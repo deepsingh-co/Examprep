@@ -1,12 +1,13 @@
-import { Exam, Subject } from "../models/index.js";
+import Exam from "../models/Exam.js";
+import Subject from "../models/Subject.js";
 import { sendSuccess, sendError } from "../utils/responseHelper.js";
 
 export const getAllExams = async (req, res) => {
   try {
-    const exams = await Exam.findAll({
-      include: [{ model: Subject, as: "subjects" }],
-      order: [["createdAt", "DESC"]],
-    });
+    const exams = await Exam.find().sort({ createdAt: -1 }).lean();
+    for (let exam of exams) {
+      exam.subjects = await Subject.find({ exam_id: exam._id });
+    }
     return sendSuccess(res, exams);
   } catch (err) {
     return sendError(res, err.message);
@@ -16,10 +17,9 @@ export const getAllExams = async (req, res) => {
 export const getExamById = async (req, res) => {
   try {
     const { id } = req.params;
-    const exam = await Exam.findByPk(id, {
-      include: [{ model: Subject, as: "subjects" }],
-    });
+    const exam = await Exam.findById(id).lean();
     if (!exam) return sendError(res, "Exam not found", 404);
+    exam.subjects = await Subject.find({ exam_id: exam._id });
     return sendSuccess(res, exam);
   } catch (err) {
     return sendError(res, err.message);
@@ -42,9 +42,8 @@ export const createExam = async (req, res) => {
 export const updateExam = async (req, res) => {
   try {
     const { id } = req.params;
-    const exam = await Exam.findByPk(id);
+    const exam = await Exam.findByIdAndUpdate(id, req.body, { new: true });
     if (!exam) return sendError(res, "Exam not found", 404);
-    await exam.update(req.body);
     return sendSuccess(res, exam, "Exam updated successfully");
   } catch (err) {
     return sendError(res, err.message);
@@ -54,9 +53,8 @@ export const updateExam = async (req, res) => {
 export const deleteExam = async (req, res) => {
   try {
     const { id } = req.params;
-    const exam = await Exam.findByPk(id);
+    const exam = await Exam.findByIdAndDelete(id);
     if (!exam) return sendError(res, "Exam not found", 404);
-    await exam.destroy();
     return sendSuccess(res, null, "Exam deleted successfully");
   } catch (err) {
     return sendError(res, err.message);
