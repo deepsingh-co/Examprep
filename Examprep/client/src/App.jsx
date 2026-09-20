@@ -10,6 +10,10 @@ import StudentLogin from "./pages/auth/StudentLogin";
 import StudentSignup from "./pages/auth/StudentSignup";
 import VerifyEmail from "./pages/auth/VerifyEmail";
 import AdminLayout from "./components/admin/AdminLayout";
+import AcademicManagement from "./pages/admin/AcademicManagement";
+import SubjectBuilder from "./pages/admin/SubjectBuilder";
+import FacultyDashboard from "./pages/faculty/FacultyDashboard";
+import StudyMaterials from "./pages/faculty/StudyMaterials";
 import ExamManager from "./pages/admin/ExamManager";
 import SubjectManager from "./pages/admin/SubjectManager";
 import TopicManager from "./pages/admin/TopicManager";
@@ -17,6 +21,8 @@ import QuestionManager from "./pages/admin/QuestionManager";
 import AIGenerator from "./pages/admin/AIGenerator";
 import Annotations from "./pages/admin/Annotations";
 import StudentLayout from "./components/student/StudentLayout";
+import StudentDashboard from "./pages/student/StudentDashboard";
+import SubjectView from "./pages/student/SubjectView";
 import AllExams from "./pages/student/AllExams";
 import ExamAttempt from "./pages/student/ExamAttempt";
 import ExamResult from "./pages/student/ExamResult";
@@ -57,6 +63,8 @@ const App = () => {
               </ProtectedRoutes>
             }
           >
+            <Route path="academic" element={<AcademicManagement />} />
+            <Route path="subject-builder" element={<SubjectBuilder />} />
             <Route path="exams" element={<ExamManager />} />
             <Route path="subjects" element={<SubjectManager />} />
             <Route path="topics" element={<TopicManager />} />
@@ -64,6 +72,27 @@ const App = () => {
             <Route path="ai-generator" element={<AIGenerator />} />
             <Route path="annotations" element={<Annotations />} />
           </Route>
+
+          <Route
+            path="/faculty/*"
+            element={
+              <ProtectedRoutes allowedRoles={["admin", "faculty"]}>
+                <div className="min-h-screen bg-gray-50 flex flex-col">
+                  {/* Top Bar for Faculty/Admin */}
+                  <div className="bg-white border-b px-6 py-4 flex justify-between items-center shadow-sm">
+                    <h1 className="text-xl font-bold text-indigo-700">IntelliExam Faculty</h1>
+                    <a href="/admin" className="text-sm text-gray-500 hover:text-indigo-600">Back to Admin</a>
+                  </div>
+                  <div className="flex-1 p-6">
+                    <Routes>
+                      <Route path="/" element={<FacultyDashboard />} />
+                      <Route path="materials" element={<StudyMaterials />} />
+                    </Routes>
+                  </div>
+                </div>
+              </ProtectedRoutes>
+            }
+          />
 
           <Route
             path="/student"
@@ -75,6 +104,8 @@ const App = () => {
               </ProtectedRoutes>
             }
           >
+            <Route index element={<StudentDashboard />} />
+            <Route path="subject/:id" element={<SubjectView />} />
             <Route path="exams" element={<AllExams />} />
             <Route path="progress" element={<Progress />} />
             <Route path="history" element={<TestHistory />} />

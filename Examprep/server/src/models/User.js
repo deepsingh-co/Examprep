@@ -18,8 +18,24 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "student"],
+      enum: ["admin", "faculty", "student"],
       required: true,
+    },
+    university_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "University",
+    },
+    college_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "College",
+    },
+    department_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Department",
+    },
+    semester_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Semester",
     },
     isVerified: {
       type: Boolean,

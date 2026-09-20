@@ -30,7 +30,15 @@ const AIChat = () => {
         role: m.role === "assistant" ? "assistant" : "user",
         content: m.content,
       }));
-      const res = await aiService.chat(history);
+
+      // Extract subject_id from URL if viewing a subject
+      let subject_id = null;
+      const match = window.location.pathname.match(/\/student\/subject\/([a-f0-9]{24})/);
+      if (match) {
+        subject_id = match[1];
+      }
+
+      const res = await aiService.chat(history, subject_id);
       setMessages((prev) => [...prev, { role: "assistant", content: res.data.data.reply }]);
     } catch {
       setMessages((prev) => [

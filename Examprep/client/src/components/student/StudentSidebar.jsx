@@ -9,10 +9,12 @@ import {
   GraduationCap,
   ChevronLeft,
   ChevronRight,
+  LayoutDashboard,
 } from "lucide-react";
 
 const navItems = [
-  { to: "/student/exams", icon: BookOpen, label: "All Exams" },
+  { to: "/student", icon: LayoutDashboard, label: "Dashboard" },
+  { to: "/student/exams", icon: BookOpen, label: "Legacy Exams" },
   { to: "/student/progress", icon: BarChart3, label: "Progress" },
   { to: "/student/history", icon: History, label: "Test History" },
   { to: "/student/ranking", icon: Trophy, label: "Ranking" },

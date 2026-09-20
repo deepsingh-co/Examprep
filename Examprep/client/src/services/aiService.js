@@ -7,5 +7,5 @@ export const aiService = {
     }),
   generateQuestions: (data) => api.post("/ai/generate", data),
   approveQuestions: (data) => api.post("/ai/approve", data),
-  chat: (messages) => api.post("/chat", { messages }),
+  chat: (messages, subject_id) => api.post("/ai/chat", { messages, subject_id }),
 };

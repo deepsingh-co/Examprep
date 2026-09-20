@@ -16,6 +16,9 @@ import battleRoutes from "./routes/battleRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import errorHandler from "./middleware/errorHandler.js";
 import { setupSocket } from "./socket.js";
+import academicRoutes from "./routes/academicRoutes.js";
+import materialRoutes from "./routes/materialRoutes.js";
+import aiKnowledgeRoutes from "./routes/aiKnowledgeRoutes.js";
 
 dotenv.config();
 
@@ -27,6 +30,9 @@ app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
+app.use("/api/academic", academicRoutes);
+app.use("/api/materials", materialRoutes);
+app.use("/api/knowledge", aiKnowledgeRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/exams", examRoutes);
 app.use("/api/subjects", subjectRoutes);

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
+  Database,
   BookOpen,
   Layers,
   Tags,
@@ -12,9 +13,11 @@ import {
 } from "lucide-react";
 
 const navItems = [
+  { to: "/admin/academic", icon: Database, label: "Academic Settings" },
+  { to: "/admin/subject-builder", icon: Layers, label: "Subject Builder" },
   { to: "/admin/exams", icon: BookOpen, label: "Exam Manager" },
-  { to: "/admin/subjects", icon: Layers, label: "Subject Manager" },
-  { to: "/admin/topics", icon: Tags, label: "Topic Manager" },
+  { to: "/admin/subjects", icon: Layers, label: "Legacy Subjects" },
+  { to: "/admin/topics", icon: Tags, label: "Legacy Topics" },
   { to: "/admin/questions", icon: HelpCircle, label: "Question Manager" },
   { to: "/admin/ai-generator", icon: Sparkles, label: "AI Generator" },
   { to: "/admin/annotations", icon: MessageSquare, label: "Annotations" },

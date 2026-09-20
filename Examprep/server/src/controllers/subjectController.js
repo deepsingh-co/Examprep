@@ -1,14 +1,20 @@
 import Subject from "../models/Subject.js";
+import Unit from "../models/Unit.js";
 import Topic from "../models/Topic.js";
 import { sendSuccess, sendError } from "../utils/responseHelper.js";
 
 export const getAllSubjects = async (req, res) => {
   try {
-    const { examId } = req.query;
-    const query = examId ? { exam_id: examId } : {};
+    const { examId, semester_id, department_id, university_id } = req.query;
+    const query = {};
+    if (examId) query.exam_id = examId;
+    if (semester_id) query.semester_id = semester_id;
+    if (department_id) query.department_id = department_id;
+    if (university_id) query.university_id = university_id;
+
     const subjects = await Subject.find(query).sort({ createdAt: -1 }).lean();
     for (let sub of subjects) {
-      sub.topics = await Topic.find({ subject_id: sub._id });
+      sub.units = await Unit.find({ subject_id: sub._id }).sort({ order: 1 });
     }
     return sendSuccess(res, subjects);
   } catch (err) {
@@ -19,9 +25,11 @@ export const getAllSubjects = async (req, res) => {
 export const getSubjectById = async (req, res) => {
   try {
     const { id } = req.params;
-    const subject = await Subject.findById(id).lean();
+    const subject = await Subject.findById(id)
+      .populate("assigned_faculty", "name email")
+      .lean();
     if (!subject) return sendError(res, "Subject not found", 404);
-    subject.topics = await Topic.find({ subject_id: subject._id });
+    subject.units = await Unit.find({ subject_id: subject._id }).sort({ order: 1 });
     return sendSuccess(res, subject);
   } catch (err) {
     return sendError(res, err.message);
@@ -30,11 +38,11 @@ export const getSubjectById = async (req, res) => {
 
 export const createSubject = async (req, res) => {
   try {
-    const { name, exam_id, description } = req.body;
-    if (!name || !exam_id) {
-      return sendError(res, "Name and exam are required", 400);
+    const { name } = req.body;
+    if (!name) {
+      return sendError(res, "Name is required", 400);
     }
-    const subject = await Subject.create({ name, exam_id, description });
+    const subject = await Subject.create(req.body);
     return sendSuccess(res, subject, "Subject created successfully", 201);
   } catch (err) {
     return sendError(res, err.message);

@@ -125,16 +125,24 @@ export const approveQuestions = async (req, res) => {
 // Chat endpoint for AI assistant
 export const chat = async (req, res) => {
   try {
-    const { messages } = req.body;
+    const { messages, subject_id } = req.body;
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return sendError(res, "Messages are required", 400);
     }
 
+    let contextText = "";
+    if (subject_id) {
+      const { default: Embedding } = await import("../models/Embedding.js");
+      const chunks = await Embedding.find({ subject_id }).limit(10).lean();
+      contextText = chunks.map((c) => c.text_chunk).join("\n\n");
+    }
+
     const systemMessage = {
       role: "system",
-      content:
-        "You are IntelliExam's study assistant. You help students prepare for exams by answering questions about study techniques, explaining concepts, and giving study advice. Be concise and helpful.",
+      content: `You are IntelliExam's study assistant. You help students prepare for exams by answering questions about study techniques, explaining concepts, and giving study advice. Be concise and helpful.${
+        contextText ? `\n\nYou have access to the following course materials to answer the student's questions:\n${contextText}` : ""
+      }`,
     };
 
     const content = await callClaude([systemMessage, ...messages]);

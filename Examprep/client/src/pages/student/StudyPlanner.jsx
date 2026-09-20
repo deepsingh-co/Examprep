@@ -43,7 +43,7 @@ const StudyPlanner = () => {
     setPlan(null);
     try {
       const res = await studyPlanService.generate(form);
-      setPlan(res.data.data.plan_data);
+      setPlan(res.data.data);
       toast.success("Study plan generated!");
       studyPlanService.getMyPlans().then((r) => setSavedPlans(r.data.data));
     } catch (err) {
@@ -115,9 +115,9 @@ const StudyPlanner = () => {
         <div className="bg-dark-800 border border-white/5 rounded-xl p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-lg">
-              Plan for {form.exam_name}{" "}
+              Plan for {plan.exam_name}{" "}
               <span className="text-sm text-gray-500 font-normal">
-                · {formattedDate(form.exam_date)}
+                · {formattedDate(plan.exam_date)}
               </span>
             </h2>
             <span className="text-xs bg-green-400/10 text-green-400 px-3 py-1 rounded-full font-medium flex items-center gap-1">
@@ -125,14 +125,14 @@ const StudyPlanner = () => {
             </span>
           </div>
 
-          {plan.overview && (
+          {plan.plan_data?.overview && (
             <p className="text-sm text-gray-400 mb-5 bg-white/5 rounded-lg p-4">
-              {plan.overview}
+              {plan.plan_data.overview}
             </p>
           )}
 
           <div className="space-y-3">
-            {plan.days?.map((day, i) => (
+            {plan.plan_data?.days?.map((day, i) => (
               <div key={i} className="border border-white/5 rounded-xl overflow-hidden">
                 <button
                   onClick={() => setExpandedDay(expandedDay === i ? null : i)}
@@ -201,8 +201,8 @@ const StudyPlanner = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {savedPlans.map((plan) => (
               <button
-                key={plan.id}
-                onClick={() => setPlan(plan.plan_data)}
+                key={plan._id}
+                onClick={() => setPlan(plan)}
                 className="bg-white/5 border border-white/10 rounded-xl p-4 text-left hover:border-primary/40 transition"
               >
                 <div className="flex items-center gap-2 mb-2">
