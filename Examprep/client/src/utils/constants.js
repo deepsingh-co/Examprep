@@ -1,5 +1,5 @@
-export const API_URL = import.meta.env.VITE_API_URL || "/api";
-export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "";
+export const API_URL = import.meta.env.VITE_API_URL || "https://examprep-1-3iaj.onrender.com/api";
+export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "https://examprep-1-3iaj.onrender.com";
 export const ROLES = {
   ADMIN: "admin",
   STUDENT: "student",
