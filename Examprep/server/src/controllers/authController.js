@@ -3,14 +3,14 @@ import User from "../models/User.js";
 import { generateToken } from "../utils/jwtHelper.js";
 import { sendVerificationEmail } from "../utils/emailHelper.js";
 import { sendSuccess, sendError } from "../utils/responseHelper.js";
-import admin from "../config/firebaseAdmin.js";
+import { adminAuth } from "../config/firebaseAdmin.js";
 
 export const firebaseLogin = async (req, res) => {
   try {
     const { token, role } = req.body;
     if (!token) return sendError(res, "Firebase token is required", 400);
 
-    const decodedToken = await admin.auth().verifyIdToken(token);
+    const decodedToken = await adminAuth.verifyIdToken(token);
     const { email, name, picture } = decodedToken;
 
     if (!email) return sendError(res, "Email not found in Firebase token", 400);
