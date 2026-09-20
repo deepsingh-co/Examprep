@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import api from "../../utils/api";
+import api from "../../services/api";
 import { BookOpen, Database, AlertCircle } from "lucide-react";
 
 export default function AcademicManagement() {

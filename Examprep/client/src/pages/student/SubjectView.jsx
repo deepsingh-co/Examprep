@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import api from "../../utils/api";
+import api from "../../services/api";
 import { Book, FileText, ChevronDown, ChevronRight, Video, File, Download, Sparkles } from "lucide-react";
 import toast from "react-hot-toast";
 

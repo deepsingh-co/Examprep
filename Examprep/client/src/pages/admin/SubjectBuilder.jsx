@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import api from "../../utils/api";
+import api from "../../services/api";
 import { BookOpen, Plus, Save } from "lucide-react";
 
 export default function SubjectBuilder() {
