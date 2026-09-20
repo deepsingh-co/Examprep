@@ -16,7 +16,7 @@ export const register = async (req, res) => {
       return sendError(res, "Invalid role", 400);
     }
 
-    const exists = await User.findOne({ where: { email } });
+    const exists = await User.findOne({ email });
     if (exists) return sendError(res, "Email already registered", 400);
 
     const verifyToken = crypto.randomBytes(32).toString("hex");
@@ -48,7 +48,7 @@ export const register = async (req, res) => {
 
     return sendSuccess(
       res,
-      { id: user.id, name: user.name, email: user.email, role: user.role, devLink, autoVerified },
+      { id: user._id, name: user.name, email: user.email, role: user.role, devLink, autoVerified },
       "Registration successful. Please verify your email.",
       201
     );
@@ -65,7 +65,7 @@ export const login = async (req, res) => {
       return sendError(res, "Email and password are required", 400);
     }
 
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ email });
     if (!user) return sendError(res, "Invalid credentials", 401);
 
     if (role && user.role !== role) {
@@ -82,12 +82,12 @@ export const login = async (req, res) => {
     user.lastLogin = new Date();
     await user.save();
 
-    const token = generateToken(user.id, user.role);
+    const token = generateToken(user._id, user.role);
 
     return sendSuccess(res, {
       token,
       user: {
-        id: user.id,
+        id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
@@ -104,7 +104,7 @@ export const verifyEmail = async (req, res) => {
 
     if (!token) return sendError(res, "Token is required", 400);
 
-    const user = await User.findOne({ where: { verifyToken: token } });
+    const user = await User.findOne({ verifyToken: token });
     if (!user) return sendError(res, "Invalid or expired token", 400);
 
     user.isVerified = true;
@@ -128,8 +128,8 @@ export const updateProfile = async (req, res) => {
 
     if (name) user.name = name;
     if (email) {
-      const exists = await User.findOne({ where: { email } });
-      if (exists && exists.id !== user.id) {
+      const exists = await User.findOne({ email });
+      if (exists && exists._id.toString() !== user._id.toString()) {
         return sendError(res, "Email already in use", 400);
       }
       user.email = email;
@@ -137,7 +137,7 @@ export const updateProfile = async (req, res) => {
 
     await user.save();
     return sendSuccess(res, {
-      id: user.id,
+      id: user._id,
       name: user.name,
       email: user.email,
       role: user.role,
