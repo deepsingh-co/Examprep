@@ -3,23 +3,44 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import { Eye, EyeOff } from "lucide-react";
+import { auth } from "../../config/firebase";
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 const StudentLogin = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { firebaseLogin } = useAuth();
   const navigate = useNavigate();
+
+  const handleFirebaseLogin = async (firebaseUser, role) => {
+    const token = await firebaseUser.getIdToken();
+    await firebaseLogin({ token, role });
+    toast.success("Welcome back!");
+    navigate("/student/exams");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const user = await login({ ...form, role: "student" });
-      toast.success("Welcome back!");
-      navigate("/student/exams");
+      const userCredential = await signInWithEmailAndPassword(auth, form.email, form.password);
+      await handleFirebaseLogin(userCredential.user, "student");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Login failed");
+      toast.error(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    try {
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+      await handleFirebaseLogin(userCredential.user, "student");
+    } catch (err) {
+      toast.error(err.message || "Google Sign-In failed");
     } finally {
       setLoading(false);
     }
@@ -71,9 +92,25 @@ const StudentLogin = () => {
             disabled={loading}
             className="w-full bg-primary hover:bg-primary-hover text-white py-3 rounded-lg font-semibold transition disabled:opacity-50"
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? "Signing in..." : "Sign In with Email"}
           </button>
         </form>
+
+        <div className="mt-6 flex items-center justify-center space-x-2">
+          <span className="h-px bg-gray-200 w-full"></span>
+          <span className="text-sm text-gray-400 font-medium uppercase">Or</span>
+          <span className="h-px bg-gray-200 w-full"></span>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleGoogleSignIn}
+          disabled={loading}
+          className="mt-6 w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 py-3 rounded-lg font-semibold transition disabled:opacity-50 flex items-center justify-center"
+        >
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5 mr-2" />
+          Sign In with Google
+        </button>
 
         <p className="text-center text-gray-500 text-sm mt-6">
           Don't have an account?{" "}

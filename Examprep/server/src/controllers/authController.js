@@ -3,6 +3,56 @@ import User from "../models/User.js";
 import { generateToken } from "../utils/jwtHelper.js";
 import { sendVerificationEmail } from "../utils/emailHelper.js";
 import { sendSuccess, sendError } from "../utils/responseHelper.js";
+import admin from "../config/firebaseAdmin.js";
+
+export const firebaseLogin = async (req, res) => {
+  try {
+    const { token, role } = req.body;
+    if (!token) return sendError(res, "Firebase token is required", 400);
+
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    const { email, name, picture } = decodedToken;
+
+    if (!email) return sendError(res, "Email not found in Firebase token", 400);
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      if (!role) return sendError(res, "Role is required for new users", 400);
+      if (!["admin", "student"].includes(role)) return sendError(res, "Invalid role", 400);
+
+      user = await User.create({
+        name: name || email.split("@")[0],
+        email,
+        password: crypto.randomBytes(16).toString("hex"), // Random secure password
+        role,
+        isVerified: true, // Firebase emails are usually verified, or we trust Google Sign-in
+      });
+    }
+
+    if (role && user.role !== role) {
+      return sendError(res, `This account is not a ${role} account`, 403);
+    }
+
+    user.lastLogin = new Date();
+    await user.save();
+
+    const jwtToken = generateToken(user._id, user.role);
+
+    return sendSuccess(res, {
+      token: jwtToken,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (err) {
+    return sendError(res, "Firebase authentication failed: " + err.message, 401);
+  }
+};
+
 
 export const register = async (req, res) => {
   try {

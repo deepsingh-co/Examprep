@@ -37,6 +37,15 @@ export const AuthProvider = ({ children }) => {
     return res.data;
   };
 
+  const firebaseLogin = async (data) => {
+    const res = await authService.firebaseLogin(data);
+    const { token, user: userData } = res.data.data;
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
+    return userData;
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -44,7 +53,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, firebaseLogin, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
