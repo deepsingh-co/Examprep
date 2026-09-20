@@ -1,0 +1,225 @@
+import { useState, useEffect } from "react";
+import {
+  GraduationCap,
+  Calendar,
+  Sparkles,
+  Loader2,
+  Save,
+  ChevronDown,
+  ChevronUp,
+  CheckCircle2,
+  Target,
+  BookOpen,
+} from "lucide-react";
+import { studyPlanService } from "../../services/studyPlanService";
+import toast from "react-hot-toast";
+
+const StudyPlanner = () => {
+  const [form, setForm] = useState({ exam_name: "", exam_date: "" });
+  const [generating, setGenerating] = useState(false);
+  const [plan, setPlan] = useState(null);
+  const [savedPlans, setSavedPlans] = useState([]);
+  const [expandedDay, setExpandedDay] = useState(0);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    studyPlanService
+      .getMyPlans()
+      .then((res) => setSavedPlans(res.data.data))
+      .catch(() => {});
+  }, []);
+
+  const handleGenerate = async (e) => {
+    e.preventDefault();
+    if (!form.exam_name || !form.exam_date) {
+      toast.error("Fill in exam name and date");
+      return;
+    }
+    if (new Date(form.exam_date) <= new Date()) {
+      toast.error("Exam date must be in the future");
+      return;
+    }
+    setGenerating(true);
+    setPlan(null);
+    try {
+      const res = await studyPlanService.generate(form);
+      setPlan(res.data.data.plan_data);
+      toast.success("Study plan generated!");
+      studyPlanService.getMyPlans().then((r) => setSavedPlans(r.data.data));
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to generate plan");
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  const formattedDate = (d) =>
+    new Date(d).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" });
+
+  return (
+    <div className="max-w-4xl">
+      <h1 className="text-2xl font-bold mb-2">Smart Study Planner</h1>
+      <p className="text-gray-400 text-sm mb-6">
+        AI-generated day-by-day study plans for your upcoming exams
+      </p>
+
+      {/* Input Form */}
+      <div className="bg-dark-800 border border-white/5 rounded-xl p-6 mb-6">
+        <form onSubmit={handleGenerate} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+          <div>
+            <label className="text-sm text-gray-400 mb-1 block">Exam Name</label>
+            <div className="relative">
+              <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+              <input
+                className="w-full bg-dark-700 border border-white/10 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-primary transition"
+                placeholder="e.g. JEE Main 2027"
+                value={form.exam_name}
+                onChange={(e) => setForm({ ...form, exam_name: e.target.value })}
+              />
+            </div>
+          </div>
+          <div>
+            <label className="text-sm text-gray-400 mb-1 block">Exam Date</label>
+            <div className="relative">
+              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+              <input
+                type="date"
+                min={new Date().toISOString().split("T")[0]}
+                className="w-full bg-dark-700 border border-white/10 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-primary transition"
+                value={form.exam_date}
+                onChange={(e) => setForm({ ...form, exam_date: e.target.value })}
+              />
+            </div>
+          </div>
+          <button
+            type="submit"
+            disabled={generating}
+            className="bg-primary hover:bg-primary-hover disabled:opacity-50 py-2.5 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2"
+          >
+            {generating ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
+            {generating ? "Generating..." : "Generate Plan"}
+          </button>
+        </form>
+      </div>
+
+      {generating && (
+        <div className="bg-dark-800 border border-white/5 rounded-xl p-12 text-center mb-6">
+          <Loader2 size={32} className="animate-spin text-primary mx-auto mb-4" />
+          <p className="text-gray-400">AI is crafting your study plan...</p>
+          <p className="text-xs text-gray-500 mt-1">This usually takes a few seconds</p>
+        </div>
+      )}
+
+      {/* Generated Plan */}
+      {plan && !generating && (
+        <div className="bg-dark-800 border border-white/5 rounded-xl p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-semibold text-lg">
+              Plan for {form.exam_name}{" "}
+              <span className="text-sm text-gray-500 font-normal">
+                · {formattedDate(form.exam_date)}
+              </span>
+            </h2>
+            <span className="text-xs bg-green-400/10 text-green-400 px-3 py-1 rounded-full font-medium flex items-center gap-1">
+              <CheckCircle2 size={12} /> Generated by AI
+            </span>
+          </div>
+
+          {plan.overview && (
+            <p className="text-sm text-gray-400 mb-5 bg-white/5 rounded-lg p-4">
+              {plan.overview}
+            </p>
+          )}
+
+          <div className="space-y-3">
+            {plan.days?.map((day, i) => (
+              <div key={i} className="border border-white/5 rounded-xl overflow-hidden">
+                <button
+                  onClick={() => setExpandedDay(expandedDay === i ? null : i)}
+                  className="w-full flex items-center justify-between px-4 py-3 bg-white/5 hover:bg-white/8 transition"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-bold text-sm">
+                      {day.day || i + 1}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Day {day.day || i + 1}</p>
+                      {day.focus && (
+                        <p className="text-xs text-gray-500">{day.focus}</p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    {day.duration && (
+                      <span className="text-xs text-gray-500">⏱ {day.duration}</span>
+                    )}
+                    {expandedDay === i ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                  </div>
+                </button>
+                {expandedDay === i && (
+                  <div className="px-5 py-4">
+                    {day.tasks && (
+                      <div className="mb-3">
+                        <p className="text-xs text-gray-500 font-medium mb-2 flex items-center gap-1">
+                          <Target size={12} /> Tasks
+                        </p>
+                        <ul className="space-y-1.5">
+                          {day.tasks.map((t, ti) => (
+                            <li key={ti} className="flex items-start gap-2 text-sm text-gray-300">
+                              <span className="text-primary mt-0.5">•</span> {t}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {day.tips && (
+                      <div>
+                        <p className="text-xs text-gray-500 font-medium mb-2 flex items-center gap-1">
+                          <Sparkles size={12} /> Tips
+                        </p>
+                        <ul className="space-y-1">
+                          {day.tips.map((t, ti) => (
+                            <li key={ti} className="flex items-start gap-2 text-sm text-gray-400">
+                              <span className="text-yellow-400 mt-0.5">💡</span> {t}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Saved Plans */}
+      {savedPlans.length > 0 && (
+        <div className="bg-dark-800 border border-white/5 rounded-xl p-6">
+          <h2 className="font-semibold text-lg mb-4">Saved Plans</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {savedPlans.map((plan) => (
+              <button
+                key={plan.id}
+                onClick={() => setPlan(plan.plan_data)}
+                className="bg-white/5 border border-white/10 rounded-xl p-4 text-left hover:border-primary/40 transition"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <GraduationCap size={16} className="text-primary" />
+                  <p className="font-medium text-sm">{plan.exam_name}</p>
+                </div>
+                <p className="text-xs text-gray-500 flex items-center gap-1">
+                  <Calendar size={12} /> {formattedDate(plan.exam_date)} ·{" "}
+                  {plan.plan_data?.days?.length || 0} days
+                </p>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default StudyPlanner;
