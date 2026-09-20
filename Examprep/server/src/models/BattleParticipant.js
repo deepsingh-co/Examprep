@@ -1,28 +1,30 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
+import mongoose from "mongoose";
 
-const BattleParticipant = sequelize.define("BattleParticipant", {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
+const battleParticipantSchema = new mongoose.Schema(
+  {
+    battle_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "GroupBattle",
+      required: true,
+    },
+    student_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    score: {
+      type: Number,
+      default: 0,
+    },
+    status: {
+      type: String,
+      enum: ["waiting", "active", "finished"],
+      default: "waiting",
+    },
   },
-  battle_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  student_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  score: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-  },
-  status: {
-    type: DataTypes.ENUM("waiting", "active", "finished"),
-    defaultValue: "waiting",
-  },
-});
+  { timestamps: true }
+);
+
+const BattleParticipant = mongoose.model("BattleParticipant", battleParticipantSchema);
 
 export default BattleParticipant;
