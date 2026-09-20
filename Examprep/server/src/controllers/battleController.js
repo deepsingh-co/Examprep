@@ -1,6 +1,10 @@
 import crypto from "crypto";
-import { Op } from "sequelize";
-import { GroupBattle, BattleParticipant, TestAttempt, Topic, Subject, User } from "../models/index.js";
+import GroupBattle from "../models/GroupBattle.js";
+import BattleParticipant from "../models/BattleParticipant.js";
+import TestAttempt from "../models/TestAttempt.js";
+import Topic from "../models/Topic.js";
+import Subject from "../models/Subject.js";
+import User from "../models/User.js";
 import { sendSuccess, sendError } from "../utils/responseHelper.js";
 
 export const createRoom = async (req, res) => {
@@ -23,7 +27,7 @@ export const createRoom = async (req, res) => {
     });
 
     await BattleParticipant.create({
-      battle_id: battle.id,
+      battle_id: battle._id,
       student_id: user_id,
       status: "waiting",
     });
@@ -39,26 +43,28 @@ export const joinRoom = async (req, res) => {
     const { room_code } = req.body;
     const user_id = req.user.id;
 
-    const battle = await GroupBattle.findOne({
-      where: { room_code: room_code.toUpperCase() },
-      include: [{ model: BattleParticipant, as: "participants" }],
-    });
+    const battle = await GroupBattle.findOne({ room_code: room_code.toUpperCase() }).lean();
 
     if (!battle) return sendError(res, "Room not found", 404);
     if (battle.status !== "waiting") {
       return sendError(res, "Battle already started", 400);
     }
 
-    const alreadyJoined = battle.participants.some(
-      (p) => p.student_id === user_id
+    const participants = await BattleParticipant.find({ battle_id: battle._id });
+    
+    const alreadyJoined = participants.some(
+      (p) => p.student_id.toString() === user_id.toString()
     );
+    
     if (!alreadyJoined) {
       await BattleParticipant.create({
-        battle_id: battle.id,
+        battle_id: battle._id,
         student_id: user_id,
         status: "waiting",
       });
     }
+
+    battle.participants = await BattleParticipant.find({ battle_id: battle._id });
 
     return sendSuccess(res, battle, "Joined room");
   } catch (err) {
@@ -69,17 +75,12 @@ export const joinRoom = async (req, res) => {
 export const getRoom = async (req, res) => {
   try {
     const { roomCode } = req.params;
-    const battle = await GroupBattle.findOne({
-      where: { room_code: roomCode.toUpperCase() },
-      include: [
-        {
-          model: BattleParticipant,
-          as: "participants",
-          include: [{ model: User, as: "student", attributes: ["id", "name"] }],
-        },
-      ],
-    });
+    const battle = await GroupBattle.findOne({ room_code: roomCode.toUpperCase() }).lean();
     if (!battle) return sendError(res, "Room not found", 404);
+    
+    battle.participants = await BattleParticipant.find({ battle_id: battle._id })
+      .populate("student_id", "name");
+      
     return sendSuccess(res, battle);
   } catch (err) {
     return sendError(res, err.message);
@@ -90,29 +91,19 @@ export const getRanking = async (req, res) => {
   try {
     const { examId } = req.params;
 
-    const subjects = await Subject.findAll({
-      where: { exam_id: examId },
-      attributes: ["id"],
-    });
-    const subjectIds = subjects.map((s) => s.id);
+    const subjects = await Subject.find({ exam_id: examId }).select("_id");
+    const subjectIds = subjects.map((s) => s._id);
 
-    const topics = await Topic.findAll({
-      where: { subject_id: { [Op.in]: subjectIds } },
-      attributes: ["id"],
-    });
-    const topicIds = topics.map((t) => t.id);
+    const topics = await Topic.find({ subject_id: { $in: subjectIds } }).select("_id");
+    const topicIds = topics.map((t) => t._id);
 
-    const attempts = await TestAttempt.findAll({
-      where: {
-        status: "completed",
-        topic_id: { [Op.in]: topicIds },
-      },
-      include: [
-        { model: User, as: "student", attributes: ["id", "name", "email"] },
-      ],
-      order: [["score", "DESC"]],
-      limit: 100,
-    });
+    const attempts = await TestAttempt.find({
+      status: "completed",
+      topic_id: { $in: topicIds },
+    })
+      .populate("student_id", "name email")
+      .sort({ score: -1 })
+      .limit(100);
 
     return sendSuccess(res, attempts);
   } catch (err) {

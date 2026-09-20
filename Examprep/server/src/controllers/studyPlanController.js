@@ -1,4 +1,4 @@
-import { StudyPlan } from "../models/index.js";
+import StudyPlan from "../models/StudyPlan.js";
 import { sendSuccess, sendError } from "../utils/responseHelper.js";
 import { callClaude, extractJson } from "../utils/aiHelper.js";
 
@@ -62,10 +62,7 @@ Return ONLY a single valid JSON object with no markdown fences and no commentary
 
 export const getMyPlans = async (req, res) => {
   try {
-    const plans = await StudyPlan.findAll({
-      where: { student_id: req.user.id },
-      order: [["createdAt", "DESC"]],
-    });
+    const plans = await StudyPlan.find({ student_id: req.user.id }).sort({ createdAt: -1 });
     return sendSuccess(res, plans);
   } catch (err) {
     return sendError(res, err.message);

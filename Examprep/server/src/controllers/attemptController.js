@@ -1,12 +1,13 @@
-import { Op } from "sequelize";
-import { Question, Option, Topic, Subject, Exam, TestAttempt, TestAttemptAnswer } from "../models/index.js";
+import Question from "../models/Question.js";
+import Topic from "../models/Topic.js";
+import Subject from "../models/Subject.js";
+import Exam from "../models/Exam.js";
+import TestAttempt from "../models/TestAttempt.js";
+import TestAttemptAnswer from "../models/TestAttemptAnswer.js";
 import { sendSuccess, sendError } from "../utils/responseHelper.js";
 
 export const getQuestionsForAttempt = async (topicId) => {
-  const questions = await Question.findAll({
-    where: { topic_id: topicId },
-    include: [{ model: Option, as: "options" }],
-  });
+  const questions = await Question.find({ topic_id: topicId }).lean();
   // Shuffle
   return questions.sort(() => Math.random() - 0.5);
 };
@@ -18,7 +19,7 @@ export const createAttempt = async (req, res) => {
 
     if (!topic_id) return sendError(res, "Topic is required", 400);
 
-    const topic = await Topic.findByPk(topic_id);
+    const topic = await Topic.findById(topic_id);
     if (!topic) return sendError(res, "Topic not found", 404);
 
     const questions = await getQuestionsForAttempt(topic_id);
@@ -44,10 +45,10 @@ export const submitAttempt = async (req, res) => {
     const { id } = req.params;
     const { answers, time_taken, violations } = req.body;
 
-    const attempt = await TestAttempt.findByPk(id);
+    const attempt = await TestAttempt.findById(id);
     if (!attempt) return sendError(res, "Attempt not found", 404);
 
-    if (attempt.student_id !== req.user.id) {
+    if (attempt.student_id.toString() !== req.user.id.toString()) {
       return sendError(res, "Unauthorized", 403);
     }
 
@@ -57,24 +58,22 @@ export const submitAttempt = async (req, res) => {
 
     const answerRecords = await Promise.all(
       answers.map(async (ans) => {
-        const question = await Question.findByPk(ans.question_id, {
-          include: [{ model: Option, as: "options" }],
-        });
+        const question = await Question.findById(ans.question_id);
         if (!question) return null;
 
         let isCorrect = false;
 
         if (question.type === "MCQ") {
           const selected = ans.selected_option;
-          const option = await Option.findByPk(selected);
+          const option = question.options.find((o) => o._id.toString() === String(selected));
           isCorrect = option ? option.is_correct : false;
         } else if (question.type === "MULTI") {
           const selectedIds = Array.isArray(ans.selected_options)
             ? ans.selected_options
             : [ans.selected_option];
           const correctOptions = question.options.filter((o) => o.is_correct);
-          const correctIds = correctOptions.map((o) => o.id).sort().join(",");
-          const selectedIdsSorted = selectedIds.map(Number).sort().join(",");
+          const correctIds = correctOptions.map((o) => o._id.toString()).sort().join(",");
+          const selectedIdsSorted = selectedIds.map(String).sort().join(",");
           isCorrect = correctIds === selectedIdsSorted;
         } else {
           isCorrect =
@@ -93,7 +92,9 @@ export const submitAttempt = async (req, res) => {
     );
 
     const valid = answerRecords.filter(Boolean);
-    await TestAttemptAnswer.bulkCreate(valid);
+    if (valid.length > 0) {
+      await TestAttemptAnswer.insertMany(valid);
+    }
 
     const totalCorrect = valid.filter((a) => a.is_correct).length;
     const totalWrong = valid.length - totalCorrect;
@@ -116,33 +117,22 @@ export const getAttemptResult = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const attempt = await TestAttempt.findByPk(id, {
-      include: [
-        {
-          model: Topic,
-          as: "topic",
-          include: [
-            {
-              model: Subject,
-              as: "subject",
-              include: [{ model: Exam, as: "exam" }],
-            },
-          ],
+    const attempt = await TestAttempt.findById(id)
+      .populate({
+        path: "topic_id",
+        populate: {
+          path: "subject_id",
+          populate: { path: "exam_id" },
         },
-        {
-          model: TestAttemptAnswer,
-          as: "answers",
-          include: [
-            {
-              model: Question,
-              as: "question",
-              include: [{ model: Option, as: "options" }],
-            },
-          ],
-        },
-      ],
-    });
+      })
+      .lean();
+
     if (!attempt) return sendError(res, "Attempt not found", 404);
+
+    attempt.answers = await TestAttemptAnswer.find({ attempt_id: attempt._id })
+      .populate("question_id")
+      .lean();
+
     return sendSuccess(res, attempt);
   } catch (err) {
     return sendError(res, err.message);
@@ -151,23 +141,16 @@ export const getAttemptResult = async (req, res) => {
 
 export const getMyAttempts = async (req, res) => {
   try {
-    const attempts = await TestAttempt.findAll({
-      where: { student_id: req.user.id },
-      include: [
-        {
-          model: Topic,
-          as: "topic",
-          include: [
-            {
-              model: Subject,
-              as: "subject",
-              include: [{ model: Exam, as: "exam" }],
-            },
-          ],
+    const attempts = await TestAttempt.find({ student_id: req.user.id })
+      .populate({
+        path: "topic_id",
+        populate: {
+          path: "subject_id",
+          populate: { path: "exam_id" },
         },
-      ],
-      order: [["createdAt", "DESC"]],
-    });
+      })
+      .sort({ createdAt: -1 });
+
     return sendSuccess(res, attempts);
   } catch (err) {
     return sendError(res, err.message);
@@ -176,23 +159,19 @@ export const getMyAttempts = async (req, res) => {
 
 export const getMyBehaviour = async (req, res) => {
   try {
-    const attempts = await TestAttempt.findAll({
-      where: {
-        student_id: req.user.id,
-        status: "completed",
-        violations: { [Op.gt]: 0 },
-      },
-      include: [
-        {
-          model: Topic,
-          as: "topic",
-          include: [{ model: Subject, as: "subject" }],
-        },
-      ],
-      attributes: ["id", "violations", "createdAt", "score", "total_questions"],
-      order: [["createdAt", "DESC"]],
-      limit: 50,
-    });
+    const attempts = await TestAttempt.find({
+      student_id: req.user.id,
+      status: "completed",
+      violations: { $gt: 0 },
+    })
+      .populate({
+        path: "topic_id",
+        populate: { path: "subject_id" },
+      })
+      .select("violations createdAt score total_questions")
+      .sort({ createdAt: -1 })
+      .limit(50);
+
     return sendSuccess(res, attempts);
   } catch (err) {
     return sendError(res, err.message);
