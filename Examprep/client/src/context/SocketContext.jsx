@@ -2,6 +2,8 @@ import { createContext, useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import { useAuth } from "../hooks/useAuth";
 
+import { SOCKET_URL } from "../utils/constants";
+
 export const SocketContext = createContext(null);
 
 let sharedSocket = null;
@@ -14,7 +16,7 @@ export const SocketProvider = ({ children }) => {
     if (!user) return;
 
     if (!sharedSocket) {
-      sharedSocket = io("http://localhost:5000", {
+      sharedSocket = io(SOCKET_URL, {
         transports: ["websocket", "polling"],
       });
     }

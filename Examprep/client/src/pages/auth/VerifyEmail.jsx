@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { authService } from "../../services/authService";
 import { CheckCircle, XCircle } from "lucide-react";
@@ -6,6 +6,7 @@ import { CheckCircle, XCircle } from "lucide-react";
 const VerifyEmail = () => {
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState("loading");
+  const requestSent = useRef(false);
 
   useEffect(() => {
     const token = searchParams.get("token");
@@ -13,6 +14,10 @@ const VerifyEmail = () => {
       setStatus("error");
       return;
     }
+    
+    if (requestSent.current) return;
+    requestSent.current = true;
+
     authService
       .verifyEmail(token)
       .then(() => setStatus("success"))
