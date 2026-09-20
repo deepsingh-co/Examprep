@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { Question, Option } from "../models/index.js";
+import Question from "../models/Question.js";
 import { sendSuccess, sendError } from "../utils/responseHelper.js";
 import { callClaude, extractJson, shuffleArray } from "../utils/aiHelper.js";
 
@@ -96,25 +96,24 @@ export const approveQuestions = async (req, res) => {
     const saved = [];
 
     for (const q of questions) {
-      const question = await Question.create({
+      const questionData = {
         topic_id,
         question_text: q.question_text,
         type: q.type || "MCQ",
         difficulty: q.difficulty || "medium",
         correct_answer: q.correct_answer,
         source: "ai",
-      });
+      };
 
       if (q.options && q.options.length > 0) {
-        const optionRecords = q.options.map((opt) => ({
-          question_id: question.id,
-          option_text: opt.text,
-          is_correct: opt.isCorrect,
+        questionData.options = q.options.map((opt) => ({
+          option_text: opt.text || opt.option_text,
+          is_correct: opt.isCorrect !== undefined ? opt.isCorrect : opt.is_correct,
         }));
-        await Option.bulkCreate(optionRecords);
       }
 
-      saved.push(question.id);
+      const question = await Question.create(questionData);
+      saved.push(question._id);
     }
 
     return sendSuccess(res, saved, `${saved.length} questions published`);
@@ -176,7 +175,7 @@ Generate a personalized study roadmap as a single valid JSON object (no markdown
 export const generateStudyPlan = async (req, res) => {
   try {
     const { exam_name, exam_date } = req.body;
-    const student_id = req.user.id;
+    const student_id = req.user.id; // user ID is ObjectId
 
     if (!exam_name || !exam_date) {
       return sendError(res, "Exam name and date are required", 400);
