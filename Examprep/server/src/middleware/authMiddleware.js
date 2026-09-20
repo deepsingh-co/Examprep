@@ -10,9 +10,7 @@ export const authenticate = async (req, res, next) => {
     }
 
     const decoded = verifyToken(header.split(" ")[1]);
-    const user = await User.findByPk(decoded.id, {
-      attributes: { exclude: ["password", "verifyToken"] },
-    });
+    const user = await User.findById(decoded.id).select("-password -verifyToken");
 
     if (!user) return sendError(res, "User not found", 401);
 
