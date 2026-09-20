@@ -15,8 +15,12 @@ const StudentSignup = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await register({ ...form, role: "student" });
-      toast.success("Account created! Please verify your email.");
+      const res = await register({ ...form, role: "student" });
+      if (res?.data?.autoVerified) {
+        toast.success("Account created! You are auto-verified in dev mode.");
+      } else {
+        toast.success("Account created! Please verify your email.");
+      }
       navigate("/student/login");
     } catch (err) {
       toast.error(err.response?.data?.message || "Signup failed");

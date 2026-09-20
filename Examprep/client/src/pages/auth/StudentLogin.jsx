@@ -4,7 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import { Eye, EyeOff } from "lucide-react";
 import { auth } from "../../config/firebase";
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 const StudentLogin = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -30,10 +30,11 @@ const StudentLogin = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, form.email, form.password);
-      await handleFirebaseLogin(userCredential.user, "student");
+      const user = await login({ ...form, role: "student" });
+      toast.success("Welcome back!");
+      navigate("/student/exams");
     } catch (err) {
-      toast.error(err.message || "Login failed");
+      toast.error(err.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }
