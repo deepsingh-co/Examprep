@@ -1,15 +1,12 @@
-import { Question, Option, Topic } from "../models/index.js";
+import Question from "../models/Question.js";
+import Topic from "../models/Topic.js";
 import { sendSuccess, sendError } from "../utils/responseHelper.js";
 
 export const getAllQuestions = async (req, res) => {
   try {
     const { topicId } = req.query;
-    const where = topicId ? { topic_id: topicId } : {};
-    const questions = await Question.findAll({
-      where,
-      include: [{ model: Option, as: "options" }],
-      order: [["createdAt", "DESC"]],
-    });
+    const query = topicId ? { topic_id: topicId } : {};
+    const questions = await Question.find(query).sort({ createdAt: -1 });
     return sendSuccess(res, questions);
   } catch (err) {
     return sendError(res, err.message);
@@ -19,9 +16,7 @@ export const getAllQuestions = async (req, res) => {
 export const getQuestionById = async (req, res) => {
   try {
     const { id } = req.params;
-    const question = await Question.findByPk(id, {
-      include: [{ model: Option, as: "options" }],
-    });
+    const question = await Question.findById(id);
     if (!question) return sendError(res, "Question not found", 404);
     return sendSuccess(res, question);
   } catch (err) {
@@ -37,28 +32,24 @@ export const createQuestion = async (req, res) => {
       return sendError(res, "Topic, question text, and type are required", 400);
     }
 
-    const question = await Question.create({
+    const questionData = {
       topic_id,
       question_text,
       type,
       difficulty,
       correct_answer,
       source: "manual",
-    });
+    };
 
     if (options && options.length > 0) {
-      const optionRecords = options.map((opt) => ({
-        question_id: question.id,
-        option_text: opt.text,
-        is_correct: opt.isCorrect,
+      questionData.options = options.map((opt) => ({
+        option_text: opt.text || opt.option_text,
+        is_correct: opt.isCorrect !== undefined ? opt.isCorrect : opt.is_correct,
       }));
-      await Option.bulkCreate(optionRecords);
     }
 
-    const created = await Question.findByPk(question.id, {
-      include: [{ model: Option, as: "options" }],
-    });
-    return sendSuccess(res, created, "Question created successfully", 201);
+    const question = await Question.create(questionData);
+    return sendSuccess(res, question, "Question created successfully", 201);
   } catch (err) {
     return sendError(res, err.message);
   }
@@ -67,25 +58,19 @@ export const createQuestion = async (req, res) => {
 export const updateQuestion = async (req, res) => {
   try {
     const { id } = req.params;
-    const question = await Question.findByPk(id);
+    const question = await Question.findById(id);
     if (!question) return sendError(res, "Question not found", 404);
 
     const { options, ...rest } = req.body;
-    await question.update(rest);
 
     if (options) {
-      await Option.destroy({ where: { question_id: id } });
-      const optionRecords = options.map((opt) => ({
-        question_id: id,
-        option_text: opt.text,
-        is_correct: opt.isCorrect,
+      rest.options = options.map((opt) => ({
+        option_text: opt.text || opt.option_text,
+        is_correct: opt.isCorrect !== undefined ? opt.isCorrect : opt.is_correct,
       }));
-      await Option.bulkCreate(optionRecords);
     }
 
-    const updated = await Question.findByPk(id, {
-      include: [{ model: Option, as: "options" }],
-    });
+    const updated = await Question.findByIdAndUpdate(id, rest, { new: true });
     return sendSuccess(res, updated, "Question updated successfully");
   } catch (err) {
     return sendError(res, err.message);
@@ -95,10 +80,8 @@ export const updateQuestion = async (req, res) => {
 export const deleteQuestion = async (req, res) => {
   try {
     const { id } = req.params;
-    const question = await Question.findByPk(id);
+    const question = await Question.findByIdAndDelete(id);
     if (!question) return sendError(res, "Question not found", 404);
-    await Option.destroy({ where: { question_id: id } });
-    await question.destroy();
     return sendSuccess(res, null, "Question deleted successfully");
   } catch (err) {
     return sendError(res, err.message);
@@ -108,13 +91,10 @@ export const deleteQuestion = async (req, res) => {
 export const getQuestionsByTopic = async (req, res) => {
   try {
     const { topicId } = req.params;
-    const topic = await Topic.findByPk(topicId);
+    const topic = await Topic.findById(topicId);
     if (!topic) return sendError(res, "Topic not found", 404);
 
-    const questions = await Question.findAll({
-      where: { topic_id: topicId },
-      include: [{ model: Option, as: "options" }],
-    });
+    const questions = await Question.find({ topic_id: topicId });
     return sendSuccess(res, questions);
   } catch (err) {
     return sendError(res, err.message);
