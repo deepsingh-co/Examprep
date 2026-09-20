@@ -1,28 +1,28 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
+import mongoose from "mongoose";
 
-const StudyPlan = sequelize.define("StudyPlan", {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
+const studyPlanSchema = new mongoose.Schema(
+  {
+    student_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    exam_name: {
+      type: String,
+      required: true,
+    },
+    exam_date: {
+      type: Date, // Date is equivalent to DATEONLY in usage if we extract only the date part
+      required: true,
+    },
+    plan_data: {
+      type: mongoose.Schema.Types.Mixed, // Mongoose way to store JSON
+      required: true,
+    },
   },
-  student_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  exam_name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  exam_date: {
-    type: DataTypes.DATEONLY,
-    allowNull: false,
-  },
-  plan_data: {
-    type: DataTypes.JSON,
-    allowNull: false,
-  },
-});
+  { timestamps: true }
+);
+
+const StudyPlan = mongoose.model("StudyPlan", studyPlanSchema);
 
 export default StudyPlan;
