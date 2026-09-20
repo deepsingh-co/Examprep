@@ -81,15 +81,18 @@ export const register = async (req, res) => {
 
     let devLink = null;
     let autoVerified = false;
+    let emailFailed = false;
+
     try {
       const result = await sendVerificationEmail(email, verifyToken);
       if (result?.devLink) devLink = result.devLink;
     } catch (err) {
       console.error("Email send failed (registration still successful):", err.message);
+      emailFailed = true;
     }
 
-    // In dev mode (no SMTP), auto-verify so user can login immediately
-    if (!process.env.SMTP_USER || process.env.SMTP_USER.includes("your_")) {
+    // Auto-verify if SMTP is not configured, or if the email failed to send
+    if (devLink || emailFailed || !process.env.SMTP_USER || process.env.SMTP_USER.includes("your_")) {
       user.isVerified = true;
       user.verifyToken = null;
       await user.save();
@@ -99,7 +102,7 @@ export const register = async (req, res) => {
     return sendSuccess(
       res,
       { id: user._id, name: user.name, email: user.email, role: user.role, devLink, autoVerified },
-      "Registration successful. Please verify your email.",
+      "Registration successful.",
       201
     );
   } catch (err) {
