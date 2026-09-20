@@ -46,6 +46,12 @@ export const AuthProvider = ({ children }) => {
     return userData;
   };
 
+  const setAuthSession = (token, userData) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -53,7 +59,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, firebaseLogin, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, firebaseLogin, register, logout, setAuthSession }}>
       {children}
     </AuthContext.Provider>
   );

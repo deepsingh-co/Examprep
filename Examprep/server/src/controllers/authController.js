@@ -159,9 +159,20 @@ export const verifyEmail = async (req, res) => {
 
     user.isVerified = true;
     user.verifyToken = null;
+    user.lastLogin = new Date();
     await user.save();
 
-    return sendSuccess(res, null, "Email verified successfully");
+    const jwtToken = generateToken(user._id, user.role);
+
+    return sendSuccess(res, {
+      token: jwtToken,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    }, "Email verified successfully");
   } catch (err) {
     return sendError(res, err.message);
   }

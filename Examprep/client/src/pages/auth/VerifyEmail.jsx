@@ -1,12 +1,16 @@
 import { useEffect, useState, useRef } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
+import { useAuth } from "../../hooks/useAuth";
 import { CheckCircle, XCircle } from "lucide-react";
 
 const VerifyEmail = () => {
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState("loading");
   const requestSent = useRef(false);
+
+  const navigate = useNavigate();
+  const { setAuthSession } = useAuth();
 
   useEffect(() => {
     const token = searchParams.get("token");
@@ -20,9 +24,17 @@ const VerifyEmail = () => {
 
     authService
       .verifyEmail(token)
-      .then(() => setStatus("success"))
+      .then((res) => {
+        setStatus("success");
+        const { token: jwtToken, user } = res.data.data;
+        setAuthSession(jwtToken, user);
+        
+        setTimeout(() => {
+          navigate(user.role === "admin" ? "/admin/exams" : "/student/exams");
+        }, 2000);
+      })
       .catch(() => setStatus("error"));
-  }, [searchParams]);
+  }, [searchParams, navigate, setAuthSession]);
 
   return (
     <div className="min-h-screen bg-dark-900 flex items-center justify-center px-4">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import toast from "react-hot-toast";
@@ -10,8 +10,14 @@ const StudentLogin = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { firebaseLogin } = useAuth();
+  const { firebaseLogin, user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate(user.role === "admin" ? "/admin/exams" : "/student/exams");
+    }
+  }, [user, navigate]);
 
   const handleFirebaseLogin = async (firebaseUser, role) => {
     const token = await firebaseUser.getIdToken();
