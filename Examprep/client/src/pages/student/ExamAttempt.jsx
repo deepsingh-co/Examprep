@@ -201,7 +201,6 @@ const ExamAttempt = () => {
   const currentQuestion = questions[currentIndex];
 
   return (
-  return (
     <div className="min-h-screen bg-dark-900 relative">
       {/* Background Mesh */}
       <div className="absolute top-[10%] left-[10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full pointer-events-none"></div>
