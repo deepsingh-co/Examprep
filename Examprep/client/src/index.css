@@ -4,27 +4,39 @@
 
 @layer base {
   body {
-    @apply bg-dark-900 text-gray-200 font-sans antialiased overflow-x-hidden;
-    background-image: 
-      radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
-    background-attachment: fixed;
+    @apply bg-background text-gray-900 font-sans antialiased overflow-x-hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-tight text-gray-900;
   }
 }
 
 @layer utilities {
-  .glass-panel {
-    @apply bg-dark-800/60 backdrop-blur-xl border border-white/10 shadow-glass;
+  .surface-card {
+    @apply bg-surface border border-gray-200 shadow-card rounded-xl;
   }
   
-  .glass-card {
-    @apply bg-dark-800/40 backdrop-blur-md border border-white/5 rounded-2xl hover:border-primary/40 hover:shadow-glow-primary transition-all duration-300;
+  .interactive-card {
+    @apply surface-card hover:shadow-elevated hover:-translate-y-0.5 transition-all duration-300;
   }
 
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-pink to-accent-cyan;
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-hover text-white font-medium px-5 py-2.5 rounded-lg shadow-sm hover:shadow-md transition-all active:scale-[0.98];
   }
+
+  .btn-secondary {
+    @apply bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 font-medium px-5 py-2.5 rounded-lg shadow-sm transition-all active:scale-[0.98];
+  }
+
+  .input-field {
+    @apply w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all;
+  }
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
 }
 
 /* Custom Scrollbar */
@@ -34,13 +46,13 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-dark-900;
+  @apply bg-transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-dark-700 rounded-full hover:bg-dark-600 transition-colors;
+  @apply bg-gray-300 rounded-full hover:bg-gray-400 transition-colors;
 }
 
 ::selection {
-  @apply bg-primary/30 text-white;
+  @apply bg-primary-light text-primary-hover;
 }
