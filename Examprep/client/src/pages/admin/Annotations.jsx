@@ -112,7 +112,7 @@ const Annotations = () => {
     new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
   return (
-    <div>
+    <div className="relative z-10">
       <div className="flex items-center gap-3 mb-2">
         <MessageSquare className="text-primary" size={24} />
         <div>
@@ -146,7 +146,7 @@ const Annotations = () => {
 
       {/* STEP 1: Search */}
       {step === 0 && (
-        <div className="bg-dark-800 border border-white/5 rounded-xl p-6">
+        <div className="glass-panel p-6">
           <form onSubmit={handleSearch} className="flex gap-3 max-w-lg">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
@@ -202,7 +202,7 @@ const Annotations = () => {
 
       {/* STEP 2: Attempts */}
       {step === 1 && (
-        <div className="bg-dark-800 border border-white/5 rounded-xl p-6">
+        <div className="glass-panel p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-11 h-11 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
               {selectedStudent?.name.charAt(0)}
@@ -267,7 +267,7 @@ const Annotations = () => {
 
       {/* STEP 3: Review */}
       {step === 2 && (
-        <div className="bg-dark-800 border border-white/5 rounded-xl p-6">
+        <div className="glass-panel p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="font-semibold">
@@ -361,7 +361,7 @@ const Annotations = () => {
 
       {/* STEP 4: Feedback */}
       {step === 3 && (
-        <div className="bg-dark-800 border border-white/5 rounded-xl p-6 max-w-xl">
+        <div className="glass-panel p-6 max-w-xl">
           <h2 className="font-semibold text-lg mb-1">Write Feedback</h2>
           <p className="text-sm text-gray-500 mb-5">
             For {selectedStudent?.name} — {selectedAttempt?.topic?.name}

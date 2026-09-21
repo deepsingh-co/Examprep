@@ -212,7 +212,7 @@ const QuestionManager = () => {
     "w-full appearance-none bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition pr-10";
 
   return (
-    <div>
+    <div className="relative z-10">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <HelpCircle className="text-primary" size={24} />
@@ -231,7 +231,7 @@ const QuestionManager = () => {
       </div>
 
       {/* Hierarchy */}
-      <div className="bg-dark-800 border border-white/5 rounded-xl p-4 mb-6">
+      <div className="glass-panel p-4 mb-6">
         <p className="text-sm text-gray-400 font-medium mb-3">Select hierarchy</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
@@ -335,7 +335,7 @@ const QuestionManager = () => {
               {questions.map((question, idx) => (
                 <div
                   key={question.id}
-                  className="bg-dark-800 border border-white/5 rounded-xl p-5 hover:border-primary/30 transition group"
+                  className="glass-card p-5 group hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">

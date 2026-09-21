@@ -60,70 +60,73 @@ const Ranking = () => {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-2">Ranking</h1>
-      <p className="text-gray-400 text-sm mb-6">Top performers across the platform</p>
+    <div className="relative z-10">
+      <h1 className="text-3xl font-extrabold mb-2 tracking-wide text-white">Global Ranking</h1>
+      <p className="text-gray-400 text-sm mb-8">Compete with the best. Top performers across the platform.</p>
 
       {/* Exam select */}
-      <div className="relative max-w-sm mb-8">
+      <div className="relative max-w-sm mb-10">
         <select
           value={selectedExam}
           onChange={(e) => {
             setSelectedExam(e.target.value);
             fetchRanking(e.target.value);
           }}
-          className="w-full appearance-none bg-dark-800 border border-white/10 rounded-lg px-4 py-3 pr-10 focus:outline-none focus:border-primary transition"
+          className="w-full appearance-none glass-panel px-5 py-4 pr-12 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white font-medium"
         >
-          <option value="">-- Select exam --</option>
+          <option value="" className="bg-dark-900">-- Select an Exam --</option>
           {exams.map((e) => (
-            <option key={e.id} value={e.id}>
+            <option key={e.id} value={e.id} className="bg-dark-900">
               {e.name}
             </option>
           ))}
         </select>
-        <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/5 rounded-md flex items-center justify-center pointer-events-none">
+          <ChevronDown size={18} className="text-primary" />
+        </div>
       </div>
 
       {selectedExam && loading && (
         <div className="flex items-center justify-center py-24">
-          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin drop-shadow-[0_0_10px_rgba(139,92,246,0.5)]" />
         </div>
       )}
 
       {selectedExam && !loading && entries.length === 0 && (
-        <emptyState
-          icon={Trophy}
-          title="No rankings yet"
-          description="Complete exams to see the leaderboard"
-        />
+        <div className="glass-panel p-16 text-center">
+          <Trophy className="w-16 h-16 text-gray-600 mx-auto mb-6" />
+          <p className="text-white text-lg font-medium">No rankings yet for this exam.</p>
+          <p className="text-gray-400 mt-2">Be the first to complete an attempt!</p>
+        </div>
       )}
 
       {selectedExam && !loading && entries.length > 0 && (
         <>
           {/* Top 3 Podium */}
-          <div className="flex items-end justify-center gap-6 mb-8">
+          <div className="flex items-end justify-center gap-4 sm:gap-8 mb-12 mt-8">
             {podiums.map((p) => {
               const entry = entries[p.place - 1];
               return (
-                <div key={p.place} className="flex flex-col items-center w-36">
-                  <div className="flex items-center gap-1 mb-2">
-                    {p.place === 1 && <Crown size={16} className="text-yellow-400" />}
-                    <Medal className={`${p.color}`} size={24} />
+                <div key={p.place} className="flex flex-col items-center w-28 sm:w-36 group">
+                  <div className="flex items-center gap-1 mb-3">
+                    {p.place === 1 && <Crown size={20} className="text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)] animate-bounce" />}
+                    <Medal className={`${p.color} drop-shadow-md`} size={28} />
                   </div>
                   {entry ? (
                     <>
-                      <p className="text-center font-medium text-sm mb-1">{entry.student?.name}</p>
+                      <p className="text-center font-bold text-white mb-2 line-clamp-1 w-full px-2">{entry.student?.name}</p>
                       <div
-                        className={`w-11 h-11 rounded-full ${p.bg} flex items-center justify-center font-bold text-primary mb-1`}
+                        className={`w-14 h-14 rounded-2xl ${p.bg} flex items-center justify-center font-extrabold text-2xl text-primary mb-3 shadow-[0_0_15px_rgba(0,0,0,0.2)] border border-white/10`}
                       >
                         {entry.student?.name?.charAt(0)}
                       </div>
-                      <div className={`w-full ${p.height} bg-gradient-to-t from-primary/30 to-primary/10 rounded-t-lg flex items-start justify-center pt-2`}>
-                        <span className="text-lg font-bold">{Math.round(entry.pct * 100)}%</span>
+                      <div className={`w-full ${p.height} bg-gradient-to-t from-primary/40 to-primary/10 rounded-t-xl flex items-start justify-center pt-3 border-t border-x border-primary/20 relative overflow-hidden transition-all duration-300 group-hover:from-primary/50 group-hover:shadow-[0_-5px_20px_rgba(139,92,246,0.3)]`}>
+                        <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0JyBoZWlnaHQ9JzQnPjxyZWN0IHdpZHRoPSc0JyBoZWlnaHQ9JzQnIGZpbGw9JyNmZmYnIGZpbGwtb3BhY2l0eT0nMC4wNScvPjwvc3ZnPg==')] opacity-50"></div>
+                        <span className="text-xl font-black text-white drop-shadow-md relative z-10">{Math.round(entry.pct * 100)}%</span>
                       </div>
                     </>
                   ) : (
-                    <div className={`w-full ${p.height} bg-white/5 rounded-t-lg flex items-center justify-center text-gray-600`}>
+                    <div className={`w-full ${p.height} bg-dark-800/50 rounded-t-xl flex items-center justify-center text-gray-600 border-t border-x border-white/5`}>
                       —
                     </div>
                   )}
@@ -133,57 +136,59 @@ const Ranking = () => {
           </div>
 
           {/* Full Leaderboard */}
-          <div className="bg-dark-800 border border-white/5 rounded-xl overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-xs text-gray-500 border-b border-white/5">
-                  <th className="px-5 py-3 font-medium">Rank</th>
-                  <th className="px-5 py-3 font-medium">Student</th>
-                  <th className="px-5 py-3 font-medium text-center">Score</th>
-                  <th className="px-5 py-3 font-medium text-right">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {entries.map((entry, idx) => {
-                  const isMe = entry.student?.id === user?.id;
-                  return (
-                    <tr
-                      key={idx}
-                      className={`border-b border-white/5 last:border-0 ${
-                        isMe ? "bg-primary/10" : "hover:bg-white/5"
-                      }`}
-                    >
-                      <td className="px-5 py-3 font-bold">
-                        {idx === 0 ? (
-                          <Crown className="text-yellow-400 inline" size={16} />
-                        ) : (
-                          <span className={idx < 3 ? "text-primary" : "text-gray-500"}>
-                            {idx + 1}
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-5 py-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">
-                            {entry.student?.name?.charAt(0)}
+          <div className="glass-panel overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.2)]">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-xs text-gray-400 uppercase tracking-widest bg-dark-900/50 border-b border-white/10">
+                    <th className="px-6 py-5 font-bold">Rank</th>
+                    <th className="px-6 py-5 font-bold">Student</th>
+                    <th className="px-6 py-5 font-bold text-center">Score</th>
+                    <th className="px-6 py-5 font-bold text-right">Date</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {entries.map((entry, idx) => {
+                    const isMe = entry.student?.id === user?.id;
+                    return (
+                      <tr
+                        key={idx}
+                        className={`transition-colors duration-200 ${
+                          isMe ? "bg-primary/20 border-l-2 border-l-primary" : "hover:bg-white/5 border-l-2 border-l-transparent"
+                        }`}
+                      >
+                        <td className="px-6 py-4 font-extrabold text-lg">
+                          {idx === 0 ? (
+                            <Crown className="text-yellow-400 inline drop-shadow-[0_0_5px_rgba(250,204,21,0.5)]" size={20} />
+                          ) : (
+                            <span className={idx < 3 ? "text-primary drop-shadow-[0_0_5px_rgba(139,92,246,0.3)]" : "text-gray-500"}>
+                              #{idx + 1}
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-xl bg-dark-900 border border-white/10 flex items-center justify-center text-primary font-bold shadow-inner">
+                              {entry.student?.name?.charAt(0)}
+                            </div>
+                            <span className={isMe ? "font-bold text-primary text-base" : "font-medium text-white text-base"}>
+                              {entry.student?.name}
+                              {isMe && <span className="ml-3 text-xs bg-primary/20 text-primary px-2 py-1 rounded-md font-bold uppercase tracking-wider">You</span>}
+                            </span>
                           </div>
-                          <span className={isMe ? "font-medium text-primary" : "font-medium"}>
-                            {entry.student?.name}
-                            {isMe && <span className="ml-2 text-xs text-primary font-normal">(You)</span>}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-5 py-3 text-center text-primary font-semibold">
-                        {Math.round(entry.pct * 100)}%
-                      </td>
-                      <td className="px-5 py-3 text-right text-gray-500">
-                        {new Date(entry.date).toLocaleDateString()}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                        </td>
+                        <td className="px-6 py-4 text-center text-primary font-extrabold text-lg tracking-wide">
+                          {Math.round(entry.pct * 100)}%
+                        </td>
+                        <td className="px-6 py-4 text-right text-gray-400 font-medium">
+                          {new Date(entry.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </>
       )}

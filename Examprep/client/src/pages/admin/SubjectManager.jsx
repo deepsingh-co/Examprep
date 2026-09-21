@@ -84,7 +84,7 @@ const SubjectManager = () => {
   };
 
   return (
-    <div>
+    <div className="relative z-10">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <Layers className="text-primary" size={24} />
@@ -103,7 +103,7 @@ const SubjectManager = () => {
       </div>
 
       {/* Step 1: Select Exam */}
-      <div className="bg-dark-800 border border-white/5 rounded-xl p-4 mb-6">
+      <div className="glass-panel p-4 mb-6">
         <label className="text-sm text-gray-400 mb-2 block font-medium">
           Step 1: Select Exam
         </label>
@@ -161,7 +161,7 @@ const SubjectManager = () => {
               {subjects.map((subject) => (
                 <div
                   key={subject.id}
-                  className="bg-dark-800 border border-white/5 rounded-xl p-6 hover:border-primary/30 transition group"
+                  className="glass-card p-6 group hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="w-11 h-11 bg-primary/10 rounded-lg flex items-center justify-center">

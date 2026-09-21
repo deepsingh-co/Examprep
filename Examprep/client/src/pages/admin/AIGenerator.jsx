@@ -207,7 +207,7 @@ const AIGenerator = () => {
   };
 
   return (
-    <div>
+    <div className="relative z-10">
       <div className="flex items-center gap-3 mb-2">
         <Sparkles className="text-primary" size={24} />
         <h1 className="text-2xl font-bold">AI Question Generator</h1>
@@ -241,7 +241,7 @@ const AIGenerator = () => {
 
       {/* STEP 1: Scope */}
       {step === 0 && (
-        <div className="bg-dark-800 border border-white/5 rounded-xl p-6">
+        <div className="glass-panel p-6">
           <h2 className="font-semibold text-lg mb-4">Select Scope</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4" onFocusCapture={fetchExams}>
             <div>
@@ -316,7 +316,7 @@ const AIGenerator = () => {
 
       {/* STEP 2: Upload */}
       {step === 1 && (
-        <div className="bg-dark-800 border border-white/5 rounded-xl p-6">
+        <div className="glass-panel p-6">
           <h2 className="font-semibold text-lg mb-4">Upload Study Material</h2>
           {!uploadedDoc ? (
             <div>
@@ -387,7 +387,7 @@ const AIGenerator = () => {
 
       {/* STEP 3: Configure */}
       {step === 2 && (
-        <div className="bg-dark-800 border border-white/5 rounded-xl p-6">
+        <div className="glass-panel p-6">
           <h2 className="font-semibold text-lg mb-4">Configure Generation</h2>
 
           <div className="mb-6">
@@ -502,14 +502,14 @@ const AIGenerator = () => {
           </div>
 
           {drafts.length === 0 ? (
-            <div className="bg-dark-800 border border-white/5 rounded-xl p-12 text-center">
+            <div className="glass-panel p-12 text-center">
               <Sparkles className="w-10 h-10 text-gray-600 mx-auto mb-4" />
               <p className="text-gray-400">No questions yet. Go back and generate.</p>
             </div>
           ) : (
             <div className="space-y-4 mb-6">
               {drafts.map((draft, idx) => (
-                <div key={idx} className="bg-dark-800 border border-white/5 rounded-xl p-5">
+                <div key={idx} className="glass-card p-5">
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">

@@ -102,7 +102,7 @@ const TopicManager = () => {
     "w-full appearance-none bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition pr-10";
 
   return (
-    <div>
+    <div className="relative z-10">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <Tags className="text-primary" size={24} />
@@ -121,7 +121,7 @@ const TopicManager = () => {
       </div>
 
       {/* Hierarchy selection */}
-      <div className="bg-dark-800 border border-white/5 rounded-xl p-4 mb-6">
+      <div className="glass-panel p-4 mb-6">
         <p className="text-sm text-gray-400 font-medium mb-3">Select hierarchy</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -201,7 +201,7 @@ const TopicManager = () => {
               {topics.map((topic) => (
                 <div
                   key={topic.id}
-                  className="bg-dark-800 border border-white/5 rounded-xl p-6 hover:border-primary/30 transition group"
+                  className="glass-card p-6 group hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="w-11 h-11 bg-primary/10 rounded-lg flex items-center justify-center">
