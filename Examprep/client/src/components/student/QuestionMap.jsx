@@ -33,8 +33,8 @@ const QuestionMap = ({ questions, answers, currentIndex, onJump, reviewFlags }) 
   }, [statuses]);
 
   return (
-    <div className="bg-dark-800 border border-white/5 rounded-xl p-4">
-      <h3 className="text-sm font-semibold mb-3">Question Map</h3>
+    <div className="glass-panel p-5 rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.2)]">
+      <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Question Map</h3>
 
       {/* Legend */}
       <div className="grid grid-cols-2 gap-2 text-xs mb-4">

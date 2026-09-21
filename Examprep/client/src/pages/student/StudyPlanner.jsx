@@ -57,21 +57,21 @@ const StudyPlanner = () => {
     new Date(d).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" });
 
   return (
-    <div className="max-w-4xl">
-      <h1 className="text-2xl font-bold mb-2">Smart Study Planner</h1>
-      <p className="text-gray-400 text-sm mb-6">
+    <div className="max-w-4xl relative z-10">
+      <h1 className="text-3xl font-extrabold text-white mb-2 tracking-wide">Smart Study Planner</h1>
+      <p className="text-gray-400 text-sm mb-8">
         AI-generated day-by-day study plans for your upcoming exams
       </p>
 
       {/* Input Form */}
-      <div className="bg-dark-800 border border-white/5 rounded-xl p-6 mb-6">
-        <form onSubmit={handleGenerate} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+      <div className="glass-panel rounded-2xl p-8 mb-8 shadow-[0_0_30px_rgba(0,0,0,0.2)]">
+        <form onSubmit={handleGenerate} className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
           <div>
-            <label className="text-sm text-gray-400 mb-1 block">Exam Name</label>
+            <label className="text-sm text-gray-400 mb-2 block font-medium">Exam Name</label>
             <div className="relative">
-              <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+              <GraduationCap className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
               <input
-                className="w-full bg-dark-700 border border-white/10 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-primary transition"
+                className="w-full glass-panel pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white placeholder-gray-500"
                 placeholder="e.g. JEE Main 2027"
                 value={form.exam_name}
                 onChange={(e) => setForm({ ...form, exam_name: e.target.value })}
@@ -79,13 +79,13 @@ const StudyPlanner = () => {
             </div>
           </div>
           <div>
-            <label className="text-sm text-gray-400 mb-1 block">Exam Date</label>
+            <label className="text-sm text-gray-400 mb-2 block font-medium">Exam Date</label>
             <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+              <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
               <input
                 type="date"
                 min={new Date().toISOString().split("T")[0]}
-                className="w-full bg-dark-700 border border-white/10 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-primary transition"
+                className="w-full glass-panel pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white"
                 value={form.exam_date}
                 onChange={(e) => setForm({ ...form, exam_date: e.target.value })}
               />
@@ -94,19 +94,19 @@ const StudyPlanner = () => {
           <button
             type="submit"
             disabled={generating}
-            className="bg-primary hover:bg-primary-hover disabled:opacity-50 py-2.5 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2"
+            className="bg-primary/90 hover:bg-primary disabled:opacity-50 py-3 rounded-xl text-sm font-bold text-white shadow-[0_0_15px_rgba(139,92,246,0.3)] transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5"
           >
-            {generating ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
+            {generating ? <Loader2 size={18} className="animate-spin" /> : <Sparkles size={18} />}
             {generating ? "Generating..." : "Generate Plan"}
           </button>
         </form>
       </div>
 
       {generating && (
-        <div className="bg-dark-800 border border-white/5 rounded-xl p-12 text-center mb-6">
-          <Loader2 size={32} className="animate-spin text-primary mx-auto mb-4" />
-          <p className="text-gray-400">AI is crafting your study plan...</p>
-          <p className="text-xs text-gray-500 mt-1">This usually takes a few seconds</p>
+        <div className="glass-panel rounded-2xl p-16 text-center mb-8 shadow-[0_0_30px_rgba(0,0,0,0.2)]">
+          <Loader2 size={40} className="animate-spin text-primary mx-auto mb-5 drop-shadow-[0_0_10px_rgba(139,92,246,0.5)]" />
+          <p className="text-white font-medium text-lg">AI is crafting your study plan...</p>
+          <p className="text-sm text-gray-400 mt-2">This usually takes a few seconds</p>
         </div>
       )}
 

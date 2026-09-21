@@ -201,11 +201,16 @@ const ExamAttempt = () => {
   const currentQuestion = questions[currentIndex];
 
   return (
-    <div className="min-h-screen bg-dark-900">
+  return (
+    <div className="min-h-screen bg-dark-900 relative">
+      {/* Background Mesh */}
+      <div className="absolute top-[10%] left-[10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full pointer-events-none"></div>
+      <div className="absolute bottom-[10%] right-[10%] w-[40%] h-[40%] bg-accent-cyan/10 blur-[120px] rounded-full pointer-events-none"></div>
+
       {/* Top Bar */}
-      <div className="h-14 bg-dark-800 border-b border-white/5 flex items-center justify-between px-6 sticky top-0 z-30">
+      <div className="h-16 glass-panel border-b-0 border-white/10 flex items-center justify-between px-6 sticky top-0 z-30 shadow-[0_4px_30px_rgba(0,0,0,0.3)]">
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 bg-primary/10 px-3 py-1.5 rounded-lg">
+          <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 px-3 py-1.5 rounded-lg shadow-[0_0_10px_rgba(139,92,246,0.1)]">
             <Clock size={16} className="text-primary" />
             <span className="font-mono text-sm font-bold text-primary">
               {formatTime(elapsed)}
@@ -213,31 +218,31 @@ const ExamAttempt = () => {
           </div>
           <div className="text-sm text-gray-400">
             Question{" "}
-            <span className="text-white font-medium">{currentIndex + 1}</span>{" "}
+            <span className="text-white font-bold">{currentIndex + 1}</span>{" "}
             of {questions.length}
           </div>
-          <div className="text-sm">
+          <div className="text-sm font-medium">
             <span className="text-green-400">{answeredCount}</span>
-            <span className="text-gray-600">/{questions.length} answered</span>
+            <span className="text-gray-500">/{questions.length} answered</span>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 text-yellow-400 text-xs">
+          <div className="flex items-center gap-1 text-yellow-400 bg-yellow-400/10 border border-yellow-400/20 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-[0_0_10px_rgba(250,204,21,0.1)]">
             <AlertTriangle size={14} />
             <span>{violationCount}/3 violations</span>
           </div>
           <button
             onClick={isFullscreen ? exitFullscreen : enterFullscreen}
-            className="text-gray-400 hover:text-white transition"
+            className="text-gray-400 hover:text-white bg-white/5 border border-white/10 hover:bg-white/10 w-9 h-9 rounded-lg flex items-center justify-center transition-all"
             title="Toggle fullscreen"
           >
-            {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
+            {isFullscreen ? <Minimize size={16} /> : <Maximize size={16} />}
           </button>
           <button
             onClick={() => handleSubmit(false)}
             disabled={submitting}
-            className="bg-green-500 hover:bg-green-600 disabled:opacity-50 px-4 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2"
+            className="bg-green-500/90 hover:bg-green-500 disabled:opacity-50 px-5 py-2 rounded-lg text-sm font-bold text-white transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(34,197,94,0.3)] hover:-translate-y-0.5"
           >
             <Send size={14} /> Submit
           </button>
@@ -245,20 +250,20 @@ const ExamAttempt = () => {
       </div>
 
       {/* Content */}
-      <div className="flex gap-6 p-6 max-w-[1440px] mx-auto">
+      <div className="flex gap-6 p-6 max-w-[1440px] mx-auto relative z-10">
         {/* Left: Question */}
         <div className="flex-1">
-          <div className="bg-dark-800 border border-white/5 rounded-xl p-6 mb-4">
-            <div className="flex items-center gap-2 mb-3 flex-wrap">
-              <span className="text-xs text-gray-500 font-mono">Q{currentIndex + 1}</span>
-              <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
+          <div className="glass-panel rounded-2xl p-8 mb-6 shadow-[0_0_30px_rgba(0,0,0,0.2)]">
+            <div className="flex items-center gap-3 mb-6 flex-wrap border-b border-white/10 pb-4">
+              <span className="text-xs text-gray-400 font-mono font-bold">Q{currentIndex + 1}</span>
+              <span className="text-xs bg-primary/20 border border-primary/30 text-primary px-3 py-1 rounded-full font-bold shadow-[0_0_10px_rgba(139,92,246,0.1)]">
                 {currentQuestion.type}
               </span>
-              <span className="text-[10px] bg-white/5 text-gray-400 px-2 py-0.5 rounded-full capitalize">
+              <span className="text-xs bg-white/10 border border-white/10 text-gray-300 px-3 py-1 rounded-full font-medium capitalize">
                 {currentQuestion.difficulty}
               </span>
             </div>
-            <p className="text-lg leading-relaxed mb-6">{currentQuestion.question_text}</p>
+            <p className="text-xl leading-relaxed text-white mb-8 font-medium">{currentQuestion.question_text}</p>
 
             {/* MCQ */}
             {currentQuestion.type === "MCQ" && (
