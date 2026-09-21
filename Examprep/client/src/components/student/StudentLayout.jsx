@@ -8,7 +8,7 @@ const StudentLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div className="flex h-screen bg-dark-900">
+    <div className="flex h-screen bg-transparent">
       <StudentSidebar
         collapsed={collapsed}
         onToggle={() => setCollapsed(!collapsed)}

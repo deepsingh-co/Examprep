@@ -37,8 +37,10 @@ const VerifyEmail = () => {
   }, [searchParams, navigate, setAuthSession]);
 
   return (
-    <div className="min-h-screen bg-dark-900 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-dark-800 border border-white/5 rounded-2xl p-8 text-center">
+    <div className="min-h-screen bg-dark-900 flex items-center justify-center px-4 relative overflow-hidden">
+      <div className="absolute top-[20%] left-[20%] w-[30%] h-[30%] bg-primary/20 blur-[120px] rounded-full"></div>
+      
+      <div className="w-full max-w-md glass-panel rounded-2xl p-8 text-center relative z-10 shadow-[0_0_40px_rgba(139,92,246,0.1)]">
         {status === "loading" && (
           <div className="py-8">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
@@ -47,15 +49,17 @@ const VerifyEmail = () => {
         )}
 
         {status === "success" && (
-          <div className="py-8">
-            <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Email Verified!</h2>
-            <p className="text-gray-400 mb-6">
+          <div className="py-8 animate-float">
+            <div className="w-20 h-20 bg-green-500/20 border border-green-500/30 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_20px_rgba(34,197,94,0.3)]">
+              <CheckCircle className="w-10 h-10 text-green-400" />
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-2 tracking-wide">Email Verified!</h2>
+            <p className="text-gray-400 mb-8">
               Your account is ready. You can now sign in.
             </p>
             <Link
               to="/student/login"
-              className="inline-block bg-primary hover:bg-primary-hover px-6 py-3 rounded-lg font-semibold transition"
+              className="inline-block bg-primary/90 hover:bg-primary px-8 py-3 rounded-xl font-bold text-white shadow-[0_0_15px_rgba(139,92,246,0.4)] transition-all hover:-translate-y-1"
             >
               Go to Login
             </Link>
@@ -64,14 +68,16 @@ const VerifyEmail = () => {
 
         {status === "error" && (
           <div className="py-8">
-            <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Verification Failed</h2>
-            <p className="text-gray-400 mb-6">
+            <div className="w-20 h-20 bg-red-500/20 border border-red-500/30 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_20px_rgba(239,68,68,0.3)]">
+              <XCircle className="w-10 h-10 text-red-400" />
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-2 tracking-wide">Verification Failed</h2>
+            <p className="text-gray-400 mb-8">
               The link is invalid or has expired.
             </p>
             <Link
               to="/"
-              className="inline-block bg-primary hover:bg-primary-hover px-6 py-3 rounded-lg font-semibold transition"
+              className="inline-block bg-primary/90 hover:bg-primary px-8 py-3 rounded-xl font-bold text-white shadow-[0_0_15px_rgba(139,92,246,0.4)] transition-all hover:-translate-y-1"
             >
               Go Home
             </Link>

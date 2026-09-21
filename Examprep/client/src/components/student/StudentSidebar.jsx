@@ -28,18 +28,19 @@ const StudentSidebar = ({ collapsed, onToggle }) => {
 
   return (
     <aside
-      className={`h-screen bg-dark-800 border-r border-white/5 flex flex-col transition-all duration-300 ${
+      className={`h-screen glass-panel border-r border-white/10 flex flex-col transition-all duration-300 z-20 ${
         collapsed ? "w-[72px]" : "w-64"
       }`}
     >
-      <div className="flex items-center gap-3 px-5 py-5 border-b border-white/5">
-        <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center font-bold text-lg flex-shrink-0">
+      <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent"></div>
+        <div className="w-9 h-9 bg-primary/20 border border-primary/30 shadow-[0_0_15px_rgba(139,92,246,0.3)] rounded-lg flex items-center justify-center font-bold text-lg flex-shrink-0 text-primary relative z-10">
           E
         </div>
         {!collapsed && (
-          <div>
-            <p className="font-bold text-sm leading-tight">IntelliExam</p>
-            <p className="text-[10px] text-accent font-medium uppercase tracking-wider">
+          <div className="relative z-10">
+            <p className="font-bold text-sm leading-tight text-white tracking-wide">IntelliExam</p>
+            <p className="text-[10px] text-accent-cyan font-semibold uppercase tracking-widest mt-0.5">
               Student Portal
             </p>
           </div>

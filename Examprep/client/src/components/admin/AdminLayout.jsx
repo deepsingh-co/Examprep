@@ -7,7 +7,7 @@ const AdminLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div className="flex h-screen bg-dark-900">
+    <div className="flex h-screen bg-transparent">
       <AdminSidebar
         collapsed={collapsed}
         onToggle={() => setCollapsed(!collapsed)}

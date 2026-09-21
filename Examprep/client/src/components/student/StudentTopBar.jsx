@@ -23,7 +23,7 @@ const StudentTopBar = () => {
   };
 
   return (
-    <header className="h-16 bg-dark-800 border-b border-white/5 flex items-center justify-between px-6">
+    <header className="h-16 glass-panel border-b border-white/10 flex items-center justify-between px-6 z-10 sticky top-0">
       <div className="flex items-center gap-3">
         <span className="text-gray-500 text-sm">Student</span>
         <span className="text-gray-600">/</span>
