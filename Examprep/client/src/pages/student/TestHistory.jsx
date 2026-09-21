@@ -58,15 +58,15 @@ const TestHistory = () => {
 
   return (
     <div className="relative z-10">
-      <h1 className="text-3xl font-extrabold text-white mb-2 tracking-wide">Test History</h1>
-      <p className="text-gray-400 text-sm mb-8">All your past test attempts</p>
+      <h1 className="text-3xl font-extrabold text-gray-900 mb-2 tracking-wide">Test History</h1>
+      <p className="text-gray-500 text-sm mb-8">All your past test attempts</p>
 
       {/* Filters */}
       <div className="flex flex-col md:flex-row gap-4 mb-8">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
           <input
-            className="w-full glass-panel pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white placeholder-gray-500"
+            className="w-full surface-card pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-gray-900 placeholder-gray-500"
             placeholder="Search by topic..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -76,16 +76,16 @@ const TestHistory = () => {
           <select
             value={filterExam}
             onChange={(e) => setFilterExam(e.target.value)}
-            className="appearance-none w-full glass-panel px-4 py-3 text-sm pr-10 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white cursor-pointer"
+            className="appearance-none w-full surface-card px-4 py-3 text-sm pr-10 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-gray-900 cursor-pointer"
           >
-            <option value="" className="bg-dark-800">All Exams</option>
+            <option value="" className="bg-surface">All Exams</option>
             {exams.map((e) => (
-              <option key={e.id} value={e.name} className="bg-dark-800">
+              <option key={e.id} value={e.name} className="bg-surface">
                 {e.name}
               </option>
             ))}
           </select>
-          <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
         </div>
       </div>
 
@@ -96,10 +96,10 @@ const TestHistory = () => {
           description="Take your first exam to see it here"
         />
       ) : (
-        <div className="glass-panel overflow-x-auto shadow-[0_0_30px_rgba(0,0,0,0.2)]">
+        <div className="surface-card overflow-x-auto shadow-sm">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-xs text-gray-400 border-b border-white/10 uppercase tracking-wider bg-white/5">
+              <tr className="text-left text-xs text-gray-500 border-b border-gray-200 uppercase tracking-wider bg-gray-50">
                 <th className="px-6 py-4 font-semibold">Exam</th>
                 <th className="px-6 py-4 font-semibold">Topic</th>
                 <th className="px-6 py-4 font-semibold text-center">Score</th>
@@ -114,21 +114,21 @@ const TestHistory = () => {
                 <tr
                   key={a.id}
                   onClick={() => navigate(`/student/result/${a.id}`)}
-                  className="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors cursor-pointer group"
+                  className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors cursor-pointer group"
                 >
-                  <td className="px-6 py-4 text-gray-300 font-medium group-hover:text-white transition-colors">
+                  <td className="px-6 py-4 text-gray-600 font-medium group-hover:text-gray-900 transition-colors">
                     {a.topic?.subject?.exam?.name || "—"}
                   </td>
-                  <td className="px-6 py-4 text-white font-medium">{a.topic?.name}</td>
+                  <td className="px-6 py-4 text-gray-900 font-medium">{a.topic?.name}</td>
                   <td className="px-6 py-4 text-center font-bold text-primary">
                     {a.score}/{a.total_questions}
                   </td>
                   <td className="px-6 py-4 text-center text-green-400 font-medium">{a.total_correct}</td>
                   <td className="px-6 py-4 text-center text-red-400 font-medium">{a.total_wrong}</td>
-                  <td className="px-6 py-4 text-gray-400">{formatDate(a.createdAt)}</td>
+                  <td className="px-6 py-4 text-gray-500">{formatDate(a.createdAt)}</td>
                   <td className="px-6 py-4 text-right">
                     <span
-                      className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider shadow-[0_0_10px_currentColor] opacity-90 ${
+                      className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider shadow-sm opacity-90 ${
                         a.status === "completed"
                           ? "bg-green-400/10 text-green-400 border border-green-400/20"
                           : a.status === "abandoned"

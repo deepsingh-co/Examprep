@@ -4,27 +4,27 @@ const ConfirmDialog = ({ open, onCancel, onConfirm, message }) => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
-      <div className="glass-panel p-6 w-full max-w-sm border-t-red-500/50 shadow-[0_0_40px_rgba(239,68,68,0.15)] transform transition-all">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm">
+      <div className="bg-surface rounded-xl shadow-xl border border-gray-200 p-6 w-full max-w-sm transform transition-all">
         <div className="flex items-start gap-4 mb-5">
-          <div className="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center flex-shrink-0 border border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
-            <AlertTriangle className="text-red-400" size={20} />
+          <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0">
+            <AlertTriangle className="text-red-600" size={20} />
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-1 tracking-wide">Confirm Action</h3>
-            <p className="text-sm text-gray-300">{message}</p>
+            <h3 className="font-semibold text-gray-900 mb-1 tracking-wide">Confirm Action</h3>
+            <p className="text-sm text-gray-600">{message}</p>
           </div>
         </div>
         <div className="flex justify-end gap-3 pt-2">
           <button
             onClick={onCancel}
-            className="px-4 py-2 text-sm font-medium border border-white/10 rounded-lg hover:bg-white/10 text-gray-300 hover:text-white transition"
+            className="btn-secondary text-sm px-4 py-2"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 text-sm font-medium bg-red-500/90 hover:bg-red-500 text-white rounded-lg shadow-[0_0_15px_rgba(239,68,68,0.4)] transition"
+            className="bg-red-600 hover:bg-red-700 text-gray-900 shadow-sm px-4 py-2 rounded-lg text-sm font-medium transition"
           >
             Delete
           </button>

@@ -88,7 +88,7 @@ const AllExams = () => {
     if (selectedSubject) {
       parts.push(
         <span key="s-sep" className="mx-2 text-gray-600">/</span>,
-        <span key="s" className="text-gray-300">{selectedSubject.name}</span>
+        <span key="s" className="text-gray-600">{selectedSubject.name}</span>
       );
     }
     return parts;
@@ -96,7 +96,7 @@ const AllExams = () => {
 
   return (
     <div>
-      <div className="flex items-center gap-2 text-sm text-gray-400 mb-6">
+      <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
         {breadcrumb()}
       </div>
 
@@ -109,28 +109,28 @@ const AllExams = () => {
           {/* Exam Level */}
           {level === "exams" && (
             <div className="animate-fade-in relative z-10">
-              <h1 className="text-3xl font-extrabold text-white mb-2 tracking-wide">All Exams</h1>
-              <p className="text-gray-400 text-sm mb-8">Choose an exam to start preparing</p>
+              <h1 className="text-3xl font-extrabold text-gray-900 mb-2 tracking-wide">All Exams</h1>
+              <p className="text-gray-500 text-sm mb-8">Choose an exam to start preparing</p>
               {exams.length === 0 ? (
-                <p className="text-gray-500 py-12 text-center glass-panel rounded-xl">No exams available yet.</p>
+                <p className="text-gray-500 py-12 text-center surface-card rounded-xl">No exams available yet.</p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {exams.map((exam) => (
                     <button
                       key={exam.id}
                       onClick={() => loadSubjects(exam)}
-                      className="glass-card p-6 text-left group hover:-translate-y-1"
+                      className="interactive-card p-6 text-left group hover:-translate-y-1"
                     >
                       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl pointer-events-none"></div>
-                      <div className="w-12 h-12 bg-primary/10 border border-primary/20 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-all shadow-[0_0_15px_rgba(139,92,246,0.1)] group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(139,92,246,0.3)]">
+                      <div className="w-12 h-12 bg-primary/10 border border-primary/20 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-all shadow-sm group-hover:scale-110 group-hover:shadow-sm">
                         <BookOpen className="text-primary" size={24} />
                       </div>
-                      <h3 className="font-bold text-xl text-white mb-2 group-hover:text-primary transition-colors">{exam.name}</h3>
-                      <p className="text-sm text-gray-400 mb-5 line-clamp-2 leading-relaxed">
+                      <h3 className="font-bold text-xl text-gray-900 mb-2 group-hover:text-primary transition-colors">{exam.name}</h3>
+                      <p className="text-sm text-gray-500 mb-5 line-clamp-2 leading-relaxed">
                         {exam.description || "No description"}
                       </p>
                       <div className="flex items-center justify-between text-sm font-medium">
-                        <span className="text-gray-400 group-hover:text-gray-300 transition-colors">
+                        <span className="text-gray-500 group-hover:text-gray-600 transition-colors">
                           {exam.subjects?.length || 0} subjects
                         </span>
                         <ArrowRight className="text-primary group-hover:translate-x-2 transition-transform duration-300" size={18} />
@@ -145,28 +145,28 @@ const AllExams = () => {
           {/* Subject Level */}
           {level === "subjects" && (
             <div className="animate-fade-in relative z-10">
-              <h1 className="text-3xl font-extrabold text-white mb-2 tracking-wide">{selectedExam?.name}</h1>
-              <p className="text-gray-400 text-sm mb-8">Select a subject</p>
+              <h1 className="text-3xl font-extrabold text-gray-900 mb-2 tracking-wide">{selectedExam?.name}</h1>
+              <p className="text-gray-500 text-sm mb-8">Select a subject</p>
               {subjects.length === 0 ? (
-                <p className="text-gray-500 py-12 text-center glass-panel rounded-xl">No subjects in this exam yet.</p>
+                <p className="text-gray-500 py-12 text-center surface-card rounded-xl">No subjects in this exam yet.</p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {subjects.map((subject) => (
                     <button
                       key={subject.id}
                       onClick={() => loadTopics(subject)}
-                      className="glass-card p-6 text-left group hover:-translate-y-1"
+                      className="interactive-card p-6 text-left group hover:-translate-y-1"
                     >
                       <div className="absolute inset-0 bg-gradient-to-br from-accent-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl pointer-events-none"></div>
-                      <div className="w-12 h-12 bg-accent-cyan/10 border border-accent-cyan/20 rounded-xl flex items-center justify-center mb-5 group-hover:bg-accent-cyan/20 transition-all shadow-[0_0_15px_rgba(6,182,212,0.1)] group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                      <div className="w-12 h-12 bg-accent-cyan/10 border border-accent-cyan/20 rounded-xl flex items-center justify-center mb-5 group-hover:bg-accent-cyan/20 transition-all shadow-sm group-hover:scale-110 group-hover:shadow-sm">
                         <Layers className="text-accent-cyan" size={24} />
                       </div>
-                      <h3 className="font-bold text-xl text-white mb-2 group-hover:text-accent-cyan transition-colors">{subject.name}</h3>
-                      <p className="text-sm text-gray-400 mb-5 line-clamp-2 leading-relaxed">
+                      <h3 className="font-bold text-xl text-gray-900 mb-2 group-hover:text-accent-cyan transition-colors">{subject.name}</h3>
+                      <p className="text-sm text-gray-500 mb-5 line-clamp-2 leading-relaxed">
                         {subject.description || "No description"}
                       </p>
                       <div className="flex items-center justify-between text-sm font-medium">
-                        <span className="text-gray-400 group-hover:text-gray-300 transition-colors">
+                        <span className="text-gray-500 group-hover:text-gray-600 transition-colors">
                           {subject.topics?.length || 0} topics
                         </span>
                         <ArrowRight className="text-accent-cyan group-hover:translate-x-2 transition-transform duration-300" size={18} />
@@ -181,24 +181,24 @@ const AllExams = () => {
           {/* Topic Level */}
           {level === "topics" && (
             <div className="animate-fade-in relative z-10">
-              <h1 className="text-3xl font-extrabold text-white mb-2 tracking-wide">{selectedSubject?.name}</h1>
-              <p className="text-gray-400 text-sm mb-8">Select a topic to start the exam</p>
+              <h1 className="text-3xl font-extrabold text-gray-900 mb-2 tracking-wide">{selectedSubject?.name}</h1>
+              <p className="text-gray-500 text-sm mb-8">Select a topic to start the exam</p>
               {topics.length === 0 ? (
-                <p className="text-gray-500 py-12 text-center glass-panel rounded-xl">No topics in this subject yet.</p>
+                <p className="text-gray-500 py-12 text-center surface-card rounded-xl">No topics in this subject yet.</p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {topics.map((topic) => (
                     <div
                       key={topic.id}
-                      className="glass-card p-5 flex items-center justify-between group"
+                      className="interactive-card p-5 flex items-center justify-between group"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-accent-pink/10 border border-accent-pink/20 rounded-xl flex items-center justify-center group-hover:bg-accent-pink/20 group-hover:scale-105 transition-all shadow-[0_0_15px_rgba(236,72,153,0.1)]">
+                        <div className="w-12 h-12 bg-accent-pink/10 border border-accent-pink/20 rounded-xl flex items-center justify-center group-hover:bg-accent-pink/20 group-hover:scale-105 transition-all shadow-sm">
                           <Tags className="text-accent-pink" size={22} />
                         </div>
                         <div>
-                          <h3 className="font-bold text-white group-hover:text-accent-pink transition-colors text-lg">{topic.name}</h3>
-                          <p className="text-sm text-gray-400 mt-0.5">
+                          <h3 className="font-bold text-gray-900 group-hover:text-accent-pink transition-colors text-lg">{topic.name}</h3>
+                          <p className="text-sm text-gray-500 mt-0.5">
                             {topic.questions?.length || 0} questions
                           </p>
                         </div>
@@ -206,7 +206,7 @@ const AllExams = () => {
                       <button
                         onClick={() => startExam(topic)}
                         disabled={!topic.questions || topic.questions.length === 0}
-                        className="bg-accent-pink/90 hover:bg-accent-pink disabled:opacity-30 disabled:cursor-not-allowed px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(236,72,153,0.3)] hover:-translate-y-0.5"
+                        className="bg-accent-pink/90 hover:bg-accent-pink disabled:opacity-30 disabled:cursor-not-allowed px-5 py-2.5 rounded-xl text-sm font-bold text-gray-900 transition-all flex items-center gap-2 shadow-sm hover:-translate-y-0.5"
                       >
                         <Play size={16} fill="currentColor" /> Start
                       </button>

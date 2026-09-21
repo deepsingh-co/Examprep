@@ -25,12 +25,12 @@ export default function StudentDashboard() {
     }
   };
 
-  if (loading) return <div className="text-white">Loading your subjects...</div>;
+  if (loading) return <div className="text-gray-900">Loading your subjects...</div>;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-white flex items-center gap-2">
+        <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
           <Book className="h-8 w-8 text-primary" />
           My Subjects
         </h1>
@@ -44,19 +44,19 @@ export default function StudentDashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
         {subjects.map((sub) => (
-          <div key={sub._id} className="glass-card p-6 flex flex-col group">
+          <div key={sub._id} className="interactive-card p-6 flex flex-col group">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl pointer-events-none"></div>
-            <h2 className="text-xl font-bold text-white relative z-10 group-hover:text-primary transition-colors">{sub.name}</h2>
-            <p className="text-sm text-gray-400 mt-1 relative z-10">{sub.code || "No Code"} | {sub.credits || 0} Credits</p>
+            <h2 className="text-xl font-bold text-gray-900 relative z-10 group-hover:text-primary transition-colors">{sub.name}</h2>
+            <p className="text-sm text-gray-500 mt-1 relative z-10">{sub.code || "No Code"} | {sub.credits || 0} Credits</p>
             <div className="mt-4 flex gap-2 relative z-10">
-              <span className="inline-flex items-center gap-1 text-xs bg-primary/10 border border-primary/20 text-primary px-2.5 py-1 rounded-md font-medium shadow-[0_0_10px_rgba(139,92,246,0.1)]">
+              <span className="inline-flex items-center gap-1 text-xs bg-primary/10 border border-primary/20 text-primary px-2.5 py-1 rounded-md font-medium shadow-sm">
                 <FileText size={12} /> {sub.units?.length || 0} Units
               </span>
             </div>
             <div className="mt-6 relative z-10 mt-auto">
               <Link
                 to={`/student/subject/${sub._id}`}
-                className="w-full flex items-center justify-center gap-2 bg-primary/10 border border-primary/20 text-primary py-2.5 rounded-xl font-semibold hover:bg-primary hover:text-white transition-all shadow-[0_0_15px_rgba(139,92,246,0.1)] hover:shadow-[0_0_20px_rgba(139,92,246,0.3)]"
+                className="w-full flex items-center justify-center gap-2 bg-primary/10 border border-primary/20 text-primary py-2.5 rounded-xl font-semibold hover:bg-primary hover:text-gray-900 transition-all shadow-sm hover:shadow-sm"
               >
                 Go to Subject <ChevronRight size={16} />
               </Link>
@@ -64,7 +64,7 @@ export default function StudentDashboard() {
           </div>
         ))}
         {subjects.length === 0 && user.semester_id && (
-          <div className="col-span-full text-center text-gray-500 py-12 bg-dark-800 rounded-xl border border-white/5">
+          <div className="col-span-full text-center text-gray-500 py-12 bg-surface rounded-xl border border-gray-100">
             No subjects found for your current semester.
           </div>
         )}

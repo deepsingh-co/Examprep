@@ -117,7 +117,7 @@ const Annotations = () => {
         <MessageSquare className="text-primary" size={24} />
         <div>
           <h1 className="text-2xl font-bold">Annotations & Feedback</h1>
-          <p className="text-sm text-gray-400">Review student attempts and leave feedback</p>
+          <p className="text-sm text-gray-500">Review student attempts and leave feedback</p>
         </div>
       </div>
 
@@ -131,7 +131,7 @@ const Annotations = () => {
                   ? "bg-primary/10 text-primary"
                   : i < step
                   ? "bg-green-400/10 text-green-400"
-                  : "bg-white/5 text-gray-500"
+                  : "bg-gray-50 text-gray-500"
               }`}
             >
               <span className="w-5 h-5 rounded-full bg-current/20 flex items-center justify-center text-xs font-bold">
@@ -146,12 +146,12 @@ const Annotations = () => {
 
       {/* STEP 1: Search */}
       {step === 0 && (
-        <div className="glass-panel p-6">
+        <div className="surface-card p-6">
           <form onSubmit={handleSearch} className="flex gap-3 max-w-lg">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
               <input
-                className="w-full bg-dark-700 border border-white/10 rounded-lg pl-10 pr-4 py-2.5 focus:outline-none focus:border-primary transition"
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-10 pr-4 py-2.5 focus:outline-none focus:border-primary transition"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search student by name..."
@@ -178,7 +178,7 @@ const Annotations = () => {
                   <button
                     key={student.id}
                     onClick={() => selectStudent(student)}
-                    className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-primary/40 transition text-left"
+                    className="bg-gray-50 border border-gray-200 rounded-xl p-5 hover:border-primary/40 transition text-left"
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
@@ -202,7 +202,7 @@ const Annotations = () => {
 
       {/* STEP 2: Attempts */}
       {step === 1 && (
-        <div className="glass-panel p-6">
+        <div className="surface-card p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-11 h-11 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
               {selectedStudent?.name.charAt(0)}
@@ -230,7 +230,7 @@ const Annotations = () => {
               {attempts.map((attempt) => (
                 <div
                   key={attempt.id}
-                  className="flex items-center justify-between bg-white/5 border border-white/10 rounded-xl px-5 py-4 hover:border-primary/40 transition"
+                  className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 hover:border-primary/40 transition"
                 >
                   <div>
                     <p className="font-medium">
@@ -267,7 +267,7 @@ const Annotations = () => {
 
       {/* STEP 3: Review */}
       {step === 2 && (
-        <div className="glass-panel p-6">
+        <div className="surface-card p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="font-semibold">
@@ -311,13 +311,13 @@ const Annotations = () => {
                     >
                       {answer.is_correct ? "Correct" : "Wrong"}
                     </span>
-                    <span className="text-[10px] bg-white/5 text-gray-400 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] bg-gray-50 text-gray-500 px-2 py-0.5 rounded-full">
                       {answer.question?.type}
                     </span>
                   </div>
                   <p className="text-sm font-medium mb-2">{answer.question?.question_text}</p>
                   {answer.question?.type === "NAQ" ? (
-                    <div className="text-sm text-gray-400">
+                    <div className="text-sm text-gray-500">
                       <span className="text-gray-500">Student answer: </span>
                       <span className="font-mono">{answer.typed_answer || "—"}</span>
                       <span className="text-gray-500 ml-3">Correct: </span>
@@ -333,7 +333,7 @@ const Annotations = () => {
                               ? "bg-green-400/10 text-green-400"
                               : opt.id === answer.selected_option
                               ? "bg-red-400/10 text-red-400"
-                              : "bg-white/5 text-gray-400"
+                              : "bg-gray-50 text-gray-500"
                           }`}
                         >
                           {opt.option_text}
@@ -361,7 +361,7 @@ const Annotations = () => {
 
       {/* STEP 4: Feedback */}
       {step === 3 && (
-        <div className="glass-panel p-6 max-w-xl">
+        <div className="surface-card p-6 max-w-xl">
           <h2 className="font-semibold text-lg mb-1">Write Feedback</h2>
           <p className="text-sm text-gray-500 mb-5">
             For {selectedStudent?.name} — {selectedAttempt?.topic?.name}
@@ -369,7 +369,7 @@ const Annotations = () => {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="text-sm text-gray-400 mb-2 block">Feedback Type</label>
+              <label className="text-sm text-gray-500 mb-2 block">Feedback Type</label>
               <div className="flex gap-2">
                 {[
                   { type: "tip", label: "💡 Tip" },
@@ -383,7 +383,7 @@ const Annotations = () => {
                     className={`flex-1 text-sm px-4 py-2.5 rounded-lg border transition ${
                       annotation.type === t.type
                         ? "bg-primary/10 border-primary text-primary"
-                        : "border-white/10 text-gray-400 hover:text-white"
+                        : "border-gray-200 text-gray-500 hover:text-gray-900"
                     }`}
                   >
                     {t.label}
@@ -393,10 +393,10 @@ const Annotations = () => {
             </div>
 
             <div>
-              <label className="text-sm text-gray-400 mb-1 block">Feedback</label>
+              <label className="text-sm text-gray-500 mb-1 block">Feedback</label>
               <textarea
                 rows={4}
-                className="w-full bg-dark-700 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition resize-none"
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition resize-none"
                 value={annotation.feedback}
                 onChange={(e) => setAnnotation({ ...annotation, feedback: e.target.value })}
                 placeholder="Write constructive feedback for this student..."
@@ -407,7 +407,7 @@ const Annotations = () => {
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="px-5 py-2.5 rounded-lg text-sm border border-white/10 hover:bg-white/5 transition"
+                className="px-5 py-2.5 rounded-lg text-sm border border-gray-200 hover:bg-gray-50 transition"
               >
                 Back
               </button>
@@ -433,7 +433,7 @@ const Annotations = () => {
           </form>
 
           {attemptDetail && (
-            <div className="mt-8 pt-5 border-t border-white/5 flex items-center gap-3 text-sm text-gray-400">
+            <div className="mt-8 pt-5 border-t border-gray-100 flex items-center gap-3 text-sm text-gray-500">
               <CheckCircle2 className="text-green-400" size={16} />
               Attempt details reviewed: {attemptDetail.total_correct}/{attemptDetail.total_questions} correct in{" "}
               {Math.round(attemptDetail.time_taken / 60)} min

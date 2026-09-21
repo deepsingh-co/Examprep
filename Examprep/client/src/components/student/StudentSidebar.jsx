@@ -28,19 +28,18 @@ const StudentSidebar = ({ collapsed, onToggle }) => {
 
   return (
     <aside
-      className={`h-screen glass-panel border-r border-white/10 flex flex-col transition-all duration-300 z-20 ${
+      className={`h-screen bg-surface border-r border-gray-200 flex flex-col transition-all duration-300 z-20 ${
         collapsed ? "w-[72px]" : "w-64"
       }`}
     >
-      <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent"></div>
-        <div className="w-9 h-9 bg-primary/20 border border-primary/30 shadow-[0_0_15px_rgba(139,92,246,0.3)] rounded-lg flex items-center justify-center font-bold text-lg flex-shrink-0 text-primary relative z-10">
+      <div className="flex items-center gap-3 px-5 py-5 border-b border-gray-200">
+        <div className="w-9 h-9 bg-primary text-gray-900 rounded-lg flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-sm">
           E
         </div>
         {!collapsed && (
-          <div className="relative z-10">
-            <p className="font-bold text-sm leading-tight text-white tracking-wide">IntelliExam</p>
-            <p className="text-[10px] text-accent-cyan font-semibold uppercase tracking-widest mt-0.5">
+          <div>
+            <p className="font-bold text-sm leading-tight text-gray-900 tracking-wide font-heading">IntelliExam</p>
+            <p className="text-[10px] text-gray-500 font-semibold uppercase tracking-widest mt-0.5">
               Student Portal
             </p>
           </div>
@@ -56,8 +55,8 @@ const StudentSidebar = ({ collapsed, onToggle }) => {
               to={item.to}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition ${
                 active
-                  ? "bg-primary/10 text-primary"
-                  : "text-gray-400 hover:text-white hover:bg-white/5"
+                  ? "bg-primary-light text-primary"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
               }`}
               title={collapsed ? item.label : undefined}
             >
@@ -70,7 +69,7 @@ const StudentSidebar = ({ collapsed, onToggle }) => {
 
       <button
         onClick={onToggle}
-        className="flex items-center justify-center py-4 border-t border-white/5 text-gray-400 hover:text-white transition"
+        className="flex items-center justify-center py-4 border-t border-gray-200 text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition"
       >
         {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
       </button>

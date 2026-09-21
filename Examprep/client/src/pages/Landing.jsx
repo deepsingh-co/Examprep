@@ -32,7 +32,7 @@ const Landing = () => {
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-primary text-white rounded-lg flex items-center justify-center font-bold text-lg shadow-sm">
+            <div className="w-9 h-9 bg-primary text-gray-900 rounded-lg flex items-center justify-center font-bold text-lg shadow-sm">
               E
             </div>
             <span className="text-xl font-heading font-bold text-gray-900 tracking-tight">IntelliExam</span>
@@ -246,7 +246,7 @@ const Landing = () => {
       <footer className="bg-white border-t border-gray-200 py-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-primary text-white rounded flex items-center justify-center font-bold text-xs">E</div>
+            <div className="w-6 h-6 bg-primary text-gray-900 rounded flex items-center justify-center font-bold text-xs">E</div>
             <span className="font-heading font-bold text-gray-900">IntelliExam</span>
           </div>
           <p className="text-sm text-gray-500 font-medium">

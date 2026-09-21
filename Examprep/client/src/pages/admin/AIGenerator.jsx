@@ -45,7 +45,7 @@ const AIGenerator = () => {
   const [publishing, setPublishing] = useState(false);
 
   const dropdownCls =
-    "w-full appearance-none bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition pr-10";
+    "w-full appearance-none bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition pr-10";
 
   const fetchExams = async () => {
     if (exams.length > 0) return;
@@ -212,7 +212,7 @@ const AIGenerator = () => {
         <Sparkles className="text-primary" size={24} />
         <h1 className="text-2xl font-bold">AI Question Generator</h1>
       </div>
-      <p className="text-sm text-gray-400 mb-6">
+      <p className="text-sm text-gray-500 mb-6">
         Upload a PDF, configure question styles, and let Claude generate questions for you.
       </p>
 
@@ -226,7 +226,7 @@ const AIGenerator = () => {
                   ? "bg-primary/10 text-primary"
                   : i < step
                   ? "bg-green-400/10 text-green-400"
-                  : "bg-white/5 text-gray-500"
+                  : "bg-gray-50 text-gray-500"
               }`}
             >
               <span className="w-5 h-5 rounded-full bg-current/20 flex items-center justify-center text-xs font-bold">
@@ -234,18 +234,18 @@ const AIGenerator = () => {
               </span>
               {label}
             </div>
-            {i < steps.length - 1 && <div className="w-8 h-px bg-white/10" />}
+            {i < steps.length - 1 && <div className="w-8 h-px bg-gray-100" />}
           </div>
         ))}
       </div>
 
       {/* STEP 1: Scope */}
       {step === 0 && (
-        <div className="glass-panel p-6">
+        <div className="surface-card p-6">
           <h2 className="font-semibold text-lg mb-4">Select Scope</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4" onFocusCapture={fetchExams}>
             <div>
-              <label className="text-sm text-gray-400 mb-1 block">Exam *</label>
+              <label className="text-sm text-gray-500 mb-1 block">Exam *</label>
               <div className="relative">
                 <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
                 <select
@@ -265,7 +265,7 @@ const AIGenerator = () => {
               </div>
             </div>
             <div>
-              <label className="text-sm text-gray-400 mb-1 block">Subject *</label>
+              <label className="text-sm text-gray-500 mb-1 block">Subject *</label>
               <div className="relative">
                 <Layers className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
                 <select
@@ -285,7 +285,7 @@ const AIGenerator = () => {
               </div>
             </div>
             <div>
-              <label className="text-sm text-gray-400 mb-1 block">Topic *</label>
+              <label className="text-sm text-gray-500 mb-1 block">Topic *</label>
               <div className="relative">
                 <Tags className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
                 <select
@@ -316,18 +316,18 @@ const AIGenerator = () => {
 
       {/* STEP 2: Upload */}
       {step === 1 && (
-        <div className="glass-panel p-6">
+        <div className="surface-card p-6">
           <h2 className="font-semibold text-lg mb-4">Upload Study Material</h2>
           {!uploadedDoc ? (
             <div>
-              <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-white/10 rounded-xl p-10 cursor-pointer hover:border-primary/40 transition">
+              <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-200 rounded-xl p-10 cursor-pointer hover:border-primary/40 transition">
                 <UploadCloud className="text-gray-500 mb-3" size={40} />
-                <span className="text-gray-400 mb-1">Drag & drop your PDF here</span>
+                <span className="text-gray-500 mb-1">Drag & drop your PDF here</span>
                 <span className="text-xs text-gray-500">or click to browse (max 15MB)</span>
                 <input type="file" accept=".pdf" className="hidden" onChange={handleFileSelect} />
               </label>
               {file && (
-                <div className="mt-4 flex items-center justify-between bg-white/5 border border-white/10 rounded-lg px-4 py-3">
+                <div className="mt-4 flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-4 py-3">
                   <div className="flex items-center gap-3">
                     <FileText className="text-primary" size={20} />
                     <div>
@@ -360,7 +360,7 @@ const AIGenerator = () => {
                   setUploadedDoc(null);
                   setFile(null);
                 }}
-                className="text-gray-400 hover:text-white text-sm transition"
+                className="text-gray-500 hover:text-gray-900 text-sm transition"
               >
                 Remove
               </button>
@@ -370,7 +370,7 @@ const AIGenerator = () => {
           <div className="flex justify-between mt-6">
             <button
               onClick={() => setStep(0)}
-              className="px-6 py-2.5 rounded-lg text-sm border border-white/10 hover:bg-white/5 transition"
+              className="px-6 py-2.5 rounded-lg text-sm border border-gray-200 hover:bg-gray-50 transition"
             >
               Back
             </button>
@@ -387,15 +387,15 @@ const AIGenerator = () => {
 
       {/* STEP 3: Configure */}
       {step === 2 && (
-        <div className="glass-panel p-6">
+        <div className="surface-card p-6">
           <h2 className="font-semibold text-lg mb-4">Configure Generation</h2>
 
           <div className="mb-6">
-            <label className="text-sm text-gray-400 mb-2 block">Question Count: <span className="text-primary font-bold">{config.count}</span></label>
+            <label className="text-sm text-gray-500 mb-2 block">Question Count: <span className="text-primary font-bold">{config.count}</span></label>
             <div className="flex items-center gap-4 max-w-sm">
               <button
                 onClick={() => setConfig({ ...config, count: Math.max(1, config.count - 1) })}
-                className="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition"
+                className="w-9 h-9 rounded-lg bg-gray-50 hover:bg-gray-100 flex items-center justify-center transition"
               >
                 <Minus size={16} />
               </button>
@@ -409,7 +409,7 @@ const AIGenerator = () => {
               />
               <button
                 onClick={() => setConfig({ ...config, count: Math.min(20, config.count + 1) })}
-                className="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition"
+                className="w-9 h-9 rounded-lg bg-gray-50 hover:bg-gray-100 flex items-center justify-center transition"
               >
                 <Plus size={16} />
               </button>
@@ -418,7 +418,7 @@ const AIGenerator = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="text-sm text-gray-400 mb-2 block">Question Type</label>
+              <label className="text-sm text-gray-500 mb-2 block">Question Type</label>
               <div className="flex gap-2">
                 {["MCQ", "MULTI", "NAQ"].map((t) => (
                   <button
@@ -427,7 +427,7 @@ const AIGenerator = () => {
                     className={`flex-1 text-sm px-3 py-2.5 rounded-lg border transition ${
                       config.type === t
                         ? "bg-primary/10 border-primary text-primary"
-                        : "border-white/10 text-gray-400 hover:text-white"
+                        : "border-gray-200 text-gray-500 hover:text-gray-900"
                     }`}
                   >
                     {t === "MCQ" ? "MCQ" : t === "MULTI" ? "Multi" : "Numeric"}
@@ -436,7 +436,7 @@ const AIGenerator = () => {
               </div>
             </div>
             <div>
-              <label className="text-sm text-gray-400 mb-2 block">Difficulty</label>
+              <label className="text-sm text-gray-500 mb-2 block">Difficulty</label>
               <div className="flex gap-2">
                 {["easy", "medium", "hard"].map((d) => (
                   <button
@@ -445,7 +445,7 @@ const AIGenerator = () => {
                     className={`flex-1 text-sm px-3 py-2.5 rounded-lg border capitalize transition ${
                       config.difficulty === d
                         ? "bg-primary/10 border-primary text-primary"
-                        : "border-white/10 text-gray-400 hover:text-white"
+                        : "border-gray-200 text-gray-500 hover:text-gray-900"
                     }`}
                   >
                     {d}
@@ -456,10 +456,10 @@ const AIGenerator = () => {
           </div>
 
           <div>
-            <label className="text-sm text-gray-400 mb-1 block">Custom Instructions (optional)</label>
+            <label className="text-sm text-gray-500 mb-1 block">Custom Instructions (optional)</label>
             <textarea
               rows={2}
-              className="w-full bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition resize-none"
+              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition resize-none"
               value={config.instructions}
               onChange={(e) => setConfig({ ...config, instructions: e.target.value })}
               placeholder="e.g. Focus on numerical problems, include real-world scenarios..."
@@ -469,7 +469,7 @@ const AIGenerator = () => {
           <div className="flex justify-between mt-6">
             <button
               onClick={() => setStep(1)}
-              className="px-6 py-2.5 rounded-lg text-sm border border-white/10 hover:bg-white/5 transition"
+              className="px-6 py-2.5 rounded-lg text-sm border border-gray-200 hover:bg-gray-50 transition"
             >
               Back
             </button>
@@ -491,7 +491,7 @@ const AIGenerator = () => {
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-lg">
               Generated Questions{" "}
-              <span className="text-sm text-gray-400 font-normal">({drafts.length} total)</span>
+              <span className="text-sm text-gray-500 font-normal">({drafts.length} total)</span>
             </h2>
             <button
               onClick={() => setStep(2)}
@@ -502,14 +502,14 @@ const AIGenerator = () => {
           </div>
 
           {drafts.length === 0 ? (
-            <div className="glass-panel p-12 text-center">
+            <div className="surface-card p-12 text-center">
               <Sparkles className="w-10 h-10 text-gray-600 mx-auto mb-4" />
-              <p className="text-gray-400">No questions yet. Go back and generate.</p>
+              <p className="text-gray-500">No questions yet. Go back and generate.</p>
             </div>
           ) : (
             <div className="space-y-4 mb-6">
               {drafts.map((draft, idx) => (
-                <div key={idx} className="glass-card p-5">
+                <div key={idx} className="interactive-card p-5">
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
@@ -530,7 +530,7 @@ const AIGenerator = () => {
                               className={`text-[10px] px-2 py-0.5 rounded-full capitalize transition ${
                                 draft.difficulty === d
                                   ? "bg-primary/10 text-primary"
-                                  : "bg-white/5 text-gray-500"
+                                  : "bg-gray-50 text-gray-500"
                               }`}
                             >
                               {d}
@@ -540,7 +540,7 @@ const AIGenerator = () => {
                       </div>
                       <textarea
                         rows={2}
-                        className="w-full bg-dark-700 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary transition resize-none"
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary transition resize-none"
                         value={draft.question_text}
                         onChange={(e) => updateDraft(idx, "question_text", e.target.value)}
                       />
@@ -549,14 +549,14 @@ const AIGenerator = () => {
                       <button
                         onClick={() => regenerateQuestion(idx)}
                         disabled={draft.regenerating}
-                        className="p-2 text-gray-400 hover:text-primary bg-white/5 rounded-lg transition"
+                        className="p-2 text-gray-500 hover:text-primary bg-gray-50 rounded-lg transition"
                         title="Regenerate"
                       >
                         {draft.regenerating ? <Loader2 size={15} className="animate-spin" /> : <RefreshCw size={15} />}
                       </button>
                       <button
                         onClick={() => deleteDraft(idx)}
-                        className="p-2 text-gray-400 hover:text-red-400 bg-white/5 rounded-lg transition"
+                        className="p-2 text-gray-500 hover:text-red-400 bg-gray-50 rounded-lg transition"
                         title="Delete"
                       >
                         <Trash2 size={15} />
@@ -572,7 +572,7 @@ const AIGenerator = () => {
                             {String.fromCharCode(65 + oi)}.
                           </span>
                           <input
-                            className="flex-1 bg-dark-700 border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary transition"
+                            className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary transition"
                             value={opt.text}
                             onChange={(e) => updateOption(idx, oi, e.target.value)}
                           />
@@ -582,7 +582,7 @@ const AIGenerator = () => {
                             className={`w-7 h-7 rounded-lg flex items-center justify-center transition border ${
                               opt.isCorrect
                                 ? "bg-green-400/10 border-green-400 text-green-400"
-                                : "border-white/10 text-gray-500 hover:text-white"
+                                : "border-gray-200 text-gray-500 hover:text-gray-900"
                             }`}
                           >
                             <CheckCircle2 size={14} />
@@ -592,9 +592,9 @@ const AIGenerator = () => {
                     </div>
                   ) : (
                     <div className="flex items-center gap-3 max-w-xs">
-                      <label className="text-sm text-gray-400">Answer:</label>
+                      <label className="text-sm text-gray-500">Answer:</label>
                       <input
-                        className="flex-1 bg-dark-700 border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary transition"
+                        className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary transition"
                         value={draft.correct_answer || ""}
                         onChange={(e) => updateDraft(idx, "correct_answer", e.target.value)}
                       />

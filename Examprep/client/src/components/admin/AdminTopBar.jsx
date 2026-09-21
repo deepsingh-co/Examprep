@@ -24,7 +24,7 @@ const AdminTopBar = () => {
   };
 
   return (
-    <header className="h-16 glass-panel border-b border-white/10 flex items-center justify-between px-6 z-10 sticky top-0">
+    <header className="h-16 bg-surface border-b border-gray-200 flex items-center justify-between px-6 z-10 sticky top-0">
       <div className="flex items-center gap-3">
         <span className="text-gray-500 text-sm">Admin</span>
         <span className="text-gray-600">/</span>
@@ -33,14 +33,14 @@ const AdminTopBar = () => {
 
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center text-primary text-sm font-bold">
+          <div className="w-8 h-8 bg-primary-light rounded-full flex items-center justify-center text-primary text-sm font-bold">
             {user?.name?.charAt(0)}
           </div>
-          <span className="text-sm text-gray-300">{user?.name}</span>
+          <span className="text-sm text-gray-700 font-medium">{user?.name}</span>
         </div>
         <button
           onClick={handleLogout}
-          className="text-gray-400 hover:text-red-400 transition"
+          className="text-gray-500 hover:text-red-500 transition"
           title="Logout"
         >
           <LogOut size={18} />

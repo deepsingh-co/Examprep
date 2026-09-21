@@ -58,20 +58,20 @@ const StudyPlanner = () => {
 
   return (
     <div className="max-w-4xl relative z-10">
-      <h1 className="text-3xl font-extrabold text-white mb-2 tracking-wide">Smart Study Planner</h1>
-      <p className="text-gray-400 text-sm mb-8">
+      <h1 className="text-3xl font-extrabold text-gray-900 mb-2 tracking-wide">Smart Study Planner</h1>
+      <p className="text-gray-500 text-sm mb-8">
         AI-generated day-by-day study plans for your upcoming exams
       </p>
 
       {/* Input Form */}
-      <div className="glass-panel rounded-2xl p-8 mb-8 shadow-[0_0_30px_rgba(0,0,0,0.2)]">
+      <div className="surface-card rounded-2xl p-8 mb-8 shadow-sm">
         <form onSubmit={handleGenerate} className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
           <div>
-            <label className="text-sm text-gray-400 mb-2 block font-medium">Exam Name</label>
+            <label className="text-sm text-gray-500 mb-2 block font-medium">Exam Name</label>
             <div className="relative">
-              <GraduationCap className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <GraduationCap className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
               <input
-                className="w-full glass-panel pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white placeholder-gray-500"
+                className="w-full surface-card pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-gray-900 placeholder-gray-500"
                 placeholder="e.g. JEE Main 2027"
                 value={form.exam_name}
                 onChange={(e) => setForm({ ...form, exam_name: e.target.value })}
@@ -79,13 +79,13 @@ const StudyPlanner = () => {
             </div>
           </div>
           <div>
-            <label className="text-sm text-gray-400 mb-2 block font-medium">Exam Date</label>
+            <label className="text-sm text-gray-500 mb-2 block font-medium">Exam Date</label>
             <div className="relative">
-              <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
               <input
                 type="date"
                 min={new Date().toISOString().split("T")[0]}
-                className="w-full glass-panel pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white"
+                className="w-full surface-card pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-gray-900"
                 value={form.exam_date}
                 onChange={(e) => setForm({ ...form, exam_date: e.target.value })}
               />
@@ -94,7 +94,7 @@ const StudyPlanner = () => {
           <button
             type="submit"
             disabled={generating}
-            className="bg-primary/90 hover:bg-primary disabled:opacity-50 py-3 rounded-xl text-sm font-bold text-white shadow-[0_0_15px_rgba(139,92,246,0.3)] transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5"
+            className="bg-primary/90 hover:bg-primary disabled:opacity-50 py-3 rounded-xl text-sm font-bold text-gray-900 shadow-sm transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5"
           >
             {generating ? <Loader2 size={18} className="animate-spin" /> : <Sparkles size={18} />}
             {generating ? "Generating..." : "Generate Plan"}
@@ -103,16 +103,16 @@ const StudyPlanner = () => {
       </div>
 
       {generating && (
-        <div className="glass-panel rounded-2xl p-16 text-center mb-8 shadow-[0_0_30px_rgba(0,0,0,0.2)]">
-          <Loader2 size={40} className="animate-spin text-primary mx-auto mb-5 drop-shadow-[0_0_10px_rgba(139,92,246,0.5)]" />
-          <p className="text-white font-medium text-lg">AI is crafting your study plan...</p>
-          <p className="text-sm text-gray-400 mt-2">This usually takes a few seconds</p>
+        <div className="surface-card rounded-2xl p-16 text-center mb-8 shadow-sm">
+          <Loader2 size={40} className="animate-spin text-primary mx-auto mb-5 drop-shadow-sm" />
+          <p className="text-gray-900 font-medium text-lg">AI is crafting your study plan...</p>
+          <p className="text-sm text-gray-500 mt-2">This usually takes a few seconds</p>
         </div>
       )}
 
       {/* Generated Plan */}
       {plan && !generating && (
-        <div className="bg-dark-800 border border-white/5 rounded-xl p-6 mb-6">
+        <div className="bg-surface border border-gray-100 rounded-xl p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-lg">
               Plan for {plan.exam_name}{" "}
@@ -126,17 +126,17 @@ const StudyPlanner = () => {
           </div>
 
           {plan.plan_data?.overview && (
-            <p className="text-sm text-gray-400 mb-5 bg-white/5 rounded-lg p-4">
+            <p className="text-sm text-gray-500 mb-5 bg-gray-50 rounded-lg p-4">
               {plan.plan_data.overview}
             </p>
           )}
 
           <div className="space-y-3">
             {plan.plan_data?.days?.map((day, i) => (
-              <div key={i} className="border border-white/5 rounded-xl overflow-hidden">
+              <div key={i} className="border border-gray-100 rounded-xl overflow-hidden">
                 <button
                   onClick={() => setExpandedDay(expandedDay === i ? null : i)}
-                  className="w-full flex items-center justify-between px-4 py-3 bg-white/5 hover:bg-white/8 transition"
+                  className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-white/8 transition"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-bold text-sm">
@@ -165,7 +165,7 @@ const StudyPlanner = () => {
                         </p>
                         <ul className="space-y-1.5">
                           {day.tasks.map((t, ti) => (
-                            <li key={ti} className="flex items-start gap-2 text-sm text-gray-300">
+                            <li key={ti} className="flex items-start gap-2 text-sm text-gray-600">
                               <span className="text-primary mt-0.5">•</span> {t}
                             </li>
                           ))}
@@ -179,7 +179,7 @@ const StudyPlanner = () => {
                         </p>
                         <ul className="space-y-1">
                           {day.tips.map((t, ti) => (
-                            <li key={ti} className="flex items-start gap-2 text-sm text-gray-400">
+                            <li key={ti} className="flex items-start gap-2 text-sm text-gray-500">
                               <span className="text-yellow-400 mt-0.5">💡</span> {t}
                             </li>
                           ))}
@@ -196,14 +196,14 @@ const StudyPlanner = () => {
 
       {/* Saved Plans */}
       {savedPlans.length > 0 && (
-        <div className="bg-dark-800 border border-white/5 rounded-xl p-6">
+        <div className="bg-surface border border-gray-100 rounded-xl p-6">
           <h2 className="font-semibold text-lg mb-4">Saved Plans</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {savedPlans.map((plan) => (
               <button
                 key={plan._id}
                 onClick={() => setPlan(plan)}
-                className="bg-white/5 border border-white/10 rounded-xl p-4 text-left hover:border-primary/40 transition"
+                className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-left hover:border-primary/40 transition"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <GraduationCap size={16} className="text-primary" />

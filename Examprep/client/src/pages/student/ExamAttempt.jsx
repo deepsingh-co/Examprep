@@ -192,7 +192,7 @@ const ExamAttempt = () => {
       <div className="flex items-center justify-center py-24">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-400 text-sm">Loading exam questions...</p>
+          <p className="text-gray-500 text-sm">Loading exam questions...</p>
         </div>
       </div>
     );
@@ -201,23 +201,23 @@ const ExamAttempt = () => {
   const currentQuestion = questions[currentIndex];
 
   return (
-    <div className="min-h-screen bg-dark-900 relative">
+    <div className="min-h-screen bg-background relative">
       {/* Background Mesh */}
       <div className="absolute top-[10%] left-[10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full pointer-events-none"></div>
       <div className="absolute bottom-[10%] right-[10%] w-[40%] h-[40%] bg-accent-cyan/10 blur-[120px] rounded-full pointer-events-none"></div>
 
       {/* Top Bar */}
-      <div className="h-16 glass-panel border-b-0 border-white/10 flex items-center justify-between px-6 sticky top-0 z-30 shadow-[0_4px_30px_rgba(0,0,0,0.3)]">
+      <div className="h-16 surface-card border-b-0 border-gray-200 flex items-center justify-between px-6 sticky top-0 z-30 shadow-sm">
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 px-3 py-1.5 rounded-lg shadow-[0_0_10px_rgba(139,92,246,0.1)]">
+          <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 px-3 py-1.5 rounded-lg shadow-sm">
             <Clock size={16} className="text-primary" />
             <span className="font-mono text-sm font-bold text-primary">
               {formatTime(elapsed)}
             </span>
           </div>
-          <div className="text-sm text-gray-400">
+          <div className="text-sm text-gray-500">
             Question{" "}
-            <span className="text-white font-bold">{currentIndex + 1}</span>{" "}
+            <span className="text-gray-900 font-bold">{currentIndex + 1}</span>{" "}
             of {questions.length}
           </div>
           <div className="text-sm font-medium">
@@ -227,13 +227,13 @@ const ExamAttempt = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 text-yellow-400 bg-yellow-400/10 border border-yellow-400/20 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-[0_0_10px_rgba(250,204,21,0.1)]">
+          <div className="flex items-center gap-1 text-yellow-400 bg-yellow-400/10 border border-yellow-400/20 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm">
             <AlertTriangle size={14} />
             <span>{violationCount}/3 violations</span>
           </div>
           <button
             onClick={isFullscreen ? exitFullscreen : enterFullscreen}
-            className="text-gray-400 hover:text-white bg-white/5 border border-white/10 hover:bg-white/10 w-9 h-9 rounded-lg flex items-center justify-center transition-all"
+            className="text-gray-500 hover:text-gray-900 bg-gray-50 border border-gray-200 hover:bg-gray-100 w-9 h-9 rounded-lg flex items-center justify-center transition-all"
             title="Toggle fullscreen"
           >
             {isFullscreen ? <Minimize size={16} /> : <Maximize size={16} />}
@@ -241,7 +241,7 @@ const ExamAttempt = () => {
           <button
             onClick={() => handleSubmit(false)}
             disabled={submitting}
-            className="bg-green-500/90 hover:bg-green-500 disabled:opacity-50 px-5 py-2 rounded-lg text-sm font-bold text-white transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(34,197,94,0.3)] hover:-translate-y-0.5"
+            className="bg-green-500/90 hover:bg-green-500 disabled:opacity-50 px-5 py-2 rounded-lg text-sm font-bold text-gray-900 transition-all flex items-center gap-2 shadow-sm hover:-translate-y-0.5"
           >
             <Send size={14} /> Submit
           </button>
@@ -252,17 +252,17 @@ const ExamAttempt = () => {
       <div className="flex gap-6 p-6 max-w-[1440px] mx-auto relative z-10">
         {/* Left: Question */}
         <div className="flex-1">
-          <div className="glass-panel rounded-2xl p-8 mb-6 shadow-[0_0_30px_rgba(0,0,0,0.2)]">
-            <div className="flex items-center gap-3 mb-6 flex-wrap border-b border-white/10 pb-4">
-              <span className="text-xs text-gray-400 font-mono font-bold">Q{currentIndex + 1}</span>
-              <span className="text-xs bg-primary/20 border border-primary/30 text-primary px-3 py-1 rounded-full font-bold shadow-[0_0_10px_rgba(139,92,246,0.1)]">
+          <div className="surface-card rounded-2xl p-8 mb-6 shadow-sm">
+            <div className="flex items-center gap-3 mb-6 flex-wrap border-b border-gray-200 pb-4">
+              <span className="text-xs text-gray-500 font-mono font-bold">Q{currentIndex + 1}</span>
+              <span className="text-xs bg-primary/20 border border-primary/30 text-primary px-3 py-1 rounded-full font-bold shadow-sm">
                 {currentQuestion.type}
               </span>
-              <span className="text-xs bg-white/10 border border-white/10 text-gray-300 px-3 py-1 rounded-full font-medium capitalize">
+              <span className="text-xs bg-gray-100 border border-gray-200 text-gray-600 px-3 py-1 rounded-full font-medium capitalize">
                 {currentQuestion.difficulty}
               </span>
             </div>
-            <p className="text-xl leading-relaxed text-white mb-8 font-medium">{currentQuestion.question_text}</p>
+            <p className="text-xl leading-relaxed text-gray-900 mb-8 font-medium">{currentQuestion.question_text}</p>
 
             {/* MCQ */}
             {currentQuestion.type === "MCQ" && (
@@ -276,7 +276,7 @@ const ExamAttempt = () => {
                       className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl border transition ${
                         selected
                           ? "bg-primary/10 border-primary text-primary"
-                          : "bg-white/5 border-white/10 text-gray-300 hover:border-white/20"
+                          : "bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-300"
                       }`}
                     >
                       <span className="w-7 h-7 rounded-full border flex items-center justify-center text-xs font-bold flex-shrink-0">
@@ -302,7 +302,7 @@ const ExamAttempt = () => {
                       className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl border transition ${
                         selected
                           ? "bg-purple-500/10 border-purple-500 text-purple-400"
-                          : "bg-white/5 border-white/10 text-gray-300 hover:border-white/20"
+                          : "bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-300"
                       }`}
                     >
                       <span className="w-7 h-7 rounded-md border flex items-center justify-center text-xs font-bold flex-shrink-0">
@@ -318,7 +318,7 @@ const ExamAttempt = () => {
             {/* NAQ */}
             {currentQuestion.type === "NAQ" && (
               <input
-                className="w-full bg-dark-700 border border-white/10 rounded-xl px-5 py-3 text-lg focus:outline-none focus:border-primary transition"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 text-lg focus:outline-none focus:border-primary transition"
                 placeholder="Type your numeric answer..."
                 value={answers[currentIndex]?.typed_answer || ""}
                 onChange={(e) => handleAnswer(e.target.value, "NAQ")}
@@ -332,14 +332,14 @@ const ExamAttempt = () => {
               <button
                 onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
                 disabled={currentIndex === 0}
-                className="bg-dark-800 border border-white/10 hover:border-white/20 disabled:opacity-30 px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition"
+                className="bg-surface border border-gray-200 hover:border-gray-300 disabled:opacity-30 px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition"
               >
                 <ChevronLeft size={16} /> Prev
               </button>
               <button
                 onClick={() => setCurrentIndex((i) => Math.min(questions.length - 1, i + 1))}
                 disabled={currentIndex === questions.length - 1}
-                className="bg-dark-800 border border-white/10 hover:border-white/20 disabled:opacity-30 px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition"
+                className="bg-surface border border-gray-200 hover:border-gray-300 disabled:opacity-30 px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition"
               >
                 Next <ChevronRight size={16} />
               </button>
@@ -348,7 +348,7 @@ const ExamAttempt = () => {
                 className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 border transition ${
                   reviewFlags[currentIndex]
                     ? "bg-blue-500/10 border-blue-500 text-blue-400"
-                    : "bg-dark-800 border-white/10 text-gray-400 hover:text-white"
+                    : "bg-surface border-gray-200 text-gray-500 hover:text-gray-900"
                 }`}
               >
                 <Flag size={14} /> {reviewFlags[currentIndex] ? "Review Marked" : "Mark Review"}
@@ -357,7 +357,7 @@ const ExamAttempt = () => {
 
             <button
               onClick={() => setScratchOpen(!scratchOpen)}
-              className="bg-dark-700 hover:bg-dark-600 border border-white/10 px-4 py-2 rounded-lg text-sm font-medium transition"
+              className="bg-gray-50 hover:bg-dark-600 border border-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition"
             >
               {scratchOpen ? "Close Pad" : "Scratch Pad"}
             </button>
@@ -382,7 +382,7 @@ const ExamAttempt = () => {
 
       {/* Scratch Pad overlay */}
       {scratchOpen && (
-        <div className="fixed bottom-4 left-4 z-30 w-[320px] h-[240px] bg-dark-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+        <div className="fixed bottom-4 left-4 z-30 w-[320px] h-[240px] bg-surface border border-gray-200 rounded-xl shadow-2xl overflow-hidden">
           <ScratchPad isOpen={scratchOpen} onToggle={() => setScratchOpen(false)} />
         </div>
       )}
@@ -390,10 +390,10 @@ const ExamAttempt = () => {
       {/* Warning Popup */}
       {showWarning && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-dark-800 border border-yellow-500/30 rounded-2xl p-8 max-w-sm text-center">
+          <div className="bg-surface border border-yellow-500/30 rounded-2xl p-8 max-w-sm text-center">
             <AlertTriangle className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
             <h3 className="text-xl font-bold mb-2">Warning!</h3>
-            <p className="text-gray-400 text-sm mb-2">{warningMessage}</p>
+            <p className="text-gray-500 text-sm mb-2">{warningMessage}</p>
             <p className="text-red-400 text-sm font-medium mb-4">
               Violation {violationCount}/3 — {3 - violationCount} more and exam auto-submits
             </p>
@@ -412,7 +412,7 @@ const ExamAttempt = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
           <div className="flex flex-col items-center gap-4">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-            <p className="text-gray-300 text-sm">Submitting your answers...</p>
+            <p className="text-gray-600 text-sm">Submitting your answers...</p>
           </div>
         </div>
       )}

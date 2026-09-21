@@ -151,7 +151,7 @@ export default function StudyMaterials() {
           <button
             type="submit"
             disabled={status?.type === 'loading'}
-            className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition font-medium disabled:opacity-50"
+            className="w-full bg-indigo-600 text-gray-900 py-3 rounded-lg hover:bg-indigo-700 transition font-medium disabled:opacity-50"
           >
             {status?.type === 'loading' ? 'Uploading...' : 'Upload Material'}
           </button>

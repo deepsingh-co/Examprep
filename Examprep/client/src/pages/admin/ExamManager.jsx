@@ -94,7 +94,7 @@ const ExamManager = () => {
           <BookOpen className="text-primary" size={24} />
           <div>
             <h1 className="text-2xl font-bold">Exam Manager</h1>
-            <p className="text-sm text-gray-400">Manage all exams in the platform</p>
+            <p className="text-sm text-gray-500">Manage all exams in the platform</p>
           </div>
         </div>
         <button
@@ -127,7 +127,7 @@ const ExamManager = () => {
           {exams.map((exam) => (
             <div
               key={exam.id}
-              className="glass-card p-6 group hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
+              className="interactive-card p-6 group hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="w-11 h-11 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -136,14 +136,14 @@ const ExamManager = () => {
                 <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition">
                   <button
                     onClick={() => handleOpenModal(exam)}
-                    className="p-2 text-gray-400 hover:text-white bg-white/5 rounded-lg transition"
+                    className="p-2 text-gray-500 hover:text-gray-900 bg-gray-50 rounded-lg transition"
                     title="Edit"
                   >
                     <Pencil size={15} />
                   </button>
                   <button
                     onClick={() => setDeleting(exam)}
-                    className="p-2 text-gray-400 hover:text-red-400 bg-white/5 rounded-lg transition"
+                    className="p-2 text-gray-500 hover:text-red-400 bg-gray-50 rounded-lg transition"
                     title="Delete"
                   >
                     <Trash2 size={15} />
@@ -151,10 +151,10 @@ const ExamManager = () => {
                 </div>
               </div>
               <h3 className="font-semibold text-lg mb-1">{exam.name}</h3>
-              <p className="text-sm text-gray-400 mb-4 line-clamp-2">
+              <p className="text-sm text-gray-500 mb-4 line-clamp-2">
                 {exam.description || "No description"}
               </p>
-              <div className="flex items-center gap-4 text-sm text-gray-400">
+              <div className="flex items-center gap-4 text-sm text-gray-500">
                 <span className="flex items-center gap-1">
                   <Clock size={14} /> {exam.duration} min
                 </span>
@@ -174,20 +174,20 @@ const ExamManager = () => {
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-sm text-gray-400 mb-1 block">Exam Name *</label>
+            <label className="text-sm text-gray-500 mb-1 block">Exam Name *</label>
             <input
               required
-              className="w-full bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
+              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               placeholder="e.g. JEE Main"
             />
           </div>
           <div>
-            <label className="text-sm text-gray-400 mb-1 block">Description</label>
+            <label className="text-sm text-gray-500 mb-1 block">Description</label>
             <textarea
               rows={2}
-              className="w-full bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition resize-none"
+              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition resize-none"
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               placeholder="Short description of the exam"
@@ -195,24 +195,24 @@ const ExamManager = () => {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm text-gray-400 mb-1 block">Duration (min) *</label>
+              <label className="text-sm text-gray-500 mb-1 block">Duration (min) *</label>
               <input
                 type="number"
                 required
                 min="1"
-                className="w-full bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
                 value={form.duration}
                 onChange={(e) => setForm({ ...form, duration: e.target.value })}
                 placeholder="180"
               />
             </div>
             <div>
-              <label className="text-sm text-gray-400 mb-1 block">Total Marks *</label>
+              <label className="text-sm text-gray-500 mb-1 block">Total Marks *</label>
               <input
                 type="number"
                 required
                 min="1"
-                className="w-full bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
                 value={form.total_marks}
                 onChange={(e) => setForm({ ...form, total_marks: e.target.value })}
                 placeholder="300"
@@ -223,7 +223,7 @@ const ExamManager = () => {
             <button
               type="button"
               onClick={() => setModalOpen(false)}
-              className="px-4 py-2 text-sm border border-white/10 rounded-lg hover:bg-white/5 transition"
+              className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 transition"
             >
               Cancel
             </button>

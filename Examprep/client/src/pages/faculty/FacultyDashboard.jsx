@@ -42,7 +42,7 @@ export default function FacultyDashboard() {
             <div className="mt-6 w-full flex gap-2">
               <a
                 href="/faculty/materials"
-                className="w-full flex justify-center items-center gap-2 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
+                className="w-full flex justify-center items-center gap-2 bg-indigo-600 text-gray-900 py-2 rounded-lg hover:bg-indigo-700 transition"
               >
                 <Upload size={16} /> Upload Material
               </a>

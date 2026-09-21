@@ -99,48 +99,48 @@ const ExamResult = () => {
     <div className="max-w-4xl mx-auto">
       <button
         onClick={() => navigate("/student/exams")}
-        className="flex items-center gap-2 text-sm text-gray-400 hover:text-white mb-6 transition"
+        className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 mb-6 transition"
       >
         <ArrowLeft size={16} /> Back to Exams
       </button>
 
       {/* Score Card */}
-      <div className="glass-panel p-8 text-center mb-8 relative overflow-hidden">
+      <div className="surface-card p-8 text-center mb-8 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[80px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
-        <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-primary/10 border-4 border-primary flex items-center justify-center shadow-[0_0_30px_rgba(139,92,246,0.3)]">
+        <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-primary/10 border-4 border-primary flex items-center justify-center shadow-sm">
           <Trophy className="text-primary" size={40} />
         </div>
-        <h1 className="text-5xl font-extrabold mb-2 text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] tracking-tight">
+        <h1 className="text-5xl font-extrabold mb-2 text-gray-900 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] tracking-tight">
           {percent}%
         </h1>
-        <span className={`inline-block text-sm font-bold px-5 py-1.5 rounded-full ${grade.bg} ${grade.color} shadow-[0_0_15px_currentColor] mb-4`}>
+        <span className={`inline-block text-sm font-bold px-5 py-1.5 rounded-full ${grade.bg} ${grade.color} shadow-sm mb-4`}>
           {grade.label}
         </span>
-        <p className="text-gray-300 text-sm font-medium">
+        <p className="text-gray-600 text-sm font-medium">
           {result.topic?.name} <span className="text-gray-500 mx-2">—</span> {result.topic?.subject?.name}
         </p>
 
-        <div className="grid grid-cols-3 gap-6 max-w-md mx-auto mt-8 p-6 bg-dark-900/50 rounded-2xl border border-white/5">
+        <div className="grid grid-cols-3 gap-6 max-w-md mx-auto mt-8 p-6 bg-background/50 rounded-2xl border border-gray-100">
           <div>
-            <p className="text-3xl font-extrabold text-green-400 drop-shadow-[0_0_10px_rgba(74,222,128,0.3)]">{result.total_correct}</p>
-            <p className="text-xs text-gray-400 mt-1 uppercase tracking-wider font-semibold">Correct</p>
+            <p className="text-3xl font-extrabold text-green-400 drop-shadow-sm">{result.total_correct}</p>
+            <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider font-semibold">Correct</p>
           </div>
           <div>
-            <p className="text-3xl font-extrabold text-red-400 drop-shadow-[0_0_10px_rgba(248,113,113,0.3)]">{result.total_wrong}</p>
-            <p className="text-xs text-gray-400 mt-1 uppercase tracking-wider font-semibold">Wrong</p>
+            <p className="text-3xl font-extrabold text-red-400 drop-shadow-sm">{result.total_wrong}</p>
+            <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider font-semibold">Wrong</p>
           </div>
           <div>
-            <p className="text-3xl font-extrabold text-gray-400 drop-shadow-[0_0_10px_rgba(156,163,175,0.3)]">{skipped}</p>
-            <p className="text-xs text-gray-400 mt-1 uppercase tracking-wider font-semibold">Skipped</p>
+            <p className="text-3xl font-extrabold text-gray-500 drop-shadow-sm">{skipped}</p>
+            <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider font-semibold">Skipped</p>
           </div>
         </div>
 
-        <div className="flex items-center justify-center gap-8 mt-6 text-sm font-medium text-gray-300">
-          <span className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-lg border border-white/10">
+        <div className="flex items-center justify-center gap-8 mt-6 text-sm font-medium text-gray-600">
+          <span className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-lg border border-gray-200">
             <Clock size={16} className="text-primary" /> {Math.round(result.time_taken / 60)} min
           </span>
           {result.violations > 0 && (
-            <span className="flex items-center gap-2 bg-yellow-400/10 text-yellow-400 px-4 py-2 rounded-lg border border-yellow-400/20 shadow-[0_0_10px_rgba(250,204,21,0.1)]">
+            <span className="flex items-center gap-2 bg-yellow-400/10 text-yellow-400 px-4 py-2 rounded-lg border border-yellow-400/20 shadow-sm">
               <AlertTriangle size={16} /> {result.violations} violations
             </span>
           )}
@@ -148,45 +148,45 @@ const ExamResult = () => {
       </div>
 
       {/* Question Review */}
-      <div className="glass-panel p-6 mb-8 relative z-10">
-        <h2 className="font-bold text-xl text-white mb-6">Question Review</h2>
+      <div className="surface-card p-6 mb-8 relative z-10">
+        <h2 className="font-bold text-xl text-gray-900 mb-6">Question Review</h2>
         <div className="space-y-4">
           {result.answers.map((answer, idx) => (
-            <div key={answer.id} className="glass-card rounded-xl overflow-hidden transition-all duration-300">
+            <div key={answer.id} className="interactive-card rounded-xl overflow-hidden transition-all duration-300">
               <button
                 onClick={() => setExpandedQ(expandedQ === idx ? null : idx)}
-                className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors"
+                className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center gap-4">
                   {answer.is_correct ? (
-                    <div className="w-8 h-8 rounded-full bg-green-400/20 text-green-400 flex items-center justify-center border border-green-400/30 shadow-[0_0_10px_rgba(74,222,128,0.2)]">
+                    <div className="w-8 h-8 rounded-full bg-green-400/20 text-green-400 flex items-center justify-center border border-green-400/30 shadow-sm">
                       <CheckCircle2 size={18} />
                     </div>
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-red-400/20 text-red-400 flex items-center justify-center border border-red-400/30 shadow-[0_0_10px_rgba(248,113,113,0.2)]">
+                    <div className="w-8 h-8 rounded-full bg-red-400/20 text-red-400 flex items-center justify-center border border-red-400/30 shadow-sm">
                       <XCircle size={18} />
                     </div>
                   )}
-                  <span className="text-sm font-medium text-white text-left">
-                    <span className="text-gray-400 font-mono mr-2">Q{idx + 1}.</span>
+                  <span className="text-sm font-medium text-gray-900 text-left">
+                    <span className="text-gray-500 font-mono mr-2">Q{idx + 1}.</span>
                     {answer.question?.question_text?.slice(0, 70)}{answer.question?.question_text?.length > 70 ? '...' : ''}
                   </span>
                 </div>
-                {expandedQ === idx ? <ChevronUp size={18} className="text-gray-400" /> : <ChevronDown size={18} className="text-gray-400" />}
+                {expandedQ === idx ? <ChevronUp size={18} className="text-gray-500" /> : <ChevronDown size={18} className="text-gray-500" />}
               </button>
               {expandedQ === idx && (
-                <div className="px-5 py-4 border-t border-white/5 bg-dark-900/30 text-sm">
-                  <p className="mb-4 text-white font-medium leading-relaxed">{answer.question?.question_text}</p>
+                <div className="px-5 py-4 border-t border-gray-100 bg-background/30 text-sm">
+                  <p className="mb-4 text-gray-900 font-medium leading-relaxed">{answer.question?.question_text}</p>
                   {answer.question?.type === "NAQ" ? (
-                    <div className="flex items-center gap-6 bg-dark-800/50 p-4 rounded-lg border border-white/5">
+                    <div className="flex items-center gap-6 bg-surface/50 p-4 rounded-lg border border-gray-100">
                       <div>
-                        <span className="text-gray-400 block mb-1 text-xs uppercase tracking-wider">Your Answer</span>
-                        <span className="font-mono text-base font-medium text-white">{answer.typed_answer || "—"}</span>
+                        <span className="text-gray-500 block mb-1 text-xs uppercase tracking-wider">Your Answer</span>
+                        <span className="font-mono text-base font-medium text-gray-900">{answer.typed_answer || "—"}</span>
                       </div>
-                      <div className="w-px h-10 bg-white/10"></div>
+                      <div className="w-px h-10 bg-gray-100"></div>
                       <div>
-                        <span className="text-gray-400 block mb-1 text-xs uppercase tracking-wider">Correct Answer</span>
-                        <span className="font-mono text-base font-bold text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.4)]">
+                        <span className="text-gray-500 block mb-1 text-xs uppercase tracking-wider">Correct Answer</span>
+                        <span className="font-mono text-base font-bold text-green-400 drop-shadow-sm">
                           {answer.question?.correct_answer}
                         </span>
                       </div>
@@ -198,10 +198,10 @@ const ExamResult = () => {
                           key={opt.id}
                           className={`px-4 py-3 rounded-lg text-sm flex items-center justify-between border ${
                             opt.is_correct
-                              ? "bg-green-400/10 border-green-400/30 text-green-400 shadow-[0_0_15px_rgba(74,222,128,0.1)]"
+                              ? "bg-green-400/10 border-green-400/30 text-green-400 shadow-sm"
                               : opt.id === answer.selected_option
                               ? "bg-red-400/10 border-red-400/30 text-red-400"
-                              : "bg-white/5 border-white/5 text-gray-400"
+                              : "bg-gray-50 border-gray-100 text-gray-500"
                           }`}
                         >
                           <span>{opt.option_text}</span>
@@ -221,20 +221,20 @@ const ExamResult = () => {
       </div>
 
       {/* AI Roadmap */}
-      <div className="glass-panel p-6 relative z-10 overflow-hidden">
+      <div className="surface-card p-6 relative z-10 overflow-hidden">
         <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-primary/20 blur-[100px] rounded-full pointer-events-none"></div>
-        <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
+        <div className="flex items-center justify-between mb-6 border-b border-gray-200 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(139,92,246,0.2)]">
+            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary shadow-sm">
               <Map size={20} />
             </div>
-            <h2 className="font-bold text-xl text-white tracking-wide">AI Study Roadmap</h2>
+            <h2 className="font-bold text-xl text-gray-900 tracking-wide">AI Study Roadmap</h2>
           </div>
           {!roadmap && (
             <button
               onClick={generateRoadmap}
               disabled={generatingRoadmap}
-              className="bg-primary/90 hover:bg-primary disabled:opacity-50 px-5 py-2.5 rounded-xl text-sm font-bold text-white shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-all flex items-center gap-2 hover:-translate-y-0.5"
+              className="bg-primary/90 hover:bg-primary disabled:opacity-50 px-5 py-2.5 rounded-xl text-sm font-bold text-gray-900 shadow-sm transition-all flex items-center gap-2 hover:-translate-y-0.5"
             >
               {generatingRoadmap ? <Loader2 size={16} className="animate-spin" /> : <Map size={16} />}
               {generatingRoadmap ? "Generating..." : "Generate Roadmap"}
@@ -243,13 +243,13 @@ const ExamResult = () => {
         </div>
 
         {!roadmap ? (
-          <p className="text-gray-400 text-sm py-8 text-center bg-dark-900/30 rounded-xl border border-white/5">
+          <p className="text-gray-500 text-sm py-8 text-center bg-background/30 rounded-xl border border-gray-100">
             Generate a personalized AI-driven study roadmap based on your weak areas from this test.
           </p>
         ) : (
           <div className="space-y-6">
             {roadmap.weakTopics && roadmap.weakTopics.length > 0 && (
-              <div className="glass-card bg-red-400/5 border-red-400/20 p-5 rounded-xl relative overflow-hidden">
+              <div className="interactive-card bg-red-400/5 border-red-400/20 p-5 rounded-xl relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-2 h-full bg-red-400"></div>
                 <p className="text-sm font-bold text-red-400 mb-3 uppercase tracking-wider pl-2">Identified Weak Areas</p>
                 <div className="flex flex-wrap gap-2 pl-2">
@@ -263,7 +263,7 @@ const ExamResult = () => {
             )}
 
             {roadmap.summary && (
-              <p className="text-sm text-gray-300 bg-white/5 p-4 rounded-xl leading-relaxed border border-white/5">
+              <p className="text-sm text-gray-600 bg-gray-50 p-4 rounded-xl leading-relaxed border border-gray-100">
                 {roadmap.summary}
               </p>
             )}
@@ -271,20 +271,20 @@ const ExamResult = () => {
             {roadmap.plan && roadmap.plan.length > 0 && (
               <div className="space-y-4">
                 {roadmap.plan.map((day, i) => (
-                  <div key={i} className="glass-card p-5 rounded-xl hover:-translate-y-1 transition-transform duration-300">
-                    <p className="text-base font-bold text-primary mb-2 drop-shadow-[0_0_8px_rgba(139,92,246,0.4)]">Day {day.day || i + 1}</p>
-                    {day.focus && <p className="text-sm font-medium text-white mb-3">Focus: {day.focus}</p>}
+                  <div key={i} className="interactive-card p-5 rounded-xl hover:-translate-y-1 transition-transform duration-300">
+                    <p className="text-base font-bold text-primary mb-2 drop-shadow-sm">Day {day.day || i + 1}</p>
+                    {day.focus && <p className="text-sm font-medium text-gray-900 mb-3">Focus: {day.focus}</p>}
                     {day.tasks && (
-                      <ul className="text-sm text-gray-300 space-y-2 mt-2">
+                      <ul className="text-sm text-gray-600 space-y-2 mt-2">
                         {day.tasks.map((t, ti) => (
                           <li key={ti} className="flex items-start gap-3">
-                            <span className="text-primary mt-1 shadow-[0_0_10px_rgba(139,92,246,0.5)]">◆</span> {t}
+                            <span className="text-primary mt-1 shadow-sm">◆</span> {t}
                           </li>
                         ))}
                       </ul>
                     )}
                     {day.resources && day.resources.length > 0 && (
-                      <div className="mt-4 pt-4 border-t border-white/10 flex flex-wrap gap-2">
+                      <div className="mt-4 pt-4 border-t border-gray-200 flex flex-wrap gap-2">
                         {day.resources.map((r, ri) => (
                           <span key={ri} className="text-[10px] bg-primary/20 border border-primary/30 text-primary px-3 py-1 rounded-full font-bold uppercase tracking-wide">
                             {r}

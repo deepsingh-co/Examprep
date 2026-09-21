@@ -68,15 +68,15 @@ const ScratchPad = ({ isOpen, onToggle }) => {
     <>
       <button
         onClick={onToggle}
-        className="bg-dark-700 hover:bg-dark-600 border border-white/10 px-4 py-2 rounded-lg text-sm font-medium transition"
+        className="bg-gray-50 hover:bg-dark-600 border border-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition"
       >
         {isOpen ? "Close Pad" : "Scratch Pad"}
       </button>
 
       {isOpen && (
-        <div className="fixed bottom-4 left-4 z-30 w-[320px] h-[240px] bg-dark-800 border border-white/10 rounded-xl shadow-2xl flex flex-col overflow-hidden">
-          <div className="flex items-center justify-between px-3 py-2 bg-dark-700 border-b border-white/5">
-            <span className="text-xs font-medium text-gray-400">Scratch Pad</span>
+        <div className="fixed bottom-4 left-4 z-30 w-[320px] h-[240px] bg-surface border border-gray-200 rounded-xl shadow-2xl flex flex-col overflow-hidden">
+          <div className="flex items-center justify-between px-3 py-2 bg-gray-50 border-b border-gray-100">
+            <span className="text-xs font-medium text-gray-500">Scratch Pad</span>
             <div className="flex items-center gap-1">
               <div className="flex gap-1 mr-2">
                 {COLORS.map((c) => (
@@ -93,7 +93,7 @@ const ScratchPad = ({ isOpen, onToggle }) => {
               <select
                 value={brushSize}
                 onChange={(e) => setBrushSize(Number(e.target.value))}
-                className="bg-dark-800 text-xs text-gray-400 border border-white/10 rounded px-1 py-0.5"
+                className="bg-surface text-xs text-gray-500 border border-gray-200 rounded px-1 py-0.5"
               >
                 {SIZES.map((s) => (
                   <option key={s} value={s}>
@@ -111,7 +111,7 @@ const ScratchPad = ({ isOpen, onToggle }) => {
           </div>
           <canvas
             ref={canvasRef}
-            className="flex-1 cursor-crosshair bg-dark-900 touch-none"
+            className="flex-1 cursor-crosshair bg-background touch-none"
             onMouseDown={startDraw}
             onMouseMove={draw}
             onMouseUp={endDraw}

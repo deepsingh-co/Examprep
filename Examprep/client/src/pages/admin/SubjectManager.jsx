@@ -90,7 +90,7 @@ const SubjectManager = () => {
           <Layers className="text-primary" size={24} />
           <div>
             <h1 className="text-2xl font-bold">Subject Manager</h1>
-            <p className="text-sm text-gray-400">Manage subjects for each exam</p>
+            <p className="text-sm text-gray-500">Manage subjects for each exam</p>
           </div>
         </div>
         <button
@@ -103,15 +103,15 @@ const SubjectManager = () => {
       </div>
 
       {/* Step 1: Select Exam */}
-      <div className="glass-panel p-4 mb-6">
-        <label className="text-sm text-gray-400 mb-2 block font-medium">
+      <div className="surface-card p-4 mb-6">
+        <label className="text-sm text-gray-500 mb-2 block font-medium">
           Step 1: Select Exam
         </label>
         <div className="relative max-w-sm">
           <select
             value={selectedExam}
             onChange={(e) => setSelectedExam(e.target.value)}
-            className="w-full appearance-none bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition pr-10"
+            className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition pr-10"
           >
             <option value="">-- Choose an exam --</option>
             {exams.map((exam) => (
@@ -122,7 +122,7 @@ const SubjectManager = () => {
           </select>
           <ChevronDown
             size={16}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
           />
         </div>
       </div>
@@ -161,7 +161,7 @@ const SubjectManager = () => {
               {subjects.map((subject) => (
                 <div
                   key={subject.id}
-                  className="glass-card p-6 group hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
+                  className="interactive-card p-6 group hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="w-11 h-11 bg-primary/10 rounded-lg flex items-center justify-center">
@@ -170,14 +170,14 @@ const SubjectManager = () => {
                     <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition">
                       <button
                         onClick={() => handleOpenModal(subject)}
-                        className="p-2 text-gray-400 hover:text-white bg-white/5 rounded-lg transition"
+                        className="p-2 text-gray-500 hover:text-gray-900 bg-gray-50 rounded-lg transition"
                         title="Edit"
                       >
                         <Pencil size={15} />
                       </button>
                       <button
                         onClick={() => setDeleting(subject)}
-                        className="p-2 text-gray-400 hover:text-red-400 bg-white/5 rounded-lg transition"
+                        className="p-2 text-gray-500 hover:text-red-400 bg-gray-50 rounded-lg transition"
                         title="Delete"
                       >
                         <Trash2 size={15} />
@@ -185,7 +185,7 @@ const SubjectManager = () => {
                     </div>
                   </div>
                   <h3 className="font-semibold text-lg mb-1">{subject.name}</h3>
-                  <p className="text-sm text-gray-400 mb-3 line-clamp-2">
+                  <p className="text-sm text-gray-500 mb-3 line-clamp-2">
                     {subject.description || "No description"}
                   </p>
                   <span className="inline-flex items-center gap-1 text-xs text-primary bg-primary/10 px-2.5 py-1 rounded-full">
@@ -205,20 +205,20 @@ const SubjectManager = () => {
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-sm text-gray-400 mb-1 block">Subject Name *</label>
+            <label className="text-sm text-gray-500 mb-1 block">Subject Name *</label>
             <input
               required
-              className="w-full bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
+              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               placeholder="e.g. Mathematics"
             />
           </div>
           <div>
-            <label className="text-sm text-gray-400 mb-1 block">Description</label>
+            <label className="text-sm text-gray-500 mb-1 block">Description</label>
             <textarea
               rows={2}
-              className="w-full bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition resize-none"
+              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition resize-none"
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
             />
@@ -232,7 +232,7 @@ const SubjectManager = () => {
             <button
               type="button"
               onClick={() => setModalOpen(false)}
-              className="px-4 py-2 text-sm border border-white/10 rounded-lg hover:bg-white/5 transition"
+              className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 transition"
             >
               Cancel
             </button>

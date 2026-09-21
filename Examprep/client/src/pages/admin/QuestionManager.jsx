@@ -209,7 +209,7 @@ const QuestionManager = () => {
   };
 
   const dropdownCls =
-    "w-full appearance-none bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition pr-10";
+    "w-full appearance-none bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition pr-10";
 
   return (
     <div className="relative z-10">
@@ -218,7 +218,7 @@ const QuestionManager = () => {
           <HelpCircle className="text-primary" size={24} />
           <div>
             <h1 className="text-2xl font-bold">Question Manager</h1>
-            <p className="text-sm text-gray-400">Build the question bank</p>
+            <p className="text-sm text-gray-500">Build the question bank</p>
           </div>
         </div>
         <button
@@ -231,8 +231,8 @@ const QuestionManager = () => {
       </div>
 
       {/* Hierarchy */}
-      <div className="glass-panel p-4 mb-6">
-        <p className="text-sm text-gray-400 font-medium mb-3">Select hierarchy</p>
+      <div className="surface-card p-4 mb-6">
+        <p className="text-sm text-gray-500 font-medium mb-3">Select hierarchy</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="text-xs text-gray-500 block mb-1">Step 1: Exam</label>
@@ -335,7 +335,7 @@ const QuestionManager = () => {
               {questions.map((question, idx) => (
                 <div
                   key={question.id}
-                  className="glass-card p-5 group hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
+                  className="interactive-card p-5 group hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
@@ -362,7 +362,7 @@ const QuestionManager = () => {
                               className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg ${
                                 opt.is_correct
                                   ? "bg-green-400/10 text-green-400"
-                                  : "bg-white/5 text-gray-400"
+                                  : "bg-gray-50 text-gray-500"
                               }`}
                             >
                               {String.fromCharCode(65 + oi)}.{" "}
@@ -373,7 +373,7 @@ const QuestionManager = () => {
                         </div>
                       )}
                       {question.type === "NAQ" && (
-                        <div className="text-sm text-gray-400">
+                        <div className="text-sm text-gray-500">
                           Answer:{" "}
                           <span className="text-green-400 font-mono font-medium">
                             {question.correct_answer}
@@ -384,14 +384,14 @@ const QuestionManager = () => {
                     <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition flex-shrink-0">
                       <button
                         onClick={() => handleOpenModal(question)}
-                        className="p-2 text-gray-400 hover:text-white bg-white/5 rounded-lg transition"
+                        className="p-2 text-gray-500 hover:text-gray-900 bg-gray-50 rounded-lg transition"
                         title="Edit"
                       >
                         <Pencil size={15} />
                       </button>
                       <button
                         onClick={() => setDeleting(question)}
-                        className="p-2 text-gray-400 hover:text-red-400 bg-white/5 rounded-lg transition"
+                        className="p-2 text-gray-500 hover:text-red-400 bg-gray-50 rounded-lg transition"
                         title="Delete"
                       >
                         <Trash2 size={15} />
@@ -414,11 +414,11 @@ const QuestionManager = () => {
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-sm text-gray-400 mb-1 block">Question Text *</label>
+            <label className="text-sm text-gray-500 mb-1 block">Question Text *</label>
             <textarea
               required
               rows={2}
-              className="w-full bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition resize-none"
+              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition resize-none"
               value={form.question_text}
               onChange={(e) => setForm({ ...form, question_text: e.target.value })}
               placeholder="Enter the question..."
@@ -427,7 +427,7 @@ const QuestionManager = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm text-gray-400 mb-1 block">Question Type *</label>
+              <label className="text-sm text-gray-500 mb-1 block">Question Type *</label>
               <div className="flex gap-2">
                 {["MCQ", "MULTI", "NAQ"].map((t) => (
                   <button
@@ -437,7 +437,7 @@ const QuestionManager = () => {
                     className={`flex-1 text-xs px-3 py-2 rounded-lg border transition ${
                       form.type === t
                         ? "bg-primary/10 border-primary text-primary"
-                        : "border-white/10 text-gray-400 hover:text-white"
+                        : "border-gray-200 text-gray-500 hover:text-gray-900"
                     }`}
                   >
                     {typeLabels[t]}
@@ -446,7 +446,7 @@ const QuestionManager = () => {
               </div>
             </div>
             <div>
-              <label className="text-sm text-gray-400 mb-1 block">Difficulty *</label>
+              <label className="text-sm text-gray-500 mb-1 block">Difficulty *</label>
               <div className="flex gap-2">
                 {["easy", "medium", "hard"].map((d) => (
                   <button
@@ -456,7 +456,7 @@ const QuestionManager = () => {
                     className={`flex-1 text-xs px-3 py-2 rounded-lg border capitalize transition ${
                       form.difficulty === d
                         ? "bg-primary/10 border-primary text-primary"
-                        : "border-white/10 text-gray-400 hover:text-white"
+                        : "border-gray-200 text-gray-500 hover:text-gray-900"
                     }`}
                   >
                     {d}
@@ -468,10 +468,10 @@ const QuestionManager = () => {
 
           {form.type === "NAQ" ? (
             <div>
-              <label className="text-sm text-gray-400 mb-1 block">Correct Numeric Answer *</label>
+              <label className="text-sm text-gray-500 mb-1 block">Correct Numeric Answer *</label>
               <input
                 required
-                className="w-full bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
                 value={form.correct_answer}
                 onChange={(e) => setForm({ ...form, correct_answer: e.target.value })}
                 placeholder="e.g. 42"
@@ -479,7 +479,7 @@ const QuestionManager = () => {
             </div>
           ) : (
             <div>
-              <label className="text-sm text-gray-400 mb-2 block">
+              <label className="text-sm text-gray-500 mb-2 block">
                 Options *{" "}
                 <span className="text-xs text-gray-500">
                   ({form.type === "MULTI" ? "select all correct" : "mark 1 correct"})
@@ -492,7 +492,7 @@ const QuestionManager = () => {
                       {String.fromCharCode(65 + index)}.
                     </span>
                     <input
-                      className="flex-1 bg-dark-700 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary transition"
+                      className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary transition"
                       value={opt.text}
                       onChange={(e) => setOption(index, "text", e.target.value)}
                       placeholder={`Option ${String.fromCharCode(65 + index)}`}
@@ -504,7 +504,7 @@ const QuestionManager = () => {
                       className={`w-8 h-8 rounded-lg flex items-center justify-center transition border ${
                         opt.isCorrect
                           ? "bg-green-400/10 border-green-400 text-green-400"
-                          : "border-white/10 text-gray-500 hover:text-white"
+                          : "border-gray-200 text-gray-500 hover:text-gray-900"
                       }`}
                     >
                       <Check size={16} />
@@ -519,7 +519,7 @@ const QuestionManager = () => {
             <button
               type="button"
               onClick={() => setModalOpen(false)}
-              className="px-4 py-2 text-sm border border-white/10 rounded-lg hover:bg-white/5 transition"
+              className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 transition"
             >
               Cancel
             </button>

@@ -59,22 +59,22 @@ const AIChat = () => {
           className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-primary hover:bg-primary-hover rounded-full shadow-lg flex items-center justify-center transition"
           title="AI Assistant"
         >
-          <MessageCircle size={24} className="text-white" />
+          <MessageCircle size={24} className="text-gray-900" />
         </button>
       )}
 
       {/* Chat Window */}
       {open && (
-        <div className="fixed bottom-6 right-6 z-40 w-[380px] h-[520px] bg-dark-800 border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+        <div className="fixed bottom-6 right-6 z-40 w-[380px] h-[520px] bg-surface border border-gray-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-5 py-3 border-b border-white/5 bg-dark-700">
+          <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 bg-gray-50">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
               <span className="font-semibold text-sm">AI Study Assistant</span>
             </div>
             <button
               onClick={() => setOpen(false)}
-              className="text-gray-400 hover:text-white transition"
+              className="text-gray-500 hover:text-gray-900 transition"
             >
               <X size={18} />
             </button>
@@ -92,8 +92,8 @@ const AIChat = () => {
                 <div
                   className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                     msg.role === "user"
-                      ? "bg-primary text-white rounded-br-sm"
-                      : "bg-white/5 text-gray-300 rounded-bl-sm"
+                      ? "bg-primary text-gray-900 rounded-br-sm"
+                      : "bg-gray-50 text-gray-600 rounded-bl-sm"
                   }`}
                 >
                   {msg.content}
@@ -102,7 +102,7 @@ const AIChat = () => {
             ))}
             {loading && (
               <div className="flex justify-start">
-                <div className="bg-white/5 px-4 py-3 rounded-2xl rounded-bl-sm">
+                <div className="bg-gray-50 px-4 py-3 rounded-2xl rounded-bl-sm">
                   <Loader2 size={16} className="animate-spin text-primary" />
                 </div>
               </div>
@@ -113,10 +113,10 @@ const AIChat = () => {
           {/* Input */}
           <form
             onSubmit={handleSend}
-            className="flex items-center gap-2 px-4 py-3 border-t border-white/5"
+            className="flex items-center gap-2 px-4 py-3 border-t border-gray-100"
           >
             <input
-              className="flex-1 bg-dark-900 border border-white/10 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition"
+              className="flex-1 bg-background border border-gray-200 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask a question..."

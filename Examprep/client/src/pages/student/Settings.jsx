@@ -103,7 +103,7 @@ const Settings = () => {
             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition border ${
               tab === t.id
                 ? "bg-primary/10 border-primary text-primary"
-                : "border-white/10 text-gray-400 hover:text-white"
+                : "border-gray-200 text-gray-500 hover:text-gray-900"
             }`}
           >
             <t.icon size={16} /> {t.label}
@@ -114,23 +114,23 @@ const Settings = () => {
       {/* Profile Tab */}
       {tab === "profile" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-dark-800 border border-white/5 rounded-xl p-6">
+          <div className="bg-surface border border-gray-100 rounded-xl p-6">
             <h2 className="font-semibold mb-1">Profile Information</h2>
             <p className="text-xs text-gray-500 mb-5">Update your name and email</p>
             <form onSubmit={handleProfile} className="space-y-4">
               <div>
-                <label className="text-sm text-gray-400 mb-1 block">Name</label>
+                <label className="text-sm text-gray-500 mb-1 block">Name</label>
                 <input
-                  className="w-full bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
                   value={profile.name}
                   onChange={(e) => setProfile({ ...profile, name: e.target.value })}
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-400 mb-1 block">Email</label>
+                <label className="text-sm text-gray-500 mb-1 block">Email</label>
                 <input
                   type="email"
-                  className="w-full bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
                   value={profile.email}
                   onChange={(e) => setProfile({ ...profile, email: e.target.value })}
                 />
@@ -145,24 +145,24 @@ const Settings = () => {
             </form>
           </div>
 
-          <div className="bg-dark-800 border border-white/5 rounded-xl p-6">
+          <div className="bg-surface border border-gray-100 rounded-xl p-6">
             <h2 className="font-semibold mb-1">Change Password</h2>
             <p className="text-xs text-gray-500 mb-5">Update your account password</p>
             <form onSubmit={handlePassword} className="space-y-4">
               <div>
-                <label className="text-sm text-gray-400 mb-1 block">Current Password</label>
+                <label className="text-sm text-gray-500 mb-1 block">Current Password</label>
                 <input
                   type="password"
-                  className="w-full bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
                   value={passwords.currentPassword}
                   onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-400 mb-1 block">New Password</label>
+                <label className="text-sm text-gray-500 mb-1 block">New Password</label>
                 <input
                   type="password"
-                  className="w-full bg-dark-700 border border-white/10 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition"
                   value={passwords.newPassword}
                   onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
                 />
@@ -181,22 +181,22 @@ const Settings = () => {
 
       {/* Behaviour Tab */}
       {tab === "behaviour" && (
-        <div className="bg-dark-800 border border-white/5 rounded-xl p-6">
+        <div className="bg-surface border border-gray-100 rounded-xl p-6">
           <div className="flex items-center gap-2 mb-6">
             <Shield className="text-yellow-400" size={20} />
             <h2 className="font-semibold">Proctoring Behaviour</h2>
           </div>
 
           <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-white/5 rounded-lg p-4 text-center">
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
               <p className="text-2xl font-bold text-yellow-400">{totalViolations}</p>
               <p className="text-xs text-gray-500">Total Violations</p>
             </div>
-            <div className="bg-white/5 rounded-lg p-4 text-center">
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
               <p className="text-2xl font-bold">{violations.length}</p>
               <p className="text-xs text-gray-500">Tests with Flag</p>
             </div>
-            <div className="bg-white/5 rounded-lg p-4 text-center">
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
               <p className="text-2xl font-bold text-green-400">
                 {violations.length > 0
                   ? Math.max(0, Math.round((violations.filter((v) => v.violations < 3).length / violations.length) * 100))
@@ -214,12 +214,12 @@ const Settings = () => {
           ) : violations.length === 0 ? (
             <div className="text-center py-10">
               <Activity className="w-10 h-10 text-green-400 mx-auto mb-3" />
-              <p className="text-gray-400">Great job! No behaviour violations recorded.</p>
+              <p className="text-gray-500">Great job! No behaviour violations recorded.</p>
             </div>
           ) : (
             <div className="space-y-3">
               {violations.map((v) => (
-                <div key={v.id} className="flex items-center justify-between bg-white/5 border border-white/5 rounded-lg px-4 py-3">
+                <div key={v.id} className="flex items-center justify-between bg-gray-50 border border-gray-100 rounded-lg px-4 py-3">
                   <div>
                     <p className="text-sm font-medium">{v.topic?.name}</p>
                     <p className="text-xs text-gray-500">{formatDate(v.createdAt)}</p>
@@ -246,7 +246,7 @@ const Settings = () => {
 
       {/* Feedback Tab */}
       {tab === "feedback" && (
-        <div className="bg-dark-800 border border-white/5 rounded-xl p-6">
+        <div className="bg-surface border border-gray-100 rounded-xl p-6">
           <div className="flex items-center gap-2 mb-6">
             <MessageSquare className="text-primary" size={20} />
             <h2 className="font-semibold">Teacher Feedback</h2>
@@ -259,12 +259,12 @@ const Settings = () => {
           ) : annotations.length === 0 ? (
             <div className="text-center py-10">
               <MessageSquare className="w-10 h-10 text-gray-600 mx-auto mb-3" />
-              <p className="text-gray-400">No feedback received yet.</p>
+              <p className="text-gray-500">No feedback received yet.</p>
             </div>
           ) : (
             <div className="space-y-4">
               {annotations.map((a) => (
-                <div key={a.id} className="bg-white/5 border border-white/5 rounded-xl p-5">
+                <div key={a.id} className="bg-gray-50 border border-gray-100 rounded-xl p-5">
                   <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
                     <span className={`text-xs px-3 py-1 rounded-full border ${typeStyles[a.type]?.cls}`}>
                       {typeStyles[a.type]?.label}
@@ -273,7 +273,7 @@ const Settings = () => {
                       {a.admin?.name} · {formatDate(a.createdAt)}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-300 mb-2">{a.feedback}</p>
+                  <p className="text-sm text-gray-600 mb-2">{a.feedback}</p>
                   <p className="text-xs text-gray-500">
                     On: {a.attempt?.topic?.name} ({a.attempt?.topic?.subject?.exam?.name || ""})
                   </p>

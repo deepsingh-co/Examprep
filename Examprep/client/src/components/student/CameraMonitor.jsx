@@ -25,7 +25,7 @@ const CameraMonitor = ({ onViolation, violationCount }) => {
   const [detectionReady, setDetectionReady] = useState(false);
   const [status, setStatus] = useState({
     label: "Initializing",
-    tone: "text-gray-400",
+    tone: "text-gray-500",
   });
 
   useEffect(() => {
@@ -123,7 +123,7 @@ const CameraMonitor = ({ onViolation, violationCount }) => {
       } catch (err) {
         if (!cancelled) {
           setDetectionReady(false);
-          setStatus({ label: "Detection off", tone: "text-gray-400" });
+          setStatus({ label: "Detection off", tone: "text-gray-500" });
         }
       }
     };
@@ -140,8 +140,8 @@ const CameraMonitor = ({ onViolation, violationCount }) => {
   }, [onViolation]);
 
   return (
-    <div className="bg-dark-800 border border-white/5 rounded-xl overflow-hidden">
-      <div className="flex items-center justify-between px-3 py-2 bg-dark-700">
+    <div className="bg-surface border border-gray-100 rounded-xl overflow-hidden">
+      <div className="flex items-center justify-between px-3 py-2 bg-gray-50">
         <div className="flex items-center gap-2">
           <Camera size={14} className="text-primary" />
           <span className="text-xs font-medium">Proctoring</span>
@@ -151,13 +151,13 @@ const CameraMonitor = ({ onViolation, violationCount }) => {
         </div>
         <div className="flex items-center gap-2">
           <AlertTriangle size={14} className="text-yellow-400" />
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-gray-500">
             {violationCount}/3
           </span>
         </div>
       </div>
 
-      <div className="relative aspect-[4/3] bg-dark-900">
+      <div className="relative aspect-[4/3] bg-background">
         {error ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 text-xs text-center px-4">
             <XCircle size={24} className="mb-2 text-red-400" />
@@ -174,7 +174,7 @@ const CameraMonitor = ({ onViolation, violationCount }) => {
         )}
         <div className="absolute top-2 left-2 flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded-full">
           <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
-          <span className="text-[10px] text-white font-medium">LIVE</span>
+          <span className="text-[10px] text-gray-900 font-medium">LIVE</span>
         </div>
         <div className="absolute bottom-2 left-2 flex items-center gap-1.5 bg-black/60 px-2 py-1 rounded-full">
           <Eye size={12} className={status.tone} />
