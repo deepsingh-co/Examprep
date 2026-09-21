@@ -57,35 +57,35 @@ const TestHistory = () => {
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-2">Test History</h1>
-      <p className="text-gray-400 text-sm mb-6">All your past test attempts</p>
+    <div className="relative z-10">
+      <h1 className="text-3xl font-extrabold text-white mb-2 tracking-wide">Test History</h1>
+      <p className="text-gray-400 text-sm mb-8">All your past test attempts</p>
 
       {/* Filters */}
-      <div className="flex flex-col md:flex-row gap-3 mb-6">
+      <div className="flex flex-col md:flex-row gap-4 mb-8">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <input
-            className="w-full bg-dark-800 border border-white/10 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-primary transition"
+            className="w-full glass-panel pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white placeholder-gray-500"
             placeholder="Search by topic..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <div className="relative">
+        <div className="relative md:w-64">
           <select
             value={filterExam}
             onChange={(e) => setFilterExam(e.target.value)}
-            className="appearance-none bg-dark-800 border border-white/10 rounded-lg px-4 py-2.5 text-sm pr-10 focus:outline-none focus:border-primary transition"
+            className="appearance-none w-full glass-panel px-4 py-3 text-sm pr-10 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-white cursor-pointer"
           >
-            <option value="">All Exams</option>
+            <option value="" className="bg-dark-800">All Exams</option>
             {exams.map((e) => (
-              <option key={e.id} value={e.name}>
+              <option key={e.id} value={e.name} className="bg-dark-800">
                 {e.name}
               </option>
             ))}
           </select>
-          <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+          <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
         </div>
       </div>
 
@@ -96,17 +96,17 @@ const TestHistory = () => {
           description="Take your first exam to see it here"
         />
       ) : (
-        <div className="bg-dark-800 border border-white/5 rounded-xl overflow-x-auto">
+        <div className="glass-panel overflow-x-auto shadow-[0_0_30px_rgba(0,0,0,0.2)]">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-xs text-gray-500 border-b border-white/5">
-                <th className="px-5 py-3 font-medium">Exam</th>
-                <th className="px-5 py-3 font-medium">Topic</th>
-                <th className="px-5 py-3 font-medium text-center">Score</th>
-                <th className="px-5 py-3 font-medium text-center">Correct</th>
-                <th className="px-5 py-3 font-medium text-center">Wrong</th>
-                <th className="px-5 py-3 font-medium">Date</th>
-                <th className="px-5 py-3 font-medium text-right">Status</th>
+              <tr className="text-left text-xs text-gray-400 border-b border-white/10 uppercase tracking-wider bg-white/5">
+                <th className="px-6 py-4 font-semibold">Exam</th>
+                <th className="px-6 py-4 font-semibold">Topic</th>
+                <th className="px-6 py-4 font-semibold text-center">Score</th>
+                <th className="px-6 py-4 font-semibold text-center">Correct</th>
+                <th className="px-6 py-4 font-semibold text-center">Wrong</th>
+                <th className="px-6 py-4 font-semibold">Date</th>
+                <th className="px-6 py-4 font-semibold text-right">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -114,26 +114,26 @@ const TestHistory = () => {
                 <tr
                   key={a.id}
                   onClick={() => navigate(`/student/result/${a.id}`)}
-                  className="border-b border-white/5 last:border-0 hover:bg-white/5 transition cursor-pointer"
+                  className="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors cursor-pointer group"
                 >
-                  <td className="px-5 py-3 text-gray-300">
+                  <td className="px-6 py-4 text-gray-300 font-medium group-hover:text-white transition-colors">
                     {a.topic?.subject?.exam?.name || "—"}
                   </td>
-                  <td className="px-5 py-3">{a.topic?.name}</td>
-                  <td className="px-5 py-3 text-center font-medium text-primary">
+                  <td className="px-6 py-4 text-white font-medium">{a.topic?.name}</td>
+                  <td className="px-6 py-4 text-center font-bold text-primary">
                     {a.score}/{a.total_questions}
                   </td>
-                  <td className="px-5 py-3 text-center text-green-400">{a.total_correct}</td>
-                  <td className="px-5 py-3 text-center text-red-400">{a.total_wrong}</td>
-                  <td className="px-5 py-3 text-gray-400">{formatDate(a.createdAt)}</td>
-                  <td className="px-5 py-3 text-right">
+                  <td className="px-6 py-4 text-center text-green-400 font-medium">{a.total_correct}</td>
+                  <td className="px-6 py-4 text-center text-red-400 font-medium">{a.total_wrong}</td>
+                  <td className="px-6 py-4 text-gray-400">{formatDate(a.createdAt)}</td>
+                  <td className="px-6 py-4 text-right">
                     <span
-                      className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                      className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider shadow-[0_0_10px_currentColor] opacity-90 ${
                         a.status === "completed"
-                          ? "bg-green-400/10 text-green-400"
+                          ? "bg-green-400/10 text-green-400 border border-green-400/20"
                           : a.status === "abandoned"
-                          ? "bg-red-400/10 text-red-400"
-                          : "bg-yellow-400/10 text-yellow-400"
+                          ? "bg-red-400/10 text-red-400 border border-red-400/20"
+                          : "bg-yellow-400/10 text-yellow-400 border border-yellow-400/20"
                       }`}
                     >
                       {a.status}

@@ -42,20 +42,21 @@ export default function StudentDashboard() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
         {subjects.map((sub) => (
-          <div key={sub._id} className="bg-dark-800 rounded-xl border border-white/10 p-6 flex flex-col hover:border-primary/50 transition-colors">
-            <h2 className="text-xl font-semibold text-white">{sub.name}</h2>
-            <p className="text-sm text-gray-400 mt-1">{sub.code || "No Code"} | {sub.credits || 0} Credits</p>
-            <div className="mt-4 flex gap-2">
-              <span className="inline-flex items-center gap-1 text-xs bg-primary/20 text-primary px-2 py-1 rounded-md">
+          <div key={sub._id} className="glass-card p-6 flex flex-col group">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl pointer-events-none"></div>
+            <h2 className="text-xl font-bold text-white relative z-10 group-hover:text-primary transition-colors">{sub.name}</h2>
+            <p className="text-sm text-gray-400 mt-1 relative z-10">{sub.code || "No Code"} | {sub.credits || 0} Credits</p>
+            <div className="mt-4 flex gap-2 relative z-10">
+              <span className="inline-flex items-center gap-1 text-xs bg-primary/10 border border-primary/20 text-primary px-2.5 py-1 rounded-md font-medium shadow-[0_0_10px_rgba(139,92,246,0.1)]">
                 <FileText size={12} /> {sub.units?.length || 0} Units
               </span>
             </div>
-            <div className="mt-6">
+            <div className="mt-6 relative z-10 mt-auto">
               <Link
                 to={`/student/subject/${sub._id}`}
-                className="w-full flex items-center justify-center gap-2 bg-primary/10 text-primary py-2 rounded-lg hover:bg-primary hover:text-white transition"
+                className="w-full flex items-center justify-center gap-2 bg-primary/10 border border-primary/20 text-primary py-2.5 rounded-xl font-semibold hover:bg-primary hover:text-white transition-all shadow-[0_0_15px_rgba(139,92,246,0.1)] hover:shadow-[0_0_20px_rgba(139,92,246,0.3)]"
               >
                 Go to Subject <ChevronRight size={16} />
               </Link>

@@ -108,31 +108,32 @@ const AllExams = () => {
         <>
           {/* Exam Level */}
           {level === "exams" && (
-            <div>
-              <h1 className="text-2xl font-bold mb-2">All Exams</h1>
-              <p className="text-gray-400 text-sm mb-6">Choose an exam to start preparing</p>
+            <div className="animate-fade-in relative z-10">
+              <h1 className="text-3xl font-extrabold text-white mb-2 tracking-wide">All Exams</h1>
+              <p className="text-gray-400 text-sm mb-8">Choose an exam to start preparing</p>
               {exams.length === 0 ? (
-                <p className="text-gray-500 py-12 text-center">No exams available yet.</p>
+                <p className="text-gray-500 py-12 text-center glass-panel rounded-xl">No exams available yet.</p>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {exams.map((exam) => (
                     <button
                       key={exam.id}
                       onClick={() => loadSubjects(exam)}
-                      className="bg-dark-800 border border-white/5 rounded-xl p-6 text-left hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 transition group"
+                      className="glass-card p-6 text-left group hover:-translate-y-1"
                     >
-                      <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition">
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl pointer-events-none"></div>
+                      <div className="w-12 h-12 bg-primary/10 border border-primary/20 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-all shadow-[0_0_15px_rgba(139,92,246,0.1)] group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(139,92,246,0.3)]">
                         <BookOpen className="text-primary" size={24} />
                       </div>
-                      <h3 className="font-semibold text-lg mb-1">{exam.name}</h3>
-                      <p className="text-sm text-gray-400 mb-4 line-clamp-2">
+                      <h3 className="font-bold text-xl text-white mb-2 group-hover:text-primary transition-colors">{exam.name}</h3>
+                      <p className="text-sm text-gray-400 mb-5 line-clamp-2 leading-relaxed">
                         {exam.description || "No description"}
                       </p>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-500">
+                      <div className="flex items-center justify-between text-sm font-medium">
+                        <span className="text-gray-400 group-hover:text-gray-300 transition-colors">
                           {exam.subjects?.length || 0} subjects
                         </span>
-                        <ArrowRight className="text-primary group-hover:translate-x-1 transition" size={16} />
+                        <ArrowRight className="text-primary group-hover:translate-x-2 transition-transform duration-300" size={18} />
                       </div>
                     </button>
                   ))}
@@ -143,31 +144,32 @@ const AllExams = () => {
 
           {/* Subject Level */}
           {level === "subjects" && (
-            <div>
-              <h1 className="text-2xl font-bold mb-2">{selectedExam?.name}</h1>
-              <p className="text-gray-400 text-sm mb-6">Select a subject</p>
+            <div className="animate-fade-in relative z-10">
+              <h1 className="text-3xl font-extrabold text-white mb-2 tracking-wide">{selectedExam?.name}</h1>
+              <p className="text-gray-400 text-sm mb-8">Select a subject</p>
               {subjects.length === 0 ? (
-                <p className="text-gray-500 py-12 text-center">No subjects in this exam yet.</p>
+                <p className="text-gray-500 py-12 text-center glass-panel rounded-xl">No subjects in this exam yet.</p>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {subjects.map((subject) => (
                     <button
                       key={subject.id}
                       onClick={() => loadTopics(subject)}
-                      className="bg-dark-800 border border-white/5 rounded-xl p-6 text-left hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 transition group"
+                      className="glass-card p-6 text-left group hover:-translate-y-1"
                     >
-                      <div className="w-12 h-12 bg-green-400/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-green-400/20 transition">
-                        <Layers className="text-green-400" size={24} />
+                      <div className="absolute inset-0 bg-gradient-to-br from-accent-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl pointer-events-none"></div>
+                      <div className="w-12 h-12 bg-accent-cyan/10 border border-accent-cyan/20 rounded-xl flex items-center justify-center mb-5 group-hover:bg-accent-cyan/20 transition-all shadow-[0_0_15px_rgba(6,182,212,0.1)] group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                        <Layers className="text-accent-cyan" size={24} />
                       </div>
-                      <h3 className="font-semibold text-lg mb-1">{subject.name}</h3>
-                      <p className="text-sm text-gray-400 mb-4 line-clamp-2">
+                      <h3 className="font-bold text-xl text-white mb-2 group-hover:text-accent-cyan transition-colors">{subject.name}</h3>
+                      <p className="text-sm text-gray-400 mb-5 line-clamp-2 leading-relaxed">
                         {subject.description || "No description"}
                       </p>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-500">
+                      <div className="flex items-center justify-between text-sm font-medium">
+                        <span className="text-gray-400 group-hover:text-gray-300 transition-colors">
                           {subject.topics?.length || 0} topics
                         </span>
-                        <ArrowRight className="text-green-400 group-hover:translate-x-1 transition" size={16} />
+                        <ArrowRight className="text-accent-cyan group-hover:translate-x-2 transition-transform duration-300" size={18} />
                       </div>
                     </button>
                   ))}
@@ -178,25 +180,25 @@ const AllExams = () => {
 
           {/* Topic Level */}
           {level === "topics" && (
-            <div>
-              <h1 className="text-2xl font-bold mb-2">{selectedSubject?.name}</h1>
-              <p className="text-gray-400 text-sm mb-6">Select a topic to start the exam</p>
+            <div className="animate-fade-in relative z-10">
+              <h1 className="text-3xl font-extrabold text-white mb-2 tracking-wide">{selectedSubject?.name}</h1>
+              <p className="text-gray-400 text-sm mb-8">Select a topic to start the exam</p>
               {topics.length === 0 ? (
-                <p className="text-gray-500 py-12 text-center">No topics in this subject yet.</p>
+                <p className="text-gray-500 py-12 text-center glass-panel rounded-xl">No topics in this subject yet.</p>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {topics.map((topic) => (
                     <div
                       key={topic.id}
-                      className="bg-dark-800 border border-white/5 rounded-xl p-5 flex items-center justify-between hover:border-primary/40 transition"
+                      className="glass-card p-5 flex items-center justify-between group"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-11 h-11 bg-primary/10 rounded-xl flex items-center justify-center">
-                          <Tags className="text-primary" size={20} />
+                        <div className="w-12 h-12 bg-accent-pink/10 border border-accent-pink/20 rounded-xl flex items-center justify-center group-hover:bg-accent-pink/20 group-hover:scale-105 transition-all shadow-[0_0_15px_rgba(236,72,153,0.1)]">
+                          <Tags className="text-accent-pink" size={22} />
                         </div>
                         <div>
-                          <h3 className="font-medium">{topic.name}</h3>
-                          <p className="text-xs text-gray-500">
+                          <h3 className="font-bold text-white group-hover:text-accent-pink transition-colors text-lg">{topic.name}</h3>
+                          <p className="text-sm text-gray-400 mt-0.5">
                             {topic.questions?.length || 0} questions
                           </p>
                         </div>
@@ -204,9 +206,9 @@ const AllExams = () => {
                       <button
                         onClick={() => startExam(topic)}
                         disabled={!topic.questions || topic.questions.length === 0}
-                        className="bg-primary hover:bg-primary-hover disabled:opacity-30 disabled:cursor-not-allowed px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2"
+                        className="bg-accent-pink/90 hover:bg-accent-pink disabled:opacity-30 disabled:cursor-not-allowed px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(236,72,153,0.3)] hover:-translate-y-0.5"
                       >
-                        <Play size={14} /> Start
+                        <Play size={16} fill="currentColor" /> Start
                       </button>
                     </div>
                   ))}
