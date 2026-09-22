@@ -5,6 +5,9 @@
 @layer base {
   body {
     @apply bg-background text-gray-900 font-sans antialiased overflow-x-hidden;
+    /* Soft premium background gradient */
+    background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,0.03) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,0.03) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,0.03) 0, transparent 50%);
+    background-attachment: fixed;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -14,23 +17,27 @@
 
 @layer utilities {
   .surface-card {
-    @apply bg-surface border border-gray-200 shadow-card rounded-xl;
+    @apply bg-white border border-gray-100 shadow-card rounded-2xl;
   }
   
   .interactive-card {
-    @apply surface-card hover:shadow-elevated hover:-translate-y-0.5 transition-all duration-300;
+    @apply surface-card hover:shadow-premium hover:-translate-y-1 transition-all duration-300;
+  }
+
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-glass;
   }
 
   .btn-primary {
-    @apply bg-primary hover:bg-primary-hover text-white font-medium px-5 py-2.5 rounded-lg shadow-sm hover:shadow-md transition-all active:scale-[0.98];
+    @apply relative overflow-hidden bg-primary hover:bg-primary-hover text-white font-medium px-5 py-2.5 rounded-xl shadow-glow transition-all duration-300 active:scale-[0.97];
   }
 
   .btn-secondary {
-    @apply bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 font-medium px-5 py-2.5 rounded-lg shadow-sm transition-all active:scale-[0.98];
+    @apply bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 font-medium px-5 py-2.5 rounded-xl shadow-sm transition-all duration-300 active:scale-[0.97];
   }
 
   .input-field {
-    @apply w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all;
+    @apply w-full bg-white/60 backdrop-blur-sm border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-white transition-all shadow-subtle;
   }
 }
 
@@ -50,9 +57,9 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full hover:bg-gray-400 transition-colors;
+  @apply bg-gray-300 rounded-full hover:bg-primary/50 transition-colors;
 }
 
 ::selection {
-  @apply bg-primary-light text-primary-hover;
+  @apply bg-primary/20 text-primary-hover;
 }
