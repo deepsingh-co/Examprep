@@ -105,45 +105,51 @@ const ExamResult = () => {
       </button>
 
       {/* Score Card */}
-      <div className="surface-card p-8 text-center mb-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[80px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
-        <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-primary/10 border-4 border-primary flex items-center justify-center shadow-sm">
-          <Trophy className="text-primary" size={40} />
-        </div>
-        <h1 className="text-5xl font-extrabold mb-2 text-gray-900 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] tracking-tight">
-          {percent}%
-        </h1>
-        <span className={`inline-block text-sm font-bold px-5 py-1.5 rounded-full ${grade.bg} ${grade.color} shadow-sm mb-4`}>
-          {grade.label}
-        </span>
-        <p className="text-gray-600 text-sm font-medium">
-          {result.topic?.name} <span className="text-gray-500 mx-2">—</span> {result.topic?.subject?.name}
-        </p>
-
-        <div className="grid grid-cols-3 gap-6 max-w-md mx-auto mt-8 p-6 bg-background/50 rounded-2xl border border-gray-100">
-          <div>
-            <p className="text-3xl font-extrabold text-green-400 drop-shadow-sm">{result.total_correct}</p>
-            <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider font-semibold">Correct</p>
+      <div className="relative surface-card p-10 text-center mb-10 overflow-hidden shadow-premium border border-primary/20 bg-gradient-to-br from-white via-white to-primary/5">
+        <div className="absolute top-0 right-0 w-72 h-72 bg-primary/20 blur-[100px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 blur-[80px] rounded-full pointer-events-none translate-y-1/3 -translate-x-1/4"></div>
+        
+        <div className="relative z-10">
+          <div className="w-28 h-28 mx-auto mb-6 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 border-4 border-primary/30 flex items-center justify-center shadow-glow">
+            <Trophy className="text-primary w-14 h-14 drop-shadow-sm" />
           </div>
-          <div>
-            <p className="text-3xl font-extrabold text-red-400 drop-shadow-sm">{result.total_wrong}</p>
-            <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider font-semibold">Wrong</p>
-          </div>
-          <div>
-            <p className="text-3xl font-extrabold text-gray-500 drop-shadow-sm">{skipped}</p>
-            <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider font-semibold">Skipped</p>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-center gap-8 mt-6 text-sm font-medium text-gray-600">
-          <span className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-lg border border-gray-200">
-            <Clock size={16} className="text-primary" /> {Math.round(result.time_taken / 60)} min
+          <h1 className="text-6xl font-heading font-black mb-3 text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary drop-shadow-sm tracking-tight">
+            {percent}%
+          </h1>
+          <span className={`inline-block text-sm font-black uppercase tracking-widest px-6 py-2 rounded-full ${grade.bg} ${grade.color} shadow-sm mb-6 border border-current/20`}>
+            {grade.label}
           </span>
-          {result.violations > 0 && (
-            <span className="flex items-center gap-2 bg-yellow-400/10 text-yellow-400 px-4 py-2 rounded-lg border border-yellow-400/20 shadow-sm">
-              <AlertTriangle size={16} /> {result.violations} violations
+          <p className="text-gray-600 text-base font-semibold max-w-lg mx-auto">
+            <span className="text-gray-900">{result.topic?.name}</span>
+            <span className="text-gray-400 mx-3">•</span>
+            <span>{result.topic?.subject?.name}</span>
+          </p>
+
+          <div className="grid grid-cols-3 gap-6 max-w-lg mx-auto mt-10 p-6 bg-white/60 backdrop-blur-md rounded-3xl border border-gray-100 shadow-sm">
+            <div className="flex flex-col items-center">
+              <p className="text-4xl font-black text-green-500 drop-shadow-sm">{result.total_correct}</p>
+              <p className="text-xs text-gray-500 mt-2 uppercase tracking-widest font-bold">Correct</p>
+            </div>
+            <div className="flex flex-col items-center border-l border-r border-gray-100">
+              <p className="text-4xl font-black text-red-500 drop-shadow-sm">{result.total_wrong}</p>
+              <p className="text-xs text-gray-500 mt-2 uppercase tracking-widest font-bold">Wrong</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <p className="text-4xl font-black text-slate-400 drop-shadow-sm">{skipped}</p>
+              <p className="text-xs text-gray-500 mt-2 uppercase tracking-widest font-bold">Skipped</p>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-center gap-6 mt-8 text-sm font-semibold text-gray-600">
+            <span className="flex items-center gap-2 bg-white px-5 py-2.5 rounded-xl border border-gray-100 shadow-sm">
+              <Clock size={18} className="text-primary" /> {Math.round(result.time_taken / 60)} min elapsed
             </span>
-          )}
+            {result.violations > 0 && (
+              <span className="flex items-center gap-2 bg-yellow-50 text-yellow-600 px-5 py-2.5 rounded-xl border border-yellow-200 shadow-sm">
+                <AlertTriangle size={18} /> {result.violations} flags triggered
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
