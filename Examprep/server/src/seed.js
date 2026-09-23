@@ -12,6 +12,8 @@ import University from './models/University.js';
 import College from './models/College.js';
 import Department from './models/Department.js';
 import Semester from './models/Semester.js';
+import TestAttempt from './models/TestAttempt.js';
+import TestAttemptAnswer from './models/TestAttemptAnswer.js';
 
 dotenv.config();
 
@@ -32,6 +34,8 @@ const seedDatabase = async () => {
       College.deleteMany({}),
       Department.deleteMany({}),
       Semester.deleteMany({}),
+      TestAttempt.deleteMany({}),
+      TestAttemptAnswer.deleteMany({}),
     ]);
 
     // 1. Core Structures
@@ -106,7 +110,7 @@ const seedDatabase = async () => {
 
     // 5. Questions
     console.log('Seeding questions...');
-    await Question.create([
+    const questions = await Question.create([
       {
         topic_id: topic._id,
         question_text: 'Which layer of the OSI model is responsible for routing?',
@@ -139,6 +143,46 @@ const seedDatabase = async () => {
         correct_answer: '7'
       }
     ]);
+
+    // 6. Test Attempts (For Demo)
+    console.log('Seeding test attempts...');
+    const attempt = await TestAttempt.create({
+      student_id: student._id,
+      topic_id: topic._id,
+      score: 2,
+      total_correct: 2,
+      total_wrong: 1,
+      total_questions: 3,
+      time_taken: 120, // 2 minutes
+      violations: 1,
+      status: 'completed'
+    });
+
+    // Q1 Correct (MCQ)
+    const q1CorrectOption = questions[0].options.find(o => o.is_correct);
+    await TestAttemptAnswer.create({
+      attempt_id: attempt._id,
+      question_id: questions[0]._id,
+      selected_option: q1CorrectOption._id,
+      is_correct: true
+    });
+
+    // Q2 Wrong (MULTI) - selected a wrong option
+    const q2WrongOption = questions[1].options.find(o => !o.is_correct);
+    await TestAttemptAnswer.create({
+      attempt_id: attempt._id,
+      question_id: questions[1]._id,
+      selected_option: q2WrongOption._id,
+      is_correct: false
+    });
+
+    // Q3 Correct (NAQ)
+    await TestAttemptAnswer.create({
+      attempt_id: attempt._id,
+      question_id: questions[2]._id,
+      typed_answer: '7',
+      is_correct: true
+    });
 
     console.log('✨ Seeding complete! You can now log in with:');
     console.log('Admin: admin@demo.com / password123');
