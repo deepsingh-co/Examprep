@@ -446,9 +446,9 @@ const GroupBattle = () => {
 
           {/* Right Sidebar: Scoreboard */}
           <div className="md:col-span-1">
-            <div className="surface-card p-6 h-full sticky top-24">
+            <div className="surface-card p-6 h-full sticky top-24 shadow-premium border-primary/20 bg-gradient-to-b from-white to-gray-50/50">
               <h3 className="text-sm font-bold text-gray-900 mb-6 uppercase tracking-widest flex items-center gap-2 border-b border-gray-200 pb-4">
-                <Trophy size={18} className="text-yellow-400" /> Leaderboard
+                <Trophy size={18} className="text-yellow-500 drop-shadow-sm" /> Live Leaderboard
               </h3>
               <div className="space-y-3">
                 {Object.keys(scoreboard).length === 0 && (
@@ -459,21 +459,25 @@ const GroupBattle = () => {
                   .map(([name, score], idx) => (
                     <div
                       key={name}
-                      className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
+                      className={`flex items-center justify-between p-4 rounded-xl border transition-all duration-300 ${
                         name === user.name 
-                          ? "bg-primary/20 border-primary/30 shadow-sm" 
-                          : "bg-background/50 border-gray-100"
+                          ? "bg-gradient-to-r from-primary/20 to-primary/5 border-primary/30 shadow-glow transform scale-[1.02]" 
+                          : "bg-white border-gray-100 hover:border-gray-200 shadow-sm"
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <span className={`font-bold w-5 text-center ${idx === 0 ? "text-yellow-400" : idx === 1 ? "text-gray-600" : idx === 2 ? "text-orange-400" : "text-gray-600"}`}>
-                          {idx + 1}
+                        <span className={`font-black w-6 text-center text-lg ${
+                          idx === 0 ? "text-yellow-500 drop-shadow-sm" : 
+                          idx === 1 ? "text-slate-400" : 
+                          idx === 2 ? "text-amber-600" : "text-gray-400"
+                        }`}>
+                          {idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `${idx + 1}`}
                         </span>
-                        <span className={`font-medium ${name === user.name ? "text-gray-900" : "text-gray-600"}`}>
+                        <span className={`font-semibold ${name === user.name ? "text-gray-900" : "text-gray-700"}`}>
                           {name === user.name ? "You" : name}
                         </span>
                       </div>
-                      <span className="font-black text-xl text-primary">{score}</span>
+                      <span className={`font-black text-2xl ${name === user.name ? "text-primary" : "text-gray-900"}`}>{score}</span>
                     </div>
                   ))}
               </div>
