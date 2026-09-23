@@ -207,34 +207,40 @@ const AIGenerator = () => {
   };
 
   return (
-    <div className="relative z-10">
-      <div className="flex items-center gap-3 mb-2">
-        <Sparkles className="text-primary" size={24} />
-        <h1 className="text-2xl font-bold">AI Question Generator</h1>
+    <div className="relative z-10 max-w-5xl mx-auto">
+      <div className="flex flex-col items-center justify-center text-center mb-10 mt-4">
+        <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl flex items-center justify-center mb-4 shadow-sm border border-primary/10">
+          <Sparkles className="text-primary w-8 h-8" />
+        </div>
+        <h1 className="text-3xl font-heading font-bold text-gray-900 mb-2">AI Question Generator</h1>
+        <p className="text-gray-500 max-w-lg">
+          Upload a PDF, configure your assessment criteria, and let our intelligent engine generate high-quality questions instantly.
+        </p>
       </div>
-      <p className="text-sm text-gray-500 mb-6">
-        Upload a PDF, configure question styles, and let Claude generate questions for you.
-      </p>
 
       {/* Progress Stepper */}
-      <div className="flex items-center gap-2 mb-8">
+      <div className="flex items-center justify-center gap-2 mb-12">
         {steps.map((label, i) => (
           <div key={label} className="flex items-center gap-2">
             <div
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                 i === step
-                  ? "bg-primary/10 text-primary"
+                  ? "bg-primary text-white shadow-glow"
                   : i < step
-                  ? "bg-green-400/10 text-green-400"
-                  : "bg-gray-50 text-gray-500"
+                  ? "bg-green-50 text-green-600 border border-green-100"
+                  : "bg-white text-gray-400 border border-gray-100 shadow-sm"
               }`}
             >
-              <span className="w-5 h-5 rounded-full bg-current/20 flex items-center justify-center text-xs font-bold">
+              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                i === step ? "bg-white/20" : i < step ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
+              }`}>
                 {i < step ? "✓" : i + 1}
               </span>
               {label}
             </div>
-            {i < steps.length - 1 && <div className="w-8 h-px bg-gray-100" />}
+            {i < steps.length - 1 && (
+              <div className={`w-10 h-[2px] rounded-full transition-colors duration-300 ${i < step ? "bg-green-400" : "bg-gray-200"}`} />
+            )}
           </div>
         ))}
       </div>

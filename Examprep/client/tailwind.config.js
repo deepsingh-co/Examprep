@@ -8,22 +8,24 @@ export default {
         heading: ["Outfit", "system-ui", "sans-serif"],
       },
       colors: {
-        primary: "#6366f1", // Deep Indigo
-        "primary-hover": "#4f46e5",
-        "primary-light": "#e0e7ff",
-        secondary: "#8b5cf6", // Vibrant Violet
+        primary: "#4f46e5", // Indigo 600
+        "primary-hover": "#4338ca", // Indigo 700
+        "primary-light": "#e0e7ff", // Indigo 100
+        secondary: "#9333ea", // Purple 600
+        "accent-cyan": "#06b6d4",
+        "accent-pink": "#ec4899",
         surface: "#ffffff",
         background: "#f8fafc", // slate-50
-        "glass-bg": "rgba(255, 255, 255, 0.7)",
-        "glass-border": "rgba(255, 255, 255, 0.18)",
+        "glass-bg": "rgba(255, 255, 255, 0.75)",
+        "glass-border": "rgba(255, 255, 255, 0.2)",
       },
       boxShadow: {
-        subtle: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
-        card: "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)",
-        elevated: "0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04)",
-        glass: "0 8px 32px 0 rgba(31, 38, 135, 0.07)",
-        premium: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-        glow: "0 0 15px rgba(99, 102, 241, 0.5)",
+        subtle: "0 2px 4px 0 rgba(0, 0, 0, 0.02)",
+        card: "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
+        elevated: "0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
+        glass: "0 8px 32px 0 rgba(31, 38, 135, 0.05)",
+        premium: "0 25px 50px -12px rgba(99, 102, 241, 0.15)",
+        glow: "0 0 20px rgba(99, 102, 241, 0.4)",
       },
       animation: {
         "fade-in": "fadeIn 0.5s ease-out forwards",

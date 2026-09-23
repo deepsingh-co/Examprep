@@ -249,11 +249,11 @@ const ExamAttempt = () => {
       </div>
 
       {/* Content */}
-      <div className="flex gap-6 p-6 max-w-[1440px] mx-auto relative z-10">
-        {/* Left: Question */}
-        <div className="flex-1">
-          <div className="surface-card rounded-2xl p-8 mb-6 shadow-sm">
-            <div className="flex items-center gap-3 mb-6 flex-wrap border-b border-gray-200 pb-4">
+      <div className="flex flex-col xl:flex-row gap-6 p-6 w-full max-w-[1800px] mx-auto relative z-10 h-[calc(100vh-120px)]">
+        {/* Left: Question (35%) */}
+        <div className="flex-shrink-0 w-full xl:w-[35%] flex flex-col h-full">
+          <div className="surface-card rounded-2xl p-8 mb-6 shadow-sm flex-1 flex flex-col min-h-0 overflow-y-auto">
+            <div className="flex items-center gap-3 mb-6 flex-wrap border-b border-gray-200 pb-4 shrink-0">
               <span className="text-xs text-gray-500 font-mono font-bold">Q{currentIndex + 1}</span>
               <span className="text-xs bg-primary/20 border border-primary/30 text-primary px-3 py-1 rounded-full font-bold shadow-sm">
                 {currentQuestion.type}
@@ -262,6 +262,7 @@ const ExamAttempt = () => {
                 {currentQuestion.difficulty}
               </span>
             </div>
+            
             <p className="text-xl leading-relaxed text-gray-900 mb-8 font-medium">{currentQuestion.question_text}</p>
 
             {/* MCQ */}
@@ -275,11 +276,11 @@ const ExamAttempt = () => {
                       onClick={() => handleAnswer(opt.id, "MCQ")}
                       className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl border transition ${
                         selected
-                          ? "bg-primary/10 border-primary text-primary"
+                          ? "bg-primary/10 border-primary text-primary shadow-sm font-medium"
                           : "bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-300"
                       }`}
                     >
-                      <span className="w-7 h-7 rounded-full border flex items-center justify-center text-xs font-bold flex-shrink-0">
+                      <span className="w-7 h-7 rounded-full border flex items-center justify-center text-xs font-bold flex-shrink-0 bg-white">
                         {String.fromCharCode(65 + oi)}
                       </span>
                       {opt.option_text}
@@ -301,11 +302,11 @@ const ExamAttempt = () => {
                       onClick={() => handleAnswer(opt.id, "MULTI")}
                       className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl border transition ${
                         selected
-                          ? "bg-purple-500/10 border-purple-500 text-purple-400"
+                          ? "bg-purple-500/10 border-purple-500 text-purple-600 shadow-sm font-medium"
                           : "bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-300"
                       }`}
                     >
-                      <span className="w-7 h-7 rounded-md border flex items-center justify-center text-xs font-bold flex-shrink-0">
+                      <span className="w-7 h-7 rounded-md border flex items-center justify-center text-xs font-bold flex-shrink-0 bg-white">
                         {selected ? "✓" : String.fromCharCode(65 + oi)}
                       </span>
                       {opt.option_text}
@@ -318,7 +319,7 @@ const ExamAttempt = () => {
             {/* NAQ */}
             {currentQuestion.type === "NAQ" && (
               <input
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 text-lg focus:outline-none focus:border-primary transition"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 text-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition shadow-sm"
                 placeholder="Type your numeric answer..."
                 value={answers[currentIndex]?.typed_answer || ""}
                 onChange={(e) => handleAnswer(e.target.value, "NAQ")}
@@ -327,45 +328,51 @@ const ExamAttempt = () => {
           </div>
 
           {/* Navigation */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between shrink-0">
             <div className="flex gap-3">
               <button
                 onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
                 disabled={currentIndex === 0}
-                className="bg-surface border border-gray-200 hover:border-gray-300 disabled:opacity-30 px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition"
+                className="bg-surface border border-gray-200 hover:border-gray-300 disabled:opacity-30 px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition font-medium"
               >
                 <ChevronLeft size={16} /> Prev
               </button>
               <button
                 onClick={() => setCurrentIndex((i) => Math.min(questions.length - 1, i + 1))}
                 disabled={currentIndex === questions.length - 1}
-                className="bg-surface border border-gray-200 hover:border-gray-300 disabled:opacity-30 px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition"
+                className="bg-surface border border-gray-200 hover:border-gray-300 disabled:opacity-30 px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition font-medium"
               >
                 Next <ChevronRight size={16} />
               </button>
               <button
                 onClick={toggleReview}
-                className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 border transition ${
+                className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 border transition font-medium ${
                   reviewFlags[currentIndex]
-                    ? "bg-blue-500/10 border-blue-500 text-blue-400"
+                    ? "bg-blue-500/10 border-blue-500 text-blue-600 shadow-sm"
                     : "bg-surface border-gray-200 text-gray-500 hover:text-gray-900"
                 }`}
               >
                 <Flag size={14} /> {reviewFlags[currentIndex] ? "Review Marked" : "Mark Review"}
               </button>
             </div>
-
+            
+            {/* Show toggle only on small screens */}
             <button
               onClick={() => setScratchOpen(!scratchOpen)}
-              className="bg-gray-50 hover:bg-dark-600 border border-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition"
+              className="xl:hidden bg-gray-50 hover:bg-gray-100 border border-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition"
             >
               {scratchOpen ? "Close Pad" : "Scratch Pad"}
             </button>
           </div>
         </div>
 
-        {/* Right: Sidebar */}
-        <div className="w-64 space-y-4 flex-shrink-0">
+        {/* Middle: Scratch Pad (45%) */}
+        <div className="hidden xl:flex flex-shrink-0 w-[45%] h-full rounded-2xl overflow-hidden shadow-sm border border-gray-200 relative">
+          <ScratchPad isEmbedded={true} isOpen={true} />
+        </div>
+
+        {/* Right: Sidebar (20%) */}
+        <div className="flex-shrink-0 w-full xl:w-[20%] space-y-4 flex flex-col h-full overflow-y-auto">
           <CameraMonitor
             onViolation={triggerViolation}
             violationCount={violationCount}
@@ -380,9 +387,9 @@ const ExamAttempt = () => {
         </div>
       </div>
 
-      {/* Scratch Pad overlay */}
+      {/* Floating Scratch Pad for smaller screens */}
       {scratchOpen && (
-        <div className="fixed bottom-4 left-4 z-30 w-[320px] h-[240px] bg-surface border border-gray-200 rounded-xl shadow-2xl overflow-hidden">
+        <div className="xl:hidden fixed bottom-4 left-4 z-30 w-[320px] h-[240px] bg-surface border border-gray-200 rounded-xl shadow-2xl overflow-hidden">
           <ScratchPad isOpen={scratchOpen} onToggle={() => setScratchOpen(false)} />
         </div>
       )}
