@@ -21,8 +21,39 @@ const TestHistory = () => {
           attemptService.getMyAttempts(),
           examService.getAll(),
         ]);
-        setAttempts(attemptRes.data.data);
-        setExams(examRes.data.data);
+        
+        // Inject demo history data
+        const demoHistory = [
+          {
+            id: 'hist1',
+            topic: { name: 'Full Syllabus Mock Test 1', subject: { exam: { name: 'Lakshya JEE 2024 Test Series' } } },
+            score: 180,
+            total_questions: 90,
+            total_correct: 45,
+            total_wrong: 15,
+            createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+            status: 'completed'
+          },
+          {
+            id: 'hist2',
+            topic: { name: 'Part Test - Mechanics', subject: { exam: { name: 'Lakshya JEE 2024 Test Series' } } },
+            score: 95,
+            total_questions: 50,
+            total_correct: 25,
+            total_wrong: 5,
+            createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+            status: 'completed'
+          }
+        ];
+        
+        setAttempts([...attemptRes.data.data, ...demoHistory]);
+        
+        // Also add the mock exams to the dropdown
+        const demoExams = [
+          { id: 'demo1', name: 'Lakshya JEE 2024 Test Series' },
+          { id: 'demo2', name: 'Arjuna NEET Mock Tests' }
+        ];
+        setExams([...examRes.data.data, ...demoExams]);
       } catch {
         toast.error("Failed to load history");
       } finally {
@@ -58,16 +89,16 @@ const TestHistory = () => {
 
   return (
     <div className="relative z-10">
-      <h1 className="text-3xl font-extrabold text-gray-900 mb-2 tracking-wide">Test History</h1>
-      <p className="text-gray-500 text-sm mb-8">All your past test attempts</p>
+      <h1 className="text-3xl font-extrabold text-secondary mb-2 tracking-wide font-heading">Test History</h1>
+      <p className="text-gray-500 text-sm mb-8">Review your past performance</p>
 
       {/* Filters */}
       <div className="flex flex-col md:flex-row gap-4 mb-8">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <input
-            className="w-full surface-card pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-gray-900 placeholder-gray-500"
-            placeholder="Search by topic..."
+            className="w-full bg-white border border-gray-200 rounded-xl pl-12 pr-4 py-3.5 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-secondary placeholder-gray-400 shadow-sm"
+            placeholder="Search by test name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -76,16 +107,16 @@ const TestHistory = () => {
           <select
             value={filterExam}
             onChange={(e) => setFilterExam(e.target.value)}
-            className="appearance-none w-full surface-card px-4 py-3 text-sm pr-10 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-gray-900 cursor-pointer"
+            className="appearance-none w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 text-sm pr-10 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-secondary cursor-pointer shadow-sm font-semibold"
           >
-            <option value="" className="bg-surface">All Exams</option>
+            <option value="" className="bg-white text-secondary">All Test Series</option>
             {exams.map((e) => (
-              <option key={e.id} value={e.name} className="bg-surface">
+              <option key={e.id} value={e.name} className="bg-white text-secondary">
                 {e.name}
               </option>
             ))}
           </select>
-          <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+          <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
         </div>
       </div>
 
@@ -96,44 +127,54 @@ const TestHistory = () => {
           description="Take your first exam to see it here"
         />
       ) : (
-        <div className="surface-card overflow-x-auto shadow-sm">
+        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-xs text-gray-500 border-b border-gray-200 uppercase tracking-wider bg-gray-50">
-                <th className="px-6 py-4 font-semibold">Exam</th>
-                <th className="px-6 py-4 font-semibold">Topic</th>
-                <th className="px-6 py-4 font-semibold text-center">Score</th>
-                <th className="px-6 py-4 font-semibold text-center">Correct</th>
-                <th className="px-6 py-4 font-semibold text-center">Wrong</th>
-                <th className="px-6 py-4 font-semibold">Date</th>
-                <th className="px-6 py-4 font-semibold text-right">Status</th>
+                <th className="px-6 py-4 font-bold">Test Series</th>
+                <th className="px-6 py-4 font-bold">Test Name</th>
+                <th className="px-6 py-4 font-bold text-center">Score</th>
+                <th className="px-6 py-4 font-bold text-center">Accuracy</th>
+                <th className="px-6 py-4 font-bold">Date</th>
+                <th className="px-6 py-4 font-bold text-right">Status</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((a) => (
                 <tr
                   key={a.id}
-                  onClick={() => navigate(`/student/result/${a.id}`)}
-                  className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors cursor-pointer group"
+                  onClick={() => {
+                    if (a.id.startsWith('hist')) {
+                      toast.error("This is demo history. Analysis not available.");
+                      return;
+                    }
+                    navigate(`/student/result/${a.id}`);
+                  }}
+                  className="border-b border-gray-100 last:border-0 hover:bg-primary-light/30 transition-colors cursor-pointer group"
                 >
-                  <td className="px-6 py-4 text-gray-600 font-medium group-hover:text-gray-900 transition-colors">
+                  <td className="px-6 py-5 text-gray-500 font-medium group-hover:text-primary transition-colors">
                     {a.topic?.subject?.exam?.name || "—"}
                   </td>
-                  <td className="px-6 py-4 text-gray-900 font-medium">{a.topic?.name}</td>
-                  <td className="px-6 py-4 text-center font-bold text-primary">
-                    {a.score}/{a.total_questions}
+                  <td className="px-6 py-5 text-secondary font-bold text-base">{a.topic?.name}</td>
+                  <td className="px-6 py-5 text-center font-bold text-primary text-base">
+                    {a.score} <span className="text-xs text-gray-400">/{a.total_questions * 4 || 300}</span>
                   </td>
-                  <td className="px-6 py-4 text-center text-green-400 font-medium">{a.total_correct}</td>
-                  <td className="px-6 py-4 text-center text-red-400 font-medium">{a.total_wrong}</td>
-                  <td className="px-6 py-4 text-gray-500">{formatDate(a.createdAt)}</td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-5 text-center">
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="text-green-500 font-bold">{a.total_correct}</span>
+                      <span className="text-gray-300">/</span>
+                      <span className="text-red-500 font-bold">{a.total_wrong}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-5 text-gray-500 font-medium">{formatDate(a.createdAt)}</td>
+                  <td className="px-6 py-5 text-right">
                     <span
                       className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider shadow-sm opacity-90 ${
                         a.status === "completed"
-                          ? "bg-green-400/10 text-green-400 border border-green-400/20"
+                          ? "bg-green-100 text-green-700 border border-green-200"
                           : a.status === "abandoned"
-                          ? "bg-red-400/10 text-red-400 border border-red-400/20"
-                          : "bg-yellow-400/10 text-yellow-400 border border-yellow-400/20"
+                          ? "bg-red-100 text-red-700 border border-red-200"
+                          : "bg-yellow-100 text-yellow-700 border border-yellow-200"
                       }`}
                     >
                       {a.status}
