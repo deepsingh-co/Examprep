@@ -8,10 +8,10 @@ export default {
         heading: ["Outfit", "system-ui", "sans-serif"],
       },
       colors: {
-        primary: "#4f46e5", // Indigo 600
-        "primary-hover": "#4338ca", // Indigo 700
-        "primary-light": "#e0e7ff", // Indigo 100
-        secondary: "#9333ea", // Purple 600
+        primary: "#eb5353", // PW Red
+        "primary-hover": "#c0392b", // Darker Red
+        "primary-light": "#fceaea", // Very light red/pink
+        secondary: "#1e272e", // Dark Navy
         "accent-cyan": "#06b6d4",
         "accent-pink": "#ec4899",
         surface: "#ffffff",

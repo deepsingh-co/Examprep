@@ -57,21 +57,20 @@ export default function StudentDashboard() {
         {subjects.map((sub, idx) => (
           <div 
             key={sub._id} 
-            className="interactive-card glass-panel p-7 flex flex-col group animate-slide-up"
+            className="bg-white border border-gray-200 rounded-2xl p-7 flex flex-col group transition-all duration-300 hover:shadow-lg hover:border-primary/30 animate-slide-up"
             style={{ animationDelay: `${idx * 100}ms` }}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl pointer-events-none"></div>
             
             <div className="flex items-start justify-between relative z-10 mb-4">
-              <div className="w-12 h-12 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-center shadow-sm group-hover:scale-110 group-hover:shadow-glow transition-all duration-300">
+              <div className="w-12 h-12 bg-primary-light rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:-translate-y-1">
                 <Book className="w-6 h-6 text-primary" />
               </div>
-              <span className="bg-gray-100/80 text-gray-600 px-3 py-1 text-xs font-semibold rounded-full border border-gray-200">
+              <span className="bg-gray-100 text-gray-600 px-3 py-1 text-xs font-bold rounded-full border border-gray-200 uppercase tracking-wide">
                 {sub.code || "Code"}
               </span>
             </div>
 
-            <h2 className="text-xl font-bold text-gray-900 relative z-10 group-hover:text-primary transition-colors line-clamp-2">{sub.name}</h2>
+            <h2 className="text-xl font-bold text-secondary relative z-10 group-hover:text-primary transition-colors line-clamp-2 mt-2">{sub.name}</h2>
             <p className="text-sm text-gray-500 mt-2 relative z-10 flex items-center gap-2">
               <span className="font-medium text-gray-700">{sub.credits || 0}</span> Credits
             </p>
@@ -85,7 +84,7 @@ export default function StudentDashboard() {
             <div className="mt-8 relative z-10 mt-auto">
               <Link
                 to={`/student/subject/${sub._id}`}
-                className="w-full flex items-center justify-center gap-2 bg-gray-50 hover:bg-primary border border-gray-200 text-gray-700 py-3 rounded-xl font-semibold hover:text-white transition-all shadow-sm hover:shadow-glow group/btn"
+                className="w-full flex items-center justify-center gap-2 bg-gray-50 hover:bg-primary border border-gray-200 hover:border-primary text-secondary py-3 rounded-xl font-bold hover:text-white transition-all group/btn"
               >
                 Go to Subject <ChevronRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
               </Link>
@@ -93,10 +92,10 @@ export default function StudentDashboard() {
           </div>
         ))}
         {subjects.length === 0 && user.semester_id && (
-          <div className="col-span-full flex flex-col items-center justify-center text-gray-500 py-16 bg-white/50 backdrop-blur-sm rounded-3xl border border-gray-200 shadow-sm border-dashed">
+          <div className="col-span-full flex flex-col items-center justify-center text-gray-500 py-16 bg-white rounded-3xl border border-gray-200 border-dashed">
             <Book className="w-12 h-12 text-gray-300 mb-4" />
-            <p className="text-lg font-medium text-gray-600">No subjects found</p>
-            <p className="text-sm text-gray-400 mt-1">There are no subjects assigned to your current semester yet.</p>
+            <p className="text-lg font-bold text-secondary">No subjects found</p>
+            <p className="text-sm text-gray-500 mt-1">There are no subjects assigned to your current semester yet.</p>
           </div>
         )}
       </div>
