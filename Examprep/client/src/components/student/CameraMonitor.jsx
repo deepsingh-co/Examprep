@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
-import { Camera, AlertTriangle, XCircle, Eye } from "lucide-react";
+import { Camera, AlertTriangle, XCircle, Eye, Users } from "lucide-react";
+import { useSocket } from "../../context/SocketContext";
 import {
   FaceDetector,
   ObjectDetector,
@@ -17,10 +18,14 @@ const DETECT_INTERVAL = 1500;
 const TRIGGER_COOLDOWN = 8000;
 const GRACE_PERIOD = 5000;
 
-const CameraMonitor = ({ onViolation, violationCount }) => {
+const CameraMonitor = ({ onViolation, violationCount, roomId }) => {
   const videoRef = useRef(null);
+  const remoteVideoRef = useRef(null);
   const canvasRef = useRef(null);
+  const peerConnectionRef = useRef(null);
+  const socket = useSocket();
   const [cameraOn, setCameraOn] = useState(false);
+  const [remoteOn, setRemoteOn] = useState(false);
   const [error, setError] = useState(null);
   const [detectionReady, setDetectionReady] = useState(false);
   const [status, setStatus] = useState({
@@ -128,7 +133,58 @@ const CameraMonitor = ({ onViolation, violationCount }) => {
       }
     };
 
-    startCamera();
+    startCamera().then(() => {
+      if (socket && roomId && stream) {
+        socket.emit("webrtc:join", { roomId });
+
+        const setupPC = (peerId) => {
+          const pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
+          peerConnectionRef.current = pc;
+          stream.getTracks().forEach(track => pc.addTrack(track, stream));
+
+          pc.ontrack = (event) => {
+            if (remoteVideoRef.current && event.streams[0]) {
+              remoteVideoRef.current.srcObject = event.streams[0];
+              setRemoteOn(true);
+            }
+          };
+
+          pc.onicecandidate = (event) => {
+            if (event.candidate) {
+              socket.emit("webrtc:ice-candidate", { candidate: event.candidate, to: peerId });
+            }
+          };
+          return pc;
+        };
+
+        socket.on("webrtc:peer-joined", async (peerId) => {
+          const pc = setupPC(peerId);
+          const offer = await pc.createOffer();
+          await pc.setLocalDescription(offer);
+          socket.emit("webrtc:offer", { offer, to: peerId });
+        });
+
+        socket.on("webrtc:offer", async ({ offer, from }) => {
+          const pc = setupPC(from);
+          await pc.setRemoteDescription(new RTCSessionDescription(offer));
+          const answer = await pc.createAnswer();
+          await pc.setLocalDescription(answer);
+          socket.emit("webrtc:answer", { answer, to: from });
+        });
+
+        socket.on("webrtc:answer", async ({ answer }) => {
+          if (peerConnectionRef.current) {
+            await peerConnectionRef.current.setRemoteDescription(new RTCSessionDescription(answer));
+          }
+        });
+
+        socket.on("webrtc:ice-candidate", async ({ candidate }) => {
+          if (peerConnectionRef.current) {
+            await peerConnectionRef.current.addIceCandidate(new RTCIceCandidate(candidate)).catch(e => console.log(e));
+          }
+        });
+      }
+    });
 
     return () => {
       cancelled = true;
@@ -136,8 +192,17 @@ const CameraMonitor = ({ onViolation, violationCount }) => {
       if (stream) {
         stream.getTracks().forEach((t) => t.stop());
       }
+      if (peerConnectionRef.current) {
+        peerConnectionRef.current.close();
+      }
+      if (socket) {
+        socket.off("webrtc:peer-joined");
+        socket.off("webrtc:offer");
+        socket.off("webrtc:answer");
+        socket.off("webrtc:ice-candidate");
+      }
     };
-  }, [onViolation]);
+  }, [onViolation, socket, roomId]);
 
   return (
     <div className="bg-surface border border-gray-100 rounded-xl overflow-hidden">
@@ -164,19 +229,35 @@ const CameraMonitor = ({ onViolation, violationCount }) => {
             {error}
           </div>
         ) : (
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-          />
+          <div className="relative w-full h-full flex items-center justify-center">
+            {remoteOn && (
+              <video
+                ref={remoteVideoRef}
+                autoPlay
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover z-10"
+              />
+            )}
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              playsInline
+              className={`object-cover ${remoteOn ? "absolute bottom-2 right-2 w-1/3 h-1/3 border-2 border-primary rounded-lg shadow-lg z-20" : "w-full h-full"}`}
+            />
+          </div>
         )}
-        <div className="absolute top-2 left-2 flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded-full">
+        <div className="absolute top-2 left-2 flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded-full z-30">
           <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
           <span className="text-[10px] text-gray-900 font-medium">LIVE</span>
         </div>
-        <div className="absolute bottom-2 left-2 flex items-center gap-1.5 bg-black/60 px-2 py-1 rounded-full">
+        {remoteOn && (
+          <div className="absolute top-2 right-2 flex items-center gap-1 bg-primary/80 text-white px-2 py-0.5 rounded-full z-30 shadow-sm">
+            <Users size={12} />
+            <span className="text-[10px] font-medium">Proctor Connected</span>
+          </div>
+        )}
+        <div className="absolute bottom-2 left-2 flex items-center gap-1.5 bg-black/60 px-2 py-1 rounded-full z-30">
           <Eye size={12} className={status.tone} />
           <span className={`text-[10px] font-medium ${status.tone}`}>
             {cameraOn && status.label}

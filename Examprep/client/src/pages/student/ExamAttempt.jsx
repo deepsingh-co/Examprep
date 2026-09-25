@@ -376,6 +376,7 @@ const ExamAttempt = () => {
           <CameraMonitor
             onViolation={triggerViolation}
             violationCount={violationCount}
+            roomId={attemptId}
           />
           <QuestionMap
             questions={questions}
