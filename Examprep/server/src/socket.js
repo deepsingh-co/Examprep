@@ -48,7 +48,27 @@ export const setupSocket = (server) => {
       rooms.delete(roomCode);
     });
 
+    // --- WebRTC Video Call Signaling ---
+    socket.on("webrtc:join", ({ roomId }) => {
+      socket.join(roomId);
+      // Tell others in the room that a new peer joined
+      socket.to(roomId).emit("webrtc:peer-joined", socket.id);
+    });
+
+    socket.on("webrtc:offer", ({ offer, to }) => {
+      socket.to(to).emit("webrtc:offer", { offer, from: socket.id });
+    });
+
+    socket.on("webrtc:answer", ({ answer, to }) => {
+      socket.to(to).emit("webrtc:answer", { answer, from: socket.id });
+    });
+
+    socket.on("webrtc:ice-candidate", ({ candidate, to }) => {
+      socket.to(to).emit("webrtc:ice-candidate", { candidate, from: socket.id });
+    });
+
     socket.on("disconnect", () => {
+      // Handle battle disconnects
       const roomCode = socket.data.roomCode;
       if (roomCode && rooms.has(roomCode)) {
         const room = rooms.get(roomCode);
@@ -58,6 +78,8 @@ export const setupSocket = (server) => {
           rooms.delete(roomCode);
         }
       }
+      // WebRTC peers will handle disconnects natively via RTCPeerConnection states,
+      // but we can also broadcast a leave event if needed.
     });
   });
 };
