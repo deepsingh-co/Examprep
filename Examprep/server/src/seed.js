@@ -40,10 +40,10 @@ const seedDatabase = async () => {
 
     // 1. Core Structures
     console.log('Seeding core structures...');
-    const university = await University.create({ name: 'Tech University', code: 'TU' });
-    const college = await College.create({ name: 'College of Engineering', university_id: university._id });
-    const dept = await Department.create({ name: 'Computer Science', code: 'CS', college_id: college._id });
-    const semester = await Semester.create({ name: 'Semester 1', number: 1, department_id: dept._id });
+    const university = await University.create({ name: 'Mumbai University', code: 'MU' });
+    const college = await College.create({ name: 'Engineering College', university_id: university._id });
+    const dept = await Department.create({ name: 'Computer Engineering', code: 'CE', college_id: college._id });
+    const semester = await Semester.create({ name: 'Semester 5', number: 5, department_id: dept._id });
 
     // 2. Users
     console.log('Seeding users...');
@@ -83,17 +83,17 @@ const seedDatabase = async () => {
     // 3. Exams & Subjects
     console.log('Seeding exams and subjects...');
     const exam = await Exam.create({
-      name: 'Midterm Examination 2026',
-      description: 'First midterm covering basics',
-      duration: 60,
-      total_marks: 100
+      name: 'Mumbai University Semester Exam',
+      description: 'End semester examination',
+      duration: 180,
+      total_marks: 80
     });
 
     const subject = await Subject.create({
-      name: 'Computer Networks',
-      code: 'CS401',
+      name: 'Database Management System',
+      code: 'CSC502',
       credits: 4,
-      description: 'Introduction to networking concepts',
+      description: 'Introduction to database systems',
       department_id: dept._id,
       semester_id: semester._id,
       exam_id: exam._id,
@@ -103,9 +103,9 @@ const seedDatabase = async () => {
     // 4. Topics
     console.log('Seeding topics...');
     const topic = await Topic.create({
-      name: 'OSI Model and TCP/IP',
+      name: 'Relational Data Model & SQL',
       subject_id: subject._id,
-      description: 'Layers, protocols, and network architecture'
+      description: 'Module 2 covering relations, constraints and SQL'
     });
 
     // 5. Questions
@@ -113,34 +113,34 @@ const seedDatabase = async () => {
     const questions = await Question.create([
       {
         topic_id: topic._id,
-        question_text: 'Which layer of the OSI model is responsible for routing?',
+        question_text: 'Which of the following is NOT a DDL command in SQL?',
         type: 'MCQ',
         difficulty: 'easy',
         options: [
-          { option_text: 'Physical Layer', is_correct: false },
-          { option_text: 'Data Link Layer', is_correct: false },
-          { option_text: 'Network Layer', is_correct: true },
-          { option_text: 'Transport Layer', is_correct: false }
+          { option_text: 'CREATE', is_correct: false },
+          { option_text: 'UPDATE', is_correct: true },
+          { option_text: 'ALTER', is_correct: false },
+          { option_text: 'DROP', is_correct: false }
         ]
       },
       {
         topic_id: topic._id,
-        question_text: 'Select the protocols that operate at the Transport Layer of the OSI model.',
+        question_text: 'Select the true statements about Primary Keys.',
         type: 'MULTI',
         difficulty: 'medium',
         options: [
-          { option_text: 'TCP', is_correct: true },
-          { option_text: 'IP', is_correct: false },
-          { option_text: 'UDP', is_correct: true },
-          { option_text: 'HTTP', is_correct: false }
+          { option_text: 'It can contain NULL values', is_correct: false },
+          { option_text: 'A table can have only one primary key', is_correct: true },
+          { option_text: 'It uniquely identifies each record', is_correct: true },
+          { option_text: 'It is the same as a foreign key', is_correct: false }
         ]
       },
       {
         topic_id: topic._id,
-        question_text: 'How many layers does the standard OSI model have?',
+        question_text: 'What does SQL stand for? (Write only the first word)',
         type: 'NAQ',
         difficulty: 'easy',
-        correct_answer: '7'
+        correct_answer: 'Structured'
       }
     ]);
 
@@ -153,8 +153,8 @@ const seedDatabase = async () => {
       total_correct: 2,
       total_wrong: 1,
       total_questions: 3,
-      time_taken: 120, // 2 minutes
-      violations: 1,
+      time_taken: 180, // 3 minutes
+      violations: 0,
       status: 'completed'
     });
 
@@ -180,7 +180,7 @@ const seedDatabase = async () => {
     await TestAttemptAnswer.create({
       attempt_id: attempt._id,
       question_id: questions[2]._id,
-      typed_answer: '7',
+      typed_answer: 'Structured',
       is_correct: true
     });
 
