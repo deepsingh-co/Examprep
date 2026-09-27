@@ -8,30 +8,30 @@ export default {
         heading: ["Outfit", "system-ui", "sans-serif"],
       },
       colors: {
-        primary: "#eb5353", // PW Red
-        "primary-hover": "#c0392b", // Darker Red
-        "primary-light": "#fceaea", // Very light red/pink
-        secondary: "#1e272e", // Dark Navy
+        primary: "#F52B2B", // Classic PW Red
+        "primary-hover": "#D32020", // Darker Red
+        "primary-light": "#FDEAEA", // Very light red
+        secondary: "#1E293B", // PW Dark Blue/Slate
         "accent-cyan": "#06b6d4",
         "accent-pink": "#ec4899",
         surface: "#ffffff",
-        background: "#f8fafc", // slate-50
-        "glass-bg": "rgba(255, 255, 255, 0.75)",
+        background: "#F3F4F6", // Gray 100
+        "glass-bg": "rgba(255, 255, 255, 0.95)",
         "glass-border": "rgba(255, 255, 255, 0.2)",
       },
       boxShadow: {
-        subtle: "0 2px 4px 0 rgba(0, 0, 0, 0.02)",
-        card: "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
-        elevated: "0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
-        glass: "0 8px 32px 0 rgba(31, 38, 135, 0.05)",
-        premium: "0 25px 50px -12px rgba(99, 102, 241, 0.15)",
-        glow: "0 0 20px rgba(99, 102, 241, 0.4)",
+        subtle: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+        card: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+        elevated: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+        glass: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        premium: "0 10px 25px -5px rgba(245, 43, 43, 0.15)",
+        glow: "0 0 20px rgba(245, 43, 43, 0.4)",
       },
       animation: {
-        "fade-in": "fadeIn 0.5s ease-out forwards",
-        "slide-up": "slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "fade-in": "fadeIn 0.4s ease-out forwards",
+        "slide-up": "slideUp 0.5s ease-out forwards",
         "float": "float 3s ease-in-out infinite",
-        "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
       keyframes: {
         fadeIn: {
@@ -39,12 +39,12 @@ export default {
           "100%": { opacity: "1" },
         },
         slideUp: {
-          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "0%": { opacity: "0", transform: "translateY(15px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
         float: {
           "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
+          "50%": { transform: "translateY(-5px)" },
         },
       }
     },
