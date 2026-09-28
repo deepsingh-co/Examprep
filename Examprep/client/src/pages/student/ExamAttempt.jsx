@@ -97,12 +97,12 @@ const ExamAttempt = () => {
   useEffect(() => {
     const onVis = () => {
       if (document.hidden && !submitting) {
-        triggerViolation("Tab switch detected! Warning.");
+        autoSubmit("Tab switch detected! Exam stopped.");
       }
     };
     document.addEventListener("visibilitychange", onVis);
     return () => document.removeEventListener("visibilitychange", onVis);
-  }, [submitting, triggerViolation]);
+  }, [submitting]);
 
   // Fullscreen exit detection
   useEffect(() => {
