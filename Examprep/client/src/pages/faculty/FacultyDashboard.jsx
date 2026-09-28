@@ -25,6 +25,10 @@ export default function FacultyDashboard() {
           <Book className="h-8 w-8 text-indigo-600" />
           Faculty Dashboard
         </h1>
+        <a href="/faculty/proctoring" className="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg font-medium hover:bg-indigo-200 transition-colors flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2.5"/></svg>
+          Live Proctoring
+        </a>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -14,6 +14,7 @@ import AcademicManagement from "./pages/admin/AcademicManagement";
 import SubjectBuilder from "./pages/admin/SubjectBuilder";
 import FacultyDashboard from "./pages/faculty/FacultyDashboard";
 import StudyMaterials from "./pages/faculty/StudyMaterials";
+import LiveProctoring from "./pages/faculty/LiveProctoring";
 import ExamManager from "./pages/admin/ExamManager";
 import SubjectManager from "./pages/admin/SubjectManager";
 import TopicManager from "./pages/admin/TopicManager";
@@ -77,7 +78,8 @@ const App = () => {
             path="/faculty/*"
             element={
               <ProtectedRoutes allowedRoles={["admin", "faculty"]}>
-                <div className="min-h-screen bg-gray-50 flex flex-col">
+                <SocketProvider>
+                  <div className="min-h-screen bg-gray-50 flex flex-col">
                   {/* Top Bar for Faculty/Admin */}
                   <div className="bg-white border-b px-6 py-4 flex justify-between items-center shadow-sm">
                     <h1 className="text-xl font-bold text-indigo-700">IntelliExam Faculty</h1>
@@ -87,9 +89,11 @@ const App = () => {
                     <Routes>
                       <Route path="/" element={<FacultyDashboard />} />
                       <Route path="materials" element={<StudyMaterials />} />
+                      <Route path="proctoring" element={<LiveProctoring />} />
                     </Routes>
                   </div>
                 </div>
+                </SocketProvider>
               </ProtectedRoutes>
             }
           />
