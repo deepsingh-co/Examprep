@@ -9,6 +9,7 @@ import AdminSignup from "./pages/auth/AdminSignup";
 import StudentLogin from "./pages/auth/StudentLogin";
 import StudentSignup from "./pages/auth/StudentSignup";
 import VerifyEmail from "./pages/auth/VerifyEmail";
+import ResetPassword from "./pages/auth/ResetPassword";
 import AdminLayout from "./components/admin/AdminLayout";
 import AcademicManagement from "./pages/admin/AcademicManagement";
 import SubjectBuilder from "./pages/admin/SubjectBuilder";
@@ -55,6 +56,7 @@ const App = () => {
           <Route path="/student/login" element={<StudentLogin />} />
           <Route path="/student/signup" element={<StudentSignup />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           <Route
             path="/admin"
