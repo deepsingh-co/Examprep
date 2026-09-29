@@ -44,6 +44,34 @@ export const sendVerificationEmail = async (email, token) => {
   });
 };
 
+export const sendPasswordResetEmail = async (email, token) => {
+  const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${token}`;
+
+  if (!hasSmtpConfig()) {
+    console.log("\n==============================================");
+    console.log("⚠️  SMTP not configured — password reset link:");
+    console.log(resetUrl);
+    console.log("==============================================\n");
+    return { devLink: resetUrl };
+  }
+
+  await getTransporter().sendMail({
+    from: process.env.SMTP_USER,
+    to: email,
+    subject: "IntelliExam — Reset Your Password",
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;padding:30px;background:#1a1a2e;border-radius:12px;color:#e0e0e0;">
+        <h2 style="color:#6c63ff;text-align:center;">IntelliExam</h2>
+        <p>You requested a password reset. Click the button below to set a new password. This link will expire in 1 hour.</p>
+        <div style="text-align:center;margin:30px 0;">
+          <a href="${resetUrl}" style="background:#6c63ff;color:#fff;padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:bold;">Reset Password</a>
+        </div>
+        <p style="font-size:12px;color:#888;">If you didn't request a password reset, you can safely ignore this email.</p>
+      </div>
+    `,
+  });
+};
+
 export const sendAnnotationEmail = async (email, feedback) => {
   if (!hasSmtpConfig()) {
     console.log(`\n[dev] Annotation email to ${email}: ${feedback}\n`);
