@@ -1,10 +1,9 @@
 import crypto from "crypto";
 import User from "../models/User.js";
 import { generateToken } from "../utils/jwtHelper.js";
-import { sendVerificationEmail } from "../utils/emailHelper.js";
-import { sendSuccess, sendError } from "../utils/responseHelper.js";
 import { adminAuth } from "../config/firebaseAdmin.js";
-
+import { sendVerificationEmail, sendPasswordResetEmail } from "../utils/emailHelper.js";
+import { sendSuccess, sendError } from "../utils/responseHelper.js";
 export const firebaseLogin = async (req, res) => {
   try {
     const { token, role } = req.body;
@@ -227,6 +226,57 @@ export const changePassword = async (req, res) => {
     await user.save();
 
     return sendSuccess(res, null, "Password changed successfully");
+  } catch (err) {
+    return sendError(res, err.message);
+  }
+};
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return sendError(res, "Email is required", 400);
+
+    const user = await User.findOne({ email });
+    if (!user) return sendError(res, "User not found", 404);
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    await user.save();
+
+    let devLink = null;
+    try {
+      const result = await sendPasswordResetEmail(user.email, resetToken);
+      if (result?.devLink) devLink = result.devLink;
+    } catch (err) {
+      console.error("Failed to send reset email:", err.message);
+      return sendError(res, "Failed to send reset email", 500);
+    }
+
+    return sendSuccess(res, { devLink }, "Password reset email sent");
+  } catch (err) {
+    return sendError(res, err.message);
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+    if (!token || !newPassword) return sendError(res, "Token and new password are required", 400);
+
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    if (!user) return sendError(res, "Invalid or expired token", 400);
+
+    user.password = newPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    return sendSuccess(res, null, "Password has been reset successfully");
   } catch (err) {
     return sendError(res, err.message);
   }
