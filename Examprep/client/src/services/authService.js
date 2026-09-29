@@ -8,4 +8,6 @@ export const authService = {
   updateProfile: (data) => api.put("/auth/profile", data),
   changePassword: (data) => api.put("/auth/password", data),
   firebaseLogin: (data) => api.post("/auth/firebase-login", data),
+  forgotPassword: (data) => api.post("/auth/forgot-password", data),
+  resetPassword: (data) => api.post("/auth/reset-password", data),
 };
