@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { Camera, AlertTriangle, XCircle, Eye, Users } from "lucide-react";
-import { useSocket } from "../../context/SocketContext";
+import { useSocket } from "../../hooks/useSocket";
 import {
   FaceDetector,
   ObjectDetector,
