@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, firebaseLogin, register, logout, setAuthSession }}>
+    <AuthContext.Provider value={{ user, setUser, loading, login, firebaseLogin, register, logout, setAuthSession }}>
       {children}
     </AuthContext.Provider>
   );

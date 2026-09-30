@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { authService } from "../../services/authService";
+import api from "../../services/api";
 import { attemptService } from "../../services/attemptService";
 import { annotationService } from "../../services/annotationService";
 import toast from "react-hot-toast";
@@ -28,12 +29,24 @@ const typeStyles = {
 };
 
 const Settings = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, setUser } = useAuth();
   const [tab, setTab] = useState("profile");
-  const [profile, setProfile] = useState({ name: user?.name || "", email: user?.email || "" });
+  const [profile, setProfile] = useState({ 
+    name: user?.name || "", 
+    email: user?.email || "",
+    university_id: user?.university_id || "",
+    college_id: user?.college_id || "",
+    department_id: user?.department_id || "",
+    semester_id: user?.semester_id || "",
+  });
   const [passwords, setPasswords] = useState({ currentPassword: "", newPassword: "" });
   const [savingProfile, setSavingProfile] = useState(false);
   const [savingPass, setSavingPass] = useState(false);
+
+  const [universities, setUniversities] = useState([]);
+  const [colleges, setColleges] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [semesters, setSemesters] = useState([]);
 
   const [violations, setViolations] = useState([]);
   const [annotations, setAnnotations] = useState([]);
@@ -58,11 +71,42 @@ const Settings = () => {
     }
   }, [tab]);
 
+  useEffect(() => {
+    api.get("/universities").then(res => setUniversities(res.data.data)).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (profile.university_id) {
+      api.get(`/colleges?university_id=${profile.university_id}`).then(res => setColleges(res.data.data)).catch(() => {});
+    } else {
+      setColleges([]);
+    }
+  }, [profile.university_id]);
+
+  useEffect(() => {
+    if (profile.college_id) {
+      api.get(`/departments?college_id=${profile.college_id}`).then(res => setDepartments(res.data.data)).catch(() => {});
+    } else {
+      setDepartments([]);
+    }
+  }, [profile.college_id]);
+
+  useEffect(() => {
+    if (profile.department_id) {
+      api.get(`/semesters?department_id=${profile.department_id}`).then(res => setSemesters(res.data.data)).catch(() => {});
+    } else {
+      setSemesters([]);
+    }
+  }, [profile.department_id]);
+
   const handleProfile = async (e) => {
     e.preventDefault();
     setSavingProfile(true);
     try {
-      await authService.updateProfile(profile);
+      const res = await authService.updateProfile(profile);
+      const updatedUser = { ...user, ...res.data.data };
+      setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
       toast.success("Profile updated");
     } catch (err) {
       toast.error(err.response?.data?.message || "Update failed");
@@ -134,6 +178,53 @@ const Settings = () => {
                   value={profile.email}
                   onChange={(e) => setProfile({ ...profile, email: e.target.value })}
                 />
+              </div>
+              <div>
+                <label className="text-sm text-gray-500 mb-1 block">University</label>
+                <select
+                  className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition appearance-none"
+                  value={profile.university_id || ""}
+                  onChange={(e) => setProfile({ ...profile, university_id: e.target.value, college_id: "", department_id: "", semester_id: "" })}
+                >
+                  <option value="">Select University</option>
+                  {universities.map(u => <option key={u._id} value={u._id}>{u.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="text-sm text-gray-500 mb-1 block">College</label>
+                <select
+                  className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition appearance-none"
+                  value={profile.college_id || ""}
+                  onChange={(e) => setProfile({ ...profile, college_id: e.target.value, department_id: "", semester_id: "" })}
+                  disabled={!profile.university_id}
+                >
+                  <option value="">Select College</option>
+                  {colleges.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="text-sm text-gray-500 mb-1 block">Department</label>
+                <select
+                  className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition appearance-none"
+                  value={profile.department_id || ""}
+                  onChange={(e) => setProfile({ ...profile, department_id: e.target.value, semester_id: "" })}
+                  disabled={!profile.college_id}
+                >
+                  <option value="">Select Department</option>
+                  {departments.map(d => <option key={d._id} value={d._id}>{d.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="text-sm text-gray-500 mb-1 block">Semester</label>
+                <select
+                  className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-primary transition appearance-none"
+                  value={profile.semester_id || ""}
+                  onChange={(e) => setProfile({ ...profile, semester_id: e.target.value })}
+                  disabled={!profile.department_id}
+                >
+                  <option value="">Select Semester</option>
+                  {semesters.map(s => <option key={s._id} value={s._id}>Semester {s.number}</option>)}
+                </select>
               </div>
               <button
                 type="submit"
