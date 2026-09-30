@@ -186,7 +186,7 @@ export const getMe = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { name, email } = req.body;
+    const { name, email, university_id, college_id, department_id, semester_id } = req.body;
     const user = req.user;
 
     if (name) user.name = name;
@@ -197,6 +197,11 @@ export const updateProfile = async (req, res) => {
       }
       user.email = email;
     }
+    
+    if (university_id) user.university_id = university_id;
+    if (college_id) user.college_id = college_id;
+    if (department_id) user.department_id = department_id;
+    if (semester_id) user.semester_id = semester_id;
 
     await user.save();
     return sendSuccess(res, {
@@ -204,6 +209,10 @@ export const updateProfile = async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      university_id: user.university_id,
+      college_id: user.college_id,
+      department_id: user.department_id,
+      semester_id: user.semester_id,
     }, "Profile updated");
   } catch (err) {
     return sendError(res, err.message);
