@@ -200,6 +200,14 @@ const ExamAttempt = () => {
 
   const currentQuestion = questions[currentIndex];
 
+  if (!currentQuestion) {
+    return (
+      <div className="flex items-center justify-center py-24">
+        <p className="text-gray-500">Exam data unavailable. Redirecting...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background relative">
       {/* Background Mesh */}
