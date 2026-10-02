@@ -10,6 +10,8 @@ import {
   Maximize,
   Minimize,
   Send,
+  ShieldAlert,
+  Video
 } from "lucide-react";
 import { topicService } from "../../services/topicService";
 import { attemptService } from "../../services/attemptService";
@@ -38,6 +40,8 @@ const ExamAttempt = () => {
   const timerRef = useRef(null);
   const loadingRef = useRef(false);
 
+  const [proctoringReady, setProctoringReady] = useState(false);
+
   // Start attempt
   useEffect(() => {
     if (loadingRef.current) return;
@@ -59,11 +63,12 @@ const ExamAttempt = () => {
 
   // Timer
   useEffect(() => {
+    if (!proctoringReady) return;
     timerRef.current = setInterval(() => {
       setElapsed((e) => e + 1);
     }, 1000);
     return () => clearInterval(timerRef.current);
-  }, []);
+  }, [proctoringReady]);
 
   // Fullscreen
   const enterFullscreen = () => {
@@ -200,10 +205,53 @@ const ExamAttempt = () => {
 
   const currentQuestion = questions[currentIndex];
 
+  const [screenStream, setScreenStream] = useState(null);
+
+  const handleStartExam = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: { displaySurface: "monitor" }
+      });
+      const track = stream.getVideoTracks()[0];
+      if (track.getSettings().displaySurface && track.getSettings().displaySurface !== 'monitor') {
+        toast.error("You must share your Entire Screen. Window or Tab sharing is not allowed.");
+        track.stop();
+        return;
+      }
+      setScreenStream(stream);
+      enterFullscreen();
+      setProctoringReady(true);
+    } catch (err) {
+      toast.error("Screen sharing is required to begin the exam.");
+    }
+  };
+
   if (!currentQuestion) {
     return (
       <div className="flex items-center justify-center py-24">
         <p className="text-gray-500">Exam data unavailable. Redirecting...</p>
+      </div>
+    );
+  }
+
+  if (!proctoringReady) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="surface-card p-10 rounded-2xl shadow-sm text-center max-w-md border border-gray-200">
+          <ShieldAlert className="w-16 h-16 text-primary mx-auto mb-6" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Proctoring Setup</h2>
+          <p className="text-gray-500 mb-8">
+            To ensure academic integrity, this exam requires you to share your screen and webcam. 
+            Once you start, please select "Entire Screen" to share.
+          </p>
+          <button
+            onClick={handleStartExam}
+            className="w-full bg-primary hover:bg-primary-hover text-white py-3 rounded-xl font-bold shadow-md transition-all flex items-center justify-center gap-2"
+          >
+            <Video size={18} />
+            Start Screen Share & Begin Exam
+          </button>
+        </div>
       </div>
     );
   }
@@ -385,6 +433,7 @@ const ExamAttempt = () => {
             onViolation={triggerViolation}
             violationCount={violationCount}
             roomId={attemptId}
+            screenStream={screenStream}
           />
           <QuestionMap
             questions={questions}

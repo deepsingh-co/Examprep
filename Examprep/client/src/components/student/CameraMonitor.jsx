@@ -18,7 +18,7 @@ const DETECT_INTERVAL = 1500;
 const TRIGGER_COOLDOWN = 8000;
 const GRACE_PERIOD = 5000;
 
-const CameraMonitor = ({ onViolation, violationCount, roomId }) => {
+const CameraMonitor = ({ onViolation, violationCount, roomId, screenStream }) => {
   const videoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -46,13 +46,29 @@ const CameraMonitor = ({ onViolation, violationCount, roomId }) => {
         stream = await navigator.mediaDevices.getUserMedia({
           video: { width: 640, height: 480, facingMode: "user" },
         });
+        
+        if (screenStream) {
+          const screenTrack = screenStream.getVideoTracks()[0];
+          
+          if (screenTrack.getSettings().displaySurface && screenTrack.getSettings().displaySurface !== 'monitor') {
+            onViolation("You must share your Entire Screen. Window or Tab sharing is not allowed.");
+          }
+          
+          screenTrack.onended = () => {
+            onViolation("Screen sharing stopped! This is a severe violation.");
+          };
+
+          // Attach screen stream to a property so we can use it in WebRTC
+          stream.screenStream = screenStream;
+        }
+
         if (cancelled) return;
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
           setCameraOn(true);
         }
       } catch {
-        if (!cancelled) setError("Camera access denied");
+        if (!cancelled) setError("Camera and Screen access required");
         return;
       }
 
@@ -140,7 +156,12 @@ const CameraMonitor = ({ onViolation, violationCount, roomId }) => {
         const setupPC = (peerId) => {
           const pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
           peerConnectionRef.current = pc;
-          stream.getTracks().forEach(track => pc.addTrack(track, stream));
+          
+          if (stream.screenStream) {
+            stream.screenStream.getTracks().forEach(track => pc.addTrack(track, stream.screenStream));
+          } else {
+            stream.getTracks().forEach(track => pc.addTrack(track, stream));
+          }
 
           pc.ontrack = (event) => {
             if (remoteVideoRef.current && event.streams[0]) {
@@ -191,6 +212,9 @@ const CameraMonitor = ({ onViolation, violationCount, roomId }) => {
       if (detectorLoop) clearInterval(detectorLoop);
       if (stream) {
         stream.getTracks().forEach((t) => t.stop());
+        if (stream.screenStream) {
+          stream.screenStream.getTracks().forEach((t) => t.stop());
+        }
       }
       if (peerConnectionRef.current) {
         peerConnectionRef.current.close();
