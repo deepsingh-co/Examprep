@@ -4,7 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "seed": "node src/seed.js",
+    "seed:dataset": "node src/seedTestDataset.js",
+    "test": "node --test test/"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
