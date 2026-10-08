@@ -5,6 +5,7 @@ import Exam from "../models/Exam.js";
 import TestAttempt from "../models/TestAttempt.js";
 import TestAttemptAnswer from "../models/TestAttemptAnswer.js";
 import { sendSuccess, sendError } from "../utils/responseHelper.js";
+import { gradeAnswer, summarizeAnswers } from "../utils/grading.js";
 
 export const getQuestionsForAttempt = async (topicId) => {
   const questions = await Question.find({ topic_id: topicId }).lean();
@@ -61,25 +62,7 @@ export const submitAttempt = async (req, res) => {
         const question = await Question.findById(ans.question_id);
         if (!question) return null;
 
-        let isCorrect = false;
-
-        if (question.type === "MCQ") {
-          const selected = ans.selected_option;
-          const option = question.options.find((o) => o._id.toString() === String(selected));
-          isCorrect = option ? option.is_correct : false;
-        } else if (question.type === "MULTI") {
-          const selectedIds = Array.isArray(ans.selected_options)
-            ? ans.selected_options
-            : [ans.selected_option];
-          const correctOptions = question.options.filter((o) => o.is_correct);
-          const correctIds = correctOptions.map((o) => o._id.toString()).sort().join(",");
-          const selectedIdsSorted = selectedIds.map(String).sort().join(",");
-          isCorrect = correctIds === selectedIdsSorted;
-        } else {
-          isCorrect =
-            String(ans.typed_answer || "").trim().toLowerCase() ===
-            String(question.correct_answer || "").trim().toLowerCase();
-        }
+        const isCorrect = gradeAnswer(question, ans);
 
         return {
           attempt_id: id,
@@ -96,8 +79,7 @@ export const submitAttempt = async (req, res) => {
       await TestAttemptAnswer.insertMany(valid);
     }
 
-    const totalCorrect = valid.filter((a) => a.is_correct).length;
-    const totalWrong = valid.length - totalCorrect;
+    const { totalCorrect, totalWrong } = summarizeAnswers(valid);
 
     attempt.score = totalCorrect;
     attempt.total_correct = totalCorrect;
