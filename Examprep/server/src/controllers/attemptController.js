@@ -139,6 +139,23 @@ export const getAttemptResult = async (req, res) => {
   }
 };
 
+export const getActiveAttempts = async (req, res) => {
+  try {
+    const attempts = await TestAttempt.find({ status: "in_progress" })
+      .populate("student_id", "name email")
+      .populate({
+        path: "topic_id",
+        populate: { path: "subject_id" },
+      })
+      .sort({ createdAt: -1 })
+      .limit(50);
+
+    return sendSuccess(res, attempts);
+  } catch (err) {
+    return sendError(res, err.message);
+  }
+};
+
 export const getMyAttempts = async (req, res) => {
   try {
     const attempts = await TestAttempt.find({ student_id: req.user.id })

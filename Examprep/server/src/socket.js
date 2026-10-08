@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+import { corsOrigin } from "./config/cors.js";
 
 let io = null;
 
@@ -7,7 +8,7 @@ const rooms = new Map();
 export const setupSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: process.env.CLIENT_URL,
+      origin: corsOrigin,
       credentials: true,
     },
   });
@@ -49,22 +50,49 @@ export const setupSocket = (server) => {
     });
 
     // --- WebRTC Video Call Signaling ---
+    // Protocol: the peer that JOINS a room creates the offer(s).
+    // 1. joiner receives "webrtc:peers" (existing peers) and offers to each
+    // 2. existing peers receive "webrtc:peer-joined" and wait for the offer
+    // This avoids offer/answer glare.
     socket.on("webrtc:join", ({ roomId }) => {
+      if (!roomId) return;
+
+      const existing = [];
+      const members = io.sockets.adapter.rooms.get(roomId);
+      if (members) {
+        members.forEach((id) => {
+          if (id !== socket.id) existing.push(id);
+        });
+      }
+
       socket.join(roomId);
-      // Tell others in the room that a new peer joined
+      socket.data.webrtcRoom = roomId;
+
       socket.to(roomId).emit("webrtc:peer-joined", socket.id);
+      socket.emit("webrtc:peers", existing);
     });
 
     socket.on("webrtc:offer", ({ offer, to }) => {
+      if (!to) return;
       socket.to(to).emit("webrtc:offer", { offer, from: socket.id });
     });
 
     socket.on("webrtc:answer", ({ answer, to }) => {
+      if (!to) return;
       socket.to(to).emit("webrtc:answer", { answer, from: socket.id });
     });
 
     socket.on("webrtc:ice-candidate", ({ candidate, to }) => {
+      if (!to) return;
       socket.to(to).emit("webrtc:ice-candidate", { candidate, from: socket.id });
+    });
+
+    socket.on("webrtc:leave", ({ roomId } = {}) => {
+      const room = roomId || socket.data.webrtcRoom;
+      if (!room) return;
+      socket.leave(room);
+      if (socket.data.webrtcRoom === room) socket.data.webrtcRoom = null;
+      socket.to(room).emit("webrtc:peer-left", socket.id);
     });
 
     socket.on("disconnect", () => {
@@ -78,8 +106,12 @@ export const setupSocket = (server) => {
           rooms.delete(roomCode);
         }
       }
-      // WebRTC peers will handle disconnects natively via RTCPeerConnection states,
-      // but we can also broadcast a leave event if needed.
+
+      // Notify WebRTC peers so they can tear the call down
+      const webrtcRoom = socket.data.webrtcRoom;
+      if (webrtcRoom) {
+        socket.to(webrtcRoom).emit("webrtc:peer-left", socket.id);
+      }
     });
   });
 };
