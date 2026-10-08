@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSocket } from "../../hooks/useSocket";
 import { useAuth } from "../../hooks/useAuth";
 import {
@@ -44,6 +44,7 @@ const GroupBattle = () => {
   const [battleOver, setBattleOver] = useState(false);
   const [winners, setWinners] = useState({});
   const [loadingQuestions, setLoadingQuestions] = useState(false);
+  const loadQuestionsRef = useRef(() => {});
 
   useEffect(() => {
     const fetchExams = async () => {
@@ -56,18 +57,28 @@ const GroupBattle = () => {
   useEffect(() => {
     if (!socket) return;
 
-    socket.on("battle:playerCount", setPlayerCount);
-    socket.on("battle:started", () => {
+    const onPlayerCount = (count) => setPlayerCount(count);
+    const onStarted = () => {
       setBattleStarted(true);
-      loadQuestions();
-    });
-    socket.on("battle:scoreboard", setScoreboard);
-    socket.on("battle:ended", (scores) => {
+      loadQuestionsRef.current?.();
+    };
+    const onScoreboard = (scores) => setScoreboard(scores);
+    const onEnded = (scores) => {
       setWinners(scores);
       setBattleOver(true);
-    });
+    };
 
-    return () => socket.off("battle:playerCount");
+    socket.on("battle:playerCount", onPlayerCount);
+    socket.on("battle:started", onStarted);
+    socket.on("battle:scoreboard", onScoreboard);
+    socket.on("battle:ended", onEnded);
+
+    return () => {
+      socket.off("battle:playerCount", onPlayerCount);
+      socket.off("battle:started", onStarted);
+      socket.off("battle:scoreboard", onScoreboard);
+      socket.off("battle:ended", onEnded);
+    };
   }, [socket]);
 
   const loadSubjects = async (examId) => {
@@ -91,8 +102,8 @@ const GroupBattle = () => {
     }
     try {
       const res = await battleService.createRoom({
-        exam_id: Number(selectedExam),
-        topic_id: Number(selectedTopic),
+        exam_id: selectedExam,
+        topic_id: selectedTopic,
       });
       setRoom(res.data.data.battle);
       socket.emit("battle:join", {
@@ -130,7 +141,7 @@ const GroupBattle = () => {
   const loadQuestions = async () => {
     setLoadingQuestions(true);
     try {
-      const topicId = Number(selectedTopic || room.topic_id);
+      const topicId = selectedTopic || room?.topic_id;
       const res = await questionService.getByTopic(topicId);
       setQuestions(res.data.data);
     } catch {
@@ -140,6 +151,11 @@ const GroupBattle = () => {
       setLoadingQuestions(false);
     }
   };
+
+  // Keep the socket handler pointed at the latest closure (selectedTopic/room)
+  useEffect(() => {
+    loadQuestionsRef.current = loadQuestions;
+  });
 
   const handleAnswer = (optionId) => {
     const q = questions[currentIndex];

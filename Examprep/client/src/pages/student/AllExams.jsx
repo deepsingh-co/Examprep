@@ -66,7 +66,8 @@ const AllExams = () => {
 
   const loadTopics = async (subject) => {
     setSelectedSubject(subject);
-    if (subject.id.startsWith('dsub')) {
+    const subjectId = String(subject.id || subject._id || "");
+    if (subjectId.startsWith("dsub")) {
       // Mock topics for demo
       setTopics([
         { id: 'dtop1', name: 'Full Syllabus Mock Test 1', questions: new Array(50) },
@@ -89,11 +90,12 @@ const AllExams = () => {
   };
 
   const startExam = (topic) => {
-    if (topic.id.startsWith('dtop')) {
+    const topicId = String(topic.id || topic._id || "");
+    if (topicId.startsWith("dtop") || !topicId) {
       toast.error("This is a demo test. Real test engine not connected.");
       return;
     }
-    navigate(`/student/exam/${topic.id}`);
+    navigate(`/student/exam/${topicId}`);
   };
 
   useEffect(() => {
@@ -205,7 +207,7 @@ const AllExams = () => {
                       </p>
                       <div className="flex items-center justify-between text-sm font-bold pt-4 border-t border-gray-100">
                         <span className="text-gray-600 group-hover:text-primary transition-colors">
-                          {subject.topics?.length || (subject.id.startsWith('dsub') ? 3 : 0)} Tests
+                          {subject.topics?.length || (String(subject.id || "").startsWith("dsub") ? 3 : 0)} Tests
                         </span>
                         <ArrowRight className="text-primary group-hover:translate-x-1 transition-transform" size={18} />
                       </div>

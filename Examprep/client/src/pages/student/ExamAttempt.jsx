@@ -41,6 +41,8 @@ const ExamAttempt = () => {
   const loadingRef = useRef(false);
 
   const [proctoringReady, setProctoringReady] = useState(false);
+  const [screenStream, setScreenStream] = useState(null);
+  const autoSubmitRef = useRef(null);
 
   // Start attempt
   useEffect(() => {
@@ -48,7 +50,7 @@ const ExamAttempt = () => {
     loadingRef.current = true;
     const init = async () => {
       try {
-        const res = await attemptService.create({ topic_id: Number(topicId) });
+        const res = await attemptService.create({ topic_id: topicId });
         setQuestions(res.data.data.questions);
         setAttemptId(res.data.data.attempt.id);
       } catch (err) {
@@ -70,6 +72,15 @@ const ExamAttempt = () => {
     return () => clearInterval(timerRef.current);
   }, [proctoringReady]);
 
+  // Stop the screen-share stream when the exam unmounts, otherwise the
+  // browser keeps sharing the screen after the student submits.
+  useEffect(() => {
+    if (!screenStream) return;
+    return () => {
+      screenStream.getTracks().forEach((t) => t.stop());
+    };
+  }, [screenStream]);
+
   // Fullscreen
   const enterFullscreen = () => {
     document.documentElement.requestFullscreen?.();
@@ -81,28 +92,18 @@ const ExamAttempt = () => {
     setIsFullscreen(false);
   };
 
-  // Violation detection
-  const triggerViolation = useCallback(
-    (msg) => {
-      setWarningMessage(msg);
-      setShowWarning(true);
-      setViolationCount((v) => {
-        const next = v + 1;
-        if (next >= 3) {
-          clearInterval(timerRef.current);
-          autoSubmit("Maximum violations reached");
-        }
-        return next;
-      });
-    },
-    []
-  );
+  // Violation detection (kept free of side effects; limit handled below)
+  const triggerViolation = useCallback((msg) => {
+    setWarningMessage(msg);
+    setShowWarning(true);
+    setViolationCount((v) => v + 1);
+  }, []);
 
   // Tab/visibility detection
   useEffect(() => {
     const onVis = () => {
       if (document.hidden && !submitting) {
-        autoSubmit("Tab switch detected! Exam stopped.");
+        autoSubmitRef.current?.("Tab switch detected! Exam stopped.");
       }
     };
     document.addEventListener("visibilitychange", onVis);
@@ -121,10 +122,25 @@ const ExamAttempt = () => {
   }, [isFullscreen, submitting, triggerViolation]);
 
   const autoSubmit = async (msg) => {
+    if (submitting) return;
     clearInterval(timerRef.current);
     toast.error(msg);
     await handleSubmit(true);
   };
+
+  // Always expose the freshest closure (attemptId, answers, elapsed) to
+  // delayed callbacks: violation limit, tab switch and fullscreen exit.
+  useEffect(() => {
+    autoSubmitRef.current = autoSubmit;
+  });
+
+  // Auto-submit once the violation limit is reached
+  // (side effects intentionally live here, not inside a state updater)
+  useEffect(() => {
+    if (violationCount >= 3 && !submitting) {
+      autoSubmitRef.current?.("Maximum violations reached");
+    }
+  }, [violationCount, submitting]);
 
   const handleAnswer = (value, type) => {
     const q = questions[currentIndex];
@@ -165,6 +181,10 @@ const ExamAttempt = () => {
 
   const handleSubmit = async (auto = false) => {
     if (submitting) return;
+    if (!attemptId) {
+      toast.error("Exam is still loading, please retry in a moment");
+      return;
+    }
     setSubmitting(true);
     clearInterval(timerRef.current);
 
@@ -204,8 +224,6 @@ const ExamAttempt = () => {
   }
 
   const currentQuestion = questions[currentIndex];
-
-  const [screenStream, setScreenStream] = useState(null);
 
   const handleStartExam = async () => {
     try {
@@ -279,6 +297,11 @@ const ExamAttempt = () => {
           <div className="text-sm font-medium">
             <span className="text-green-400">{answeredCount}</span>
             <span className="text-gray-500">/{questions.length} answered</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-1.5 text-xs font-mono text-gray-500 bg-gray-50 border border-gray-200 px-2.5 py-1.5 rounded-lg">
+            <Video size={13} className="text-primary" />
+            Attempt ID&nbsp;
+            <span className="font-bold text-gray-900">{attemptId}</span>
           </div>
         </div>
 

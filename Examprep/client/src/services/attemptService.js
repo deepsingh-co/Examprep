@@ -6,4 +6,5 @@ export const attemptService = {
   getResult: (id) => api.get(`/attempts/${id}/result`),
   getMyAttempts: () => api.get("/attempts/my"),
   getMyBehaviour: () => api.get("/attempts/behaviour"),
+  getActiveAttempts: () => api.get("/attempts/active"),
 };
