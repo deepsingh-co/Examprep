@@ -15,6 +15,8 @@ import studyPlanRoutes from "./routes/studyPlanRoutes.js";
 import battleRoutes from "./routes/battleRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import errorHandler from "./middleware/errorHandler.js";
+import serializeIds from "./middleware/serializeMiddleware.js";
+import { corsOrigin } from "./config/cors.js";
 import { setupSocket } from "./socket.js";
 import academicRoutes from "./routes/academicRoutes.js";
 import materialRoutes from "./routes/materialRoutes.js";
@@ -26,8 +28,9 @@ const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(cors({ origin: corsOrigin, credentials: true }));
 app.use(express.json());
+app.use(serializeIds);
 app.use("/uploads", express.static("uploads"));
 
 app.use("/api/academic", academicRoutes);
