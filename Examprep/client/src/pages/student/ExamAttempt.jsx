@@ -412,14 +412,14 @@ const ExamAttempt = () => {
               <button
                 onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
                 disabled={currentIndex === 0}
-                className="bg-surface border border-gray-200 hover:border-gray-300 disabled:opacity-30 px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition font-medium"
+                className="bg-white text-gray-900 border border-gray-300 hover:border-gray-400 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition font-medium shadow-sm"
               >
                 <ChevronLeft size={16} /> Prev
               </button>
               <button
                 onClick={() => setCurrentIndex((i) => Math.min(questions.length - 1, i + 1))}
                 disabled={currentIndex === questions.length - 1}
-                className="bg-surface border border-gray-200 hover:border-gray-300 disabled:opacity-30 px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition font-medium"
+                className="bg-primary hover:bg-primary-hover text-white border border-primary disabled:opacity-40 disabled:cursor-not-allowed px-5 py-2 rounded-lg text-sm flex items-center gap-2 transition font-bold shadow-sm"
               >
                 Next <ChevronRight size={16} />
               </button>

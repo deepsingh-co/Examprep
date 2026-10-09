@@ -105,7 +105,17 @@ export const getRanking = async (req, res) => {
       .sort({ score: -1 })
       .limit(100);
 
-    return sendSuccess(res, attempts);
+    // Frontend reads `student` for name/avatar and uses `student_id` (raw id)
+    // as the aggregation key, so alias the populated doc and restore the id.
+    const data = attempts.map((a) => {
+      const doc = a.toObject();
+      const student = doc.student_id;
+      doc.student_id = student && student._id ? student._id : student;
+      doc.student = student && student._id ? student : null;
+      return doc;
+    });
+
+    return sendSuccess(res, data);
   } catch (err) {
     return sendError(res, err.message);
   }
