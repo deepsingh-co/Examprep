@@ -10,10 +10,12 @@ import {
   ChevronLeft,
   ChevronRight,
   LayoutDashboard,
+  User,
 } from "lucide-react";
 
 const navItems = [
   { to: "/student", icon: LayoutDashboard, label: "Dashboard" },
+  { to: "/student/profile", icon: User, label: "Profile" },
   { to: "/student/exams", icon: BookOpen, label: "Legacy Exams" },
   { to: "/student/progress", icon: BarChart3, label: "Progress" },
   { to: "/student/history", icon: History, label: "Test History" },

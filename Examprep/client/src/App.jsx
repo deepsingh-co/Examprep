@@ -24,6 +24,7 @@ import AIGenerator from "./pages/admin/AIGenerator";
 import Annotations from "./pages/admin/Annotations";
 import StudentLayout from "./components/student/StudentLayout";
 import StudentDashboard from "./pages/student/StudentDashboard";
+import Profile from "./pages/student/Profile";
 import SubjectView from "./pages/student/SubjectView";
 import AllExams from "./pages/student/AllExams";
 import ExamAttempt from "./pages/student/ExamAttempt";
@@ -111,6 +112,7 @@ const App = () => {
             }
           >
             <Route index element={<StudentDashboard />} />
+            <Route path="profile" element={<Profile />} />
             <Route path="subject/:id" element={<SubjectView />} />
             <Route path="exams" element={<AllExams />} />
             <Route path="progress" element={<Progress />} />

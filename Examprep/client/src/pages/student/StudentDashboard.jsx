@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../../services/api";
-import { Book, FileText, ChevronRight } from "lucide-react";
+import { Book, FileText, ChevronRight, AlertTriangle } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function StudentDashboard() {
@@ -41,17 +41,43 @@ export default function StudentDashboard() {
         </div>
       </div>
       
-      {!user.semester_id && (
-        <div className="bg-orange-50 border border-orange-200 text-orange-800 p-5 rounded-2xl shadow-sm flex items-start gap-4">
-          <div className="p-2 bg-orange-100 rounded-lg">
-            <Book className="w-5 h-5 text-orange-600" />
+      {!loading && (() => {
+        const fields = ["name", "email", "university_id", "college_id", "department_id", "semester_id"];
+        const done = fields.filter((f) => user?.[f]).length;
+        const pct = Math.round((done / fields.length) * 100);
+        if (pct === 100) return null;
+        return (
+          <div className="bg-orange-50 border border-orange-200 p-5 rounded-2xl shadow-sm">
+            <div className="flex items-start gap-4 flex-wrap">
+              <div className="p-2 bg-orange-100 rounded-lg">
+                <AlertTriangle className="w-5 h-5 text-orange-600" />
+              </div>
+              <div className="flex-1 min-w-[250px]">
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                  <h3 className="font-semibold text-orange-900">
+                    Complete Your Profile <span className="text-orange-600">({pct}%)</span>
+                  </h3>
+                  <Link
+                    to="/student/profile"
+                    className="bg-orange-600 hover:bg-orange-700 text-white text-sm font-bold px-4 py-2 rounded-lg transition-colors shadow-sm"
+                  >
+                    Complete Profile →
+                  </Link>
+                </div>
+                <p className="text-sm mt-1 text-orange-800">
+                  Select your University, College, Department and Semester to see your enrolled subjects and appear in rankings.
+                </p>
+                <div className="h-2 bg-orange-100 rounded-full overflow-hidden mt-3">
+                  <div
+                    className="h-full bg-gradient-to-r from-orange-500 to-orange-600 rounded-full transition-all duration-700"
+                    style={{ width: `${pct}%` }}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-          <div>
-            <h3 className="font-semibold text-orange-900">Profile Incomplete</h3>
-            <p className="text-sm mt-1">Please update your profile in Settings to select your University, College, Department, and Semester to see your enrolled subjects.</p>
-          </div>
-        </div>
-      )}
+        );
+      })()}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
         {subjects.map((sub, idx) => (
