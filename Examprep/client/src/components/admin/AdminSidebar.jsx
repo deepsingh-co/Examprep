@@ -39,7 +39,7 @@ const AdminSidebar = ({ collapsed, onToggle }) => {
         </div>
         {!collapsed && (
           <div>
-            <p className="font-bold text-sm leading-tight text-gray-900 tracking-wide font-heading">IntelliExam</p>
+            <p className="font-bold text-sm leading-tight text-gray-900 tracking-wide font-heading">Examprep</p>
             <p className="text-[10px] text-gray-500 font-semibold uppercase tracking-widest mt-0.5">
               Admin Portal
             </p>

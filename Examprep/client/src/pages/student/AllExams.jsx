@@ -141,7 +141,7 @@ const AllExams = () => {
           {level === "exams" && (
             <div className="animate-fade-in relative z-10">
               <h1 className="text-3xl font-extrabold text-secondary mb-2 tracking-wide font-heading">Test Series</h1>
-              <p className="text-gray-500 text-sm mb-8">Boost your preparation with PW style mock tests.</p>
+              <p className="text-gray-500 text-sm mb-8">Boost your preparation with Examprep style mock tests.</p>
               {exams.length === 0 ? (
                 <p className="text-gray-500 py-12 text-center bg-white rounded-xl border border-gray-200">No exams available yet.</p>
               ) : (

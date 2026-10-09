@@ -34,11 +34,11 @@ const StudentSidebar = ({ collapsed, onToggle }) => {
     >
       <div className="flex items-center gap-3 px-5 py-5 border-b border-gray-200">
         <div className="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center font-bold text-xl flex-shrink-0 shadow-sm relative overflow-hidden">
-          <span className="relative z-10 font-heading">PW</span>
+          <span className="relative z-10 font-heading">EP</span>
         </div>
         {!collapsed && (
           <div className="animate-fade-in">
-            <p className="font-bold text-lg leading-tight text-secondary tracking-tight font-heading">Physics Wallah</p>
+            <p className="font-bold text-lg leading-tight text-secondary tracking-tight font-heading">Examprep</p>
             <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">
               Student Portal
             </p>
