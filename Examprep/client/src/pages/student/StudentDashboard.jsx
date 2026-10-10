@@ -47,9 +47,9 @@ export default function StudentDashboard() {
         const pct = Math.round((done / fields.length) * 100);
         if (pct === 100) return null;
         return (
-          <div className="bg-orange-50 border border-orange-200 p-5 rounded-2xl shadow-sm">
+          <div className="bg-orange-50 border border-orange-200 p-5 rounded-2xl shadow-sm animate-slide-up">
             <div className="flex items-start gap-4 flex-wrap">
-              <div className="p-2 bg-orange-100 rounded-lg">
+              <div className="p-2 bg-orange-100 rounded-lg animate-float">
                 <AlertTriangle className="w-5 h-5 text-orange-600" />
               </div>
               <div className="flex-1 min-w-[250px]">
