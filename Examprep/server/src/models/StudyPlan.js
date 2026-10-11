@@ -15,6 +15,15 @@ const studyPlanSchema = new mongoose.Schema(
       type: Date, // Date is equivalent to DATEONLY in usage if we extract only the date part
       required: true,
     },
+    start_date: {
+      type: Date,
+      default: Date.now,
+    },
+    completed_days: [
+      {
+        type: Number,
+      },
+    ],
     plan_data: {
       type: mongoose.Schema.Types.Mixed, // Mongoose way to store JSON
       required: true,
