@@ -1,17 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../../services/api";
-import { Book, FileText, ChevronRight, AlertTriangle } from "lucide-react";
+import { Book, FileText, ChevronRight, AlertTriangle, CalendarDays, Bell, Sparkles } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import { studyPlanService } from "../../services/studyPlanService";
+import { planInfo, getActivePlan, notifyOnceToday } from "../../utils/planProgress";
+import toast from "react-hot-toast";
 
 export default function StudentDashboard() {
   const { user } = useAuth();
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activePlan, setActivePlan] = useState(null);
 
   useEffect(() => {
     fetchMySubjects();
   }, [user]);
+
+  useEffect(() => {
+    studyPlanService
+      .getMyPlans()
+      .then((res) => {
+        const active = getActivePlan(res.data.data || []);
+        setActivePlan(active);
+        if (active) {
+          const info = planInfo(active);
+          if (info.todayDay) {
+            notifyOnceToday(
+              toast,
+              `Day ${info.todayNumber} of ${info.total}: ${info.todayDay.focus}`,
+              { duration: 12000 }
+            );
+          }
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const fetchMySubjects = async () => {
     try {
@@ -78,6 +102,79 @@ export default function StudentDashboard() {
           </div>
         );
       })()}
+
+      {/* Day-wise study plan notification + progress bar */}
+      {activePlan ? (
+        (() => {
+          const info = planInfo(activePlan);
+          const upcoming = info.todayIdx < 0;
+          const finished = info.todayIdx >= info.total;
+          return (
+            <div className="bg-white border border-primary/20 rounded-2xl p-5 shadow-sm animate-slide-up relative overflow-hidden">
+              <div className="absolute -top-14 -right-14 w-44 h-44 bg-primary/10 blur-[60px] rounded-full pointer-events-none" />
+              <div className="flex items-center gap-4 flex-wrap relative">
+                <div className="p-3 bg-primary/10 rounded-xl flex-shrink-0">
+                  <CalendarDays className="w-6 h-6 text-primary" />
+                </div>
+                <div className="flex-1 min-w-[240px]">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-bold text-gray-900">{activePlan.exam_name}</h3>
+                    {!upcoming && !finished && (
+                      <span className="text-[10px] font-extrabold uppercase tracking-widest bg-primary text-white px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <Bell size={9} /> Day {info.todayNumber} of {info.total}
+                      </span>
+                    )}
+                    {finished && (
+                      <span className="text-[10px] font-extrabold uppercase tracking-widest bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">Plan finished</span>
+                    )}
+                    {upcoming && (
+                      <span className="text-[10px] font-extrabold uppercase tracking-widest bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/25 px-2 py-0.5 rounded-full">
+                        Starts in {Math.abs(info.todayIdx)} day{Math.abs(info.todayIdx) === 1 ? "" : "s"}
+                      </span>
+                    )}
+                  </div>
+                  {info.todayDay ? (
+                    <p className="text-sm text-gray-600 mt-1">
+                      <span className="font-semibold text-primary">Today's focus:</span> {info.todayDay.focus}
+                    </p>
+                  ) : (
+                    <p className="text-sm text-gray-500 mt-1">Exam on {new Date(activePlan.exam_date).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}</p>
+                  )}
+                  <div className="mt-3 h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-primary via-orange-400 to-green-400 rounded-full transition-all duration-1000"
+                      style={{ width: `${info.pct}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1.5 font-medium">
+                    <b className="text-gray-900">{info.pct}%</b> complete · ✅ {info.done} done · 🔴 {info.missed} missed · ⏳ {info.total - info.done - info.missed} left
+                  </p>
+                </div>
+                <Link
+                  to="/student/study-planner"
+                  className="bg-primary hover:bg-primary-hover text-white text-sm font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm hover:-translate-y-0.5 flex items-center gap-1.5"
+                >
+                  Open Planner <ChevronRight size={16} />
+                </Link>
+              </div>
+            </div>
+          );
+        })()
+      ) : (
+        <Link
+          to="/student/study-planner"
+          className="bg-white border-2 border-dashed border-gray-200 hover:border-primary/50 rounded-2xl p-4 flex items-center gap-3 transition-colors animate-slide-up group"
+        >
+          <div className="p-2 bg-orange-50 rounded-lg">
+            <Sparkles className="w-5 h-5 text-orange-500" />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-gray-800 group-hover:text-primary transition-colors">Create a study plan</p>
+            <p className="text-xs text-gray-500">Get a day-by-day schedule with daily reminders until your exam.</p>
+          </div>
+          <ChevronRight size={18} className="ml-auto text-gray-300 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+        </Link>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
         {subjects.map((sub, idx) => (
