@@ -66,13 +66,14 @@ export const planInfo = (plan) => {
 };
 
 export const notifyOnceToday = (toastFn, message, options = {}) => {
-  const key = `notify_${startOfLocalDay().toISOString().slice(0, 10)}`;
+  const { planId, ...toastOpts } = options;
+  const key = `notify_${planId || "default"}_${startOfLocalDay().toISOString().slice(0, 10)}`;
   try {
     if (localStorage.getItem(key)) return false;
     localStorage.setItem(key, "1");
   } catch {
     // storage unavailable — still show the notification
   }
-  toastFn(message, { duration: 10000, icon: "📅", ...options });
+  toastFn(message, { duration: 10000, icon: "📅", ...toastOpts });
   return true;
 };

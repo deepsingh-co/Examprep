@@ -29,7 +29,7 @@ export default function StudentDashboard() {
             notifyOnceToday(
               toast,
               `Day ${info.todayNumber} of ${info.total}: ${info.todayDay.focus}`,
-              { duration: 12000 }
+              { planId: active._id, duration: 12000 }
             );
           }
         }
