@@ -10,10 +10,11 @@ import toast from "react-hot-toast";
 export default function StudentDashboard() {
   const { user } = useAuth();
   const [subjects, setSubjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [subjectsLoading, setSubjectsLoading] = useState(true);
   const [activePlan, setActivePlan] = useState(null);
 
   useEffect(() => {
+    if (!user) return;
     fetchMySubjects();
   }, [user]);
 
@@ -40,16 +41,14 @@ export default function StudentDashboard() {
   const fetchMySubjects = async () => {
     try {
       // Fetch subjects by student's semester
-      const res = await api.get(`/subjects?semester_id=${user.semester_id || ""}`);
+      const res = await api.get(`/subjects?semester_id=${user?.semester_id || ""}`);
       setSubjects(res.data.data || []);
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false);
+      setSubjectsLoading(false);
     }
   };
-
-  if (loading) return <div className="text-gray-900">Loading your subjects...</div>;
 
   return (
     <div className="space-y-8 animate-fade-in pb-10">
@@ -65,7 +64,7 @@ export default function StudentDashboard() {
         </div>
       </div>
       
-      {!loading && (() => {
+      {(() => {
         const fields = ["name", "email", "university_id", "college_id", "department_id", "semester_id"];
         const done = fields.filter((f) => user?.[f]).length;
         const pct = Math.round((done / fields.length) * 100);
@@ -177,7 +176,19 @@ export default function StudentDashboard() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
-        {subjects.map((sub, idx) => (
+        {subjectsLoading &&
+          [0, 1, 2].map((i) => (
+            <div key={i} className="bg-white border border-gray-200 rounded-2xl p-7 animate-pulse">
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-12 h-12 bg-gray-200 rounded-2xl" />
+                <div className="w-14 h-5 bg-gray-200 rounded-full" />
+              </div>
+              <div className="h-6 bg-gray-200 rounded w-3/4 mb-2" />
+              <div className="h-4 bg-gray-200 rounded w-1/3" />
+              <div className="h-10 bg-gray-100 rounded-xl mt-8" />
+            </div>
+          ))}
+        {!subjectsLoading && subjects.map((sub, idx) => (
           <div 
             key={sub._id} 
             className="bg-white border border-gray-200 rounded-2xl p-7 flex flex-col group transition-all duration-300 hover:shadow-lg hover:border-primary/30 animate-slide-up"
@@ -214,11 +225,15 @@ export default function StudentDashboard() {
             </div>
           </div>
         ))}
-        {subjects.length === 0 && user.semester_id && (
+        {!subjectsLoading && subjects.length === 0 && (
           <div className="col-span-full flex flex-col items-center justify-center text-gray-500 py-16 bg-white rounded-3xl border border-gray-200 border-dashed">
             <Book className="w-12 h-12 text-gray-300 mb-4" />
             <p className="text-lg font-bold text-secondary">No subjects found</p>
-            <p className="text-sm text-gray-500 mt-1">There are no subjects assigned to your current semester yet.</p>
+            <p className="text-sm text-gray-500 mt-1">
+              {user?.semester_id
+                ? "There are no subjects assigned to your current semester yet."
+                : "Complete your profile to see enrolled subjects."}
+            </p>
           </div>
         )}
       </div>
