@@ -4,11 +4,30 @@ export const startOfLocalDay = (d = new Date()) =>
 export const daysBetween = (a, b) =>
   Math.round((startOfLocalDay(b) - startOfLocalDay(a)) / 86400000);
 
-export const getActivePlan = (plans) =>
-  (plans || []).find((p) => new Date(p.exam_date) >= startOfLocalDay(new Date())) || null;
-
 export const planStartDate = (plan) =>
   new Date(plan?.start_date || plan?.createdAt || Date.now());
+
+// Pick the plan the student should actually be following today:
+// prefer one whose day-range covers today, then the nearest upcoming exam.
+export const getActivePlan = (plans) => {
+  const upcoming = (plans || []).filter(
+    (p) => new Date(p.exam_date) >= startOfLocalDay(new Date())
+  );
+  if (upcoming.length === 0) return null;
+
+  const today = startOfLocalDay(new Date());
+  const inProgress = upcoming.filter((p) => {
+    const start = planStartDate(p);
+    const total = p?.plan_data?.days?.length || 0;
+    const end = new Date(start.getTime() + (total - 1) * 86400000);
+    return start <= today && today <= end;
+  });
+
+  const pool = inProgress.length > 0 ? inProgress : upcoming;
+  return pool.sort(
+    (a, b) => new Date(a.exam_date) - new Date(b.exam_date)
+  )[0];
+};
 
 export const dayNumber = (day, i) => day?.day || i + 1;
 
